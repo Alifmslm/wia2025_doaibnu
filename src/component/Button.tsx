@@ -1,6 +1,10 @@
-function Button() {
+type ButtonProps = {
+    nameButton: string;
+}
+
+function Button({nameButton}:ButtonProps) {
     return(
-        <button>Login Akun</button>
+        <button>{nameButton}</button>
     )
 }
 

@@ -1,10 +1,10 @@
 import './style/App.css'
-import LoginPage from './page/LoginPage.tsx'
+import RegisterPage from './page/RegisterPage.tsx'
 
 function App() {
   return (
     <>
-      <LoginPage/>
+      <RegisterPage/>
     </>
   )
 }
