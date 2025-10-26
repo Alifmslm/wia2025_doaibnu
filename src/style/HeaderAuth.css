@@ -1,0 +1,14 @@
+.header_auth {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.header_auth_header {
+    font-size: 36px;
+    line-height: 40px;
+}
+
+.header_auth_subheader {
+    color: var(--text-color-secondary);
+}
