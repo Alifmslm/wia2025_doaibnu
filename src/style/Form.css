@@ -1,0 +1,26 @@
+.section_form_parent {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form_section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form_section label {
+    font-weight: 500;
+}
+
+.form_section input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+}
+
+.form_section input::placeholder {
+    color: var(--text-color-secondary);
+}
