@@ -24,3 +24,41 @@
 .form_section input::placeholder {
     color: var(--text-color-secondary);
 }
+
+.form_input {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.label_error {
+    display: none;
+    gap: 6px;
+}
+
+.label_error p {
+    color: var(--error-color);
+    font-weight: 400;
+    font-size: 12px;
+}
+
+@media (min-width: 600px) and (max-width: 1024px) {
+  /* CSS khusus untuk tablet di sini */
+    body {
+        background-color: #FCFCFC;
+    }
+
+    .auth_form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container_login {
+        background-color: #Ffff;
+        border-radius: 5px;
+        border: 1px solid var(--border-color);
+        max-width: 460px;
+    }
+}

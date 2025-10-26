@@ -15,3 +15,10 @@ button {
     color: white;
     background-color: var(--main-color);
 }
+
+@media (min-width: 600px) and (max-width: 1024px) {
+  /* CSS khusus untuk tablet di sini */
+    .img_logo {
+        margin: auto;
+    }
+}

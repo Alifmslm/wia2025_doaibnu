@@ -6,7 +6,7 @@ import LogoWia from "../assets/logo_wia.jpg";
 function LoginPage() {
     return (
         <>
-            <form action="">
+            <form className="auth_form">
                 <section className="container_login">
                     <img src={LogoWia} alt="" className="img_logo" />
                     <HeaderAuth />

@@ -1,11 +1,15 @@
-import '../style/Form.css'
-
 function FormInput() {
     return(
         <>
             <section className='form_section'>
                 <label htmlFor="">Email</label>
-                <input type="email" placeholder='Masukan email anda...'/>
+                <div className="form_input">
+                    <input type="email" placeholder='Masukan email anda...'/>
+                    <label className="label_error" htmlFor="">
+                        <img src="" alt="" />
+                        <p>Email yang anda masukan tidak ditemukan.</p>
+                    </label>
+                </div>
             </section>
         </>
     )
