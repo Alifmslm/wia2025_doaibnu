@@ -16,6 +16,7 @@ function RegisterPage() {
                 </section>
             </form>
         </>
+        // test
     );
 }
 
