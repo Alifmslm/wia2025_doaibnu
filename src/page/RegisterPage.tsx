@@ -4,7 +4,7 @@ import SideImage from "../component/SideImage.tsx";
 import "../style/AuthPage.css";
 import LogoWia from "../assets/logo_wia.jpg";
 
-function LoginPage() {
+function RegisterPage() {
     return (
         <>
             <form className="auth_form">
@@ -12,11 +12,12 @@ function LoginPage() {
                 <section className="container_login">
                     <img src={LogoWia} alt="" className="img_logo" />
                     <HeaderAuth />
-                    <Form name="Login Akun"/>
+                    <Form name="Daftar Akun"/>
                 </section>
             </form>
         </>
+        // test
     );
 }
 
-export default LoginPage;
+export default RegisterPage;
