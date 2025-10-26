@@ -1,12 +1,17 @@
 import '../style/FooterAuth.css'
 
+type FooterProps = {
+    name: string;
+    subname: string;
+    link: string;
+};
 
-function FooterAuth() {
+function FooterAuth({name, subname, link}:FooterProps) {
     return(
         <>
             <section className="footer_auth">
-                <p>Belum punya akun?</p>
-                <a href="">Daftar Sekarang!</a>
+                <p>{name}</p>
+                <a href={link}>{subname}</a>
             </section>
         </>
     )
