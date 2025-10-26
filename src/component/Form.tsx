@@ -10,9 +10,17 @@ type FormProps = {
 function Form({ name }: FormProps) {
     const isLogin = name === "Login Akun";
 
+    // daftar field & tipe input-nya
     const fields = isLogin
-        ? ["Email", "Password"]
-        : ["Nama", "Email", "Password"];
+        ? [
+            { label: "Email", type: "email" },
+            { label: "Password", type: "password" }
+        ]
+        : [
+            { label: "Nama", type: "text" },
+            { label: "Email", type: "email" },
+            { label: "Password", type: "password" }
+        ];
 
     const footerText = isLogin
         ? { name: "Belum punya akun?", subname: "Daftar Sekarang!", link: "/register" }
@@ -22,9 +30,12 @@ function Form({ name }: FormProps) {
         <section className="section_form_parent">
             {fields.map((field) => (
                 <FormInput
-                    key={field}
-                    nameInput={field}
-                    placeholderInput={`Masukan ${field.toLowerCase()} anda...`}
+                    key={field.label}
+                    nameInput={field.label}
+                    placeholderInput={`Masukan ${field.label.toLowerCase()} anda...`}
+                    inputType={field.type}
+                    isLogin={isLogin}
+                    errorInput=""
                 />
             ))}
 

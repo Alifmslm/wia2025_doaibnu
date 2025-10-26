@@ -31,15 +31,36 @@
     gap: 4px;
 }
 
-.label_error {
-    display: none;
-    gap: 6px;
-}
-
 .label_error p {
     color: var(--error-color);
     font-weight: 400;
     font-size: 12px;
+}
+
+.password_strength {
+    margin-top: 4px;
+    font-size: 0.85rem;
+}
+
+.strength_text.lemah {
+    color: var(--error-color);
+}
+
+.strength_text.sedang {
+    color: var(--warning-color);
+}
+
+.strength_text.kuat {
+    color: var(--main-color);
+}
+
+.label_error {
+    color: var(--error-color);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
 }
 
 @media (min-width: 600px) and (max-width: 1024px) {
