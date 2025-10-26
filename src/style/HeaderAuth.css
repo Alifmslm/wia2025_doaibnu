@@ -19,3 +19,9 @@
         text-align: center;
     }
 }
+
+@media (min-width: 1025px) {
+    .header_auth {
+        text-align: center;
+    }
+}
