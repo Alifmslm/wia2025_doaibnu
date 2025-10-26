@@ -1,0 +1,86 @@
+.container_login {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin: 24px 16px;
+}
+
+.side_image {
+    display: none;
+}
+
+@media (min-width: 600px) {
+    body {
+        background-color: #fcfcfc;
+        margin: 0 auto;
+    }
+
+    .container_login {
+        margin: 0;
+        padding: 48px 68px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .auth_form {
+        display: grid;
+        grid-template-columns: 30% 70%;
+        /* 40% kiri, 60% kanan */
+        height: 100vh;
+    }
+
+    .container_login {
+        margin: auto;
+    }
+
+    .container_login .img_logo {
+        display: none;
+    }
+
+    .side_image {
+        display: block;
+        position: relative;
+        height: 100vh;
+        background: url("../assets/") center/cover no-repeat;
+    }
+
+    .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #3A8F63 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 64px 32px;
+        color: white;
+    }
+
+    .img_logo {
+        width: 140px;
+    }
+
+    .side_content {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .side_content .quote {
+        color: white;
+        font-size: 22px;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    .user_info .name {
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .user_info .role {
+        color: white;
+        font-size: 14px;
+        opacity: 0.9;
+    }
+}

@@ -1,0 +1,27 @@
+.header_auth {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.header_auth_header {
+    font-size: 36px;
+    line-height: 40px;
+}
+
+.header_auth_subheader {
+    color: var(--text-color-secondary);
+}
+
+@media (min-width: 600px) and (max-width: 1024px) {
+  /* CSS khusus untuk tablet di sini */
+    .header_auth {
+        text-align: center;
+    }
+}
+
+@media (min-width: 1025px) {
+    .header_auth {
+        text-align: center;
+    }
+}

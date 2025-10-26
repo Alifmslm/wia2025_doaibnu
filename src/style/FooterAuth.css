@@ -1,0 +1,9 @@
+.footer_auth {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+}
+
+.footer_auth p {
+    color: var(--text-color-secondary);
+}

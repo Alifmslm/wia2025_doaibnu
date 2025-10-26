@@ -1,6 +1,6 @@
 function Button() {
     return(
-        <h1>Ini adalah Button</h1>
+        <button>Login Akun</button>
     )
 }
 
