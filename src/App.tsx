@@ -1,10 +1,10 @@
 import './style/App.css'
-import Form from "./Form.tsx";
+import LoginPage from './page/LoginPage.tsx'
 
 function App() {
   return (
     <>
-      <Form />
+      <LoginPage/>
     </>
   )
 }
