@@ -1,15 +1,11 @@
 import './style/App.css'
-import RegisterPage from './page/RegisterPage.tsx'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from './page/LoginPage.tsx';
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from './routes/AppRoutes.tsx';
 
 function App() {
   return (
       <BrowserRouter>
-        <Routes>
-          <Route path='/register' element={<RegisterPage/>}></Route>
-          <Route path='/login' element={<LoginPage/>}></Route>
-        </Routes>
+        <AppRoutes />
       </BrowserRouter>
   )
 }
