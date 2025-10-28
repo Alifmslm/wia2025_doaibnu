@@ -35,7 +35,6 @@ function Form({ name }: FormProps) {
                     placeholderInput={`Masukan ${field.label.toLowerCase()} anda...`}
                     inputType={field.type}
                     isLogin={isLogin}
-                    errorInput=""
                 />
             ))}
 
