@@ -8,8 +8,10 @@ function HomePage() {
     return(
         <>
             <HeaderDefault/>
-            <HeroImage/>
-            <SearchFilterContainer/>
+            <div className="hero-container">
+                <HeroImage/>
+                <SearchFilterContainer/>
+            </div>
             <UmkmList/>
         </>
     )

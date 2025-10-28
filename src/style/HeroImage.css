@@ -37,3 +37,10 @@
     font-size: 16px;
     opacity: 0.9;
 }
+
+@media (min-width: 1025px) {
+    .text-container h1 {
+        font-size: 28px;
+        margin-bottom: 12px;
+    }
+}
