@@ -20,17 +20,28 @@ function FormInput({
                     type={inputType}
                     placeholder={placeholderInput}
                     id={nameInput}
-                    name={nameInput.toLowerCase()}/>
-                    {/* Label buat email dan password salah (Login Page) */}
-                    <label className="label-error" htmlFor={nameInput}>
-                        <img src="" alt="error-icon" />
-                        <p>{nameInput} anda salah!</p>
+                    name={nameInput.toLowerCase()} />
+                {/* Label buat email dan password salah (Login Page) */}
+                <label className="label-error" htmlFor={nameInput}>
+                    <img src="" alt="error-icon" />
+                    <p>{nameInput} anda salah!</p>
+                </label>
+                {/* Label buat password complexity (Register Page) */}
+                {nameInput.toLowerCase() === "password" && (
+                    <label className="label-password-complexity" htmlFor={nameInput}>
+                        <div className="progress-container">
+                            <div className="progress-bar" style={{
+                                width: `30%`,
+                                background: `var(--error-color)`,
+                            }} />
+                        </div>
+                        <div className="complexity-feedback">
+                            <img src="" alt="error-icon" />
+                            <img src="" alt="success-icon" />
+                            <p>{nameInput}</p>
+                        </div>
                     </label>
-                    {/* Label buat email dan password salah (Login Page) */}
-                    <label className="label-error" htmlFor={nameInput}>
-                        <img src="" alt="error-icon" />
-                        <p>{nameInput} anda salah!</p>
-                    </label>
+                )}
             </div>
         </section>
     );
