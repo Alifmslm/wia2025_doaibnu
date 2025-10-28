@@ -1,3 +1,8 @@
+.home-section {
+    height: 100vh;
+    background-color: #f6f8fd;
+}
+
 .hero-container {
     position: relative; /* penting supaya absolute-nya C ngikutin container ini */
     width: 100%;
