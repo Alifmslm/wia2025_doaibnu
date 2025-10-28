@@ -1,4 +1,4 @@
-import "../../style/HeaderAuth.css";
+import "../../../style/HeaderAuth.css";
 
 function HeaderAuth() {
     return (

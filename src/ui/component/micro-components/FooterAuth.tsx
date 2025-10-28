@@ -1,4 +1,4 @@
-import '../../style/FooterAuth.css'
+import '../../../style/FooterAuth.css'
 
 type FooterProps = {
     name: string;

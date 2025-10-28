@@ -1,7 +1,7 @@
-import "../../style/Form.css";
-import FormInput from "./FormInput.tsx";
-import Button from "./Button.tsx";
-import FooterAuth from "./FooterAuth.tsx";
+import "../../../style/Form.css";
+import FormInput from "../micro-components/FormInput.tsx";
+import Button from "../micro-components/Button.tsx";
+import FooterAuth from "../micro-components/FooterAuth.tsx";
 
 type FormProps = {
     name: string;
