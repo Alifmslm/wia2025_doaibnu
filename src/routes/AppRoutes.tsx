@@ -1,6 +1,6 @@
-import RegisterPage from "../page/RegisterPage.tsx";
+import RegisterPage from "../ui/page/RegisterPage.tsx";
 import { Routes, Route } from "react-router-dom";
-import LoginPage from "../page/LoginPage.tsx";
+import LoginPage from "../ui/page/LoginPage.tsx";
 
 function AppRoutes() {
     return (

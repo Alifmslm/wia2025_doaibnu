@@ -1,4 +1,4 @@
-import "../style/Form.css";
+import "../../style/Form.css";
 import FormInput from "./FormInput.tsx";
 import Button from "./Button.tsx";
 import FooterAuth from "./FooterAuth.tsx";
