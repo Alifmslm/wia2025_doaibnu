@@ -7,12 +7,14 @@ import UmkmList from "../component/macro-components/UmkmList.tsx";
 function HomePage() {
     return(
         <>
-            <HeaderDefault/>
-            <div className="hero-container">
-                <HeroImage/>
-                <SearchFilterContainer/>
-            </div>
-            <UmkmList/>
+            <section className="home-section">
+                <HeaderDefault/>
+                <div className="hero-container">
+                    <HeroImage/>
+                    <SearchFilterContainer/>
+                </div>
+                <UmkmList/>
+            </section>
         </>
     )
 }
