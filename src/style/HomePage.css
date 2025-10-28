@@ -1,0 +1,5 @@
+.hero-container {
+    position: relative; /* penting supaya absolute-nya C ngikutin container ini */
+    width: 100%;
+    height: auto;
+}

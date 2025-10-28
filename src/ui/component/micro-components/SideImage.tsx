@@ -1,4 +1,4 @@
-import LogoWia from "../assets/logo_wia.jpg";
+import LogoWia from "../../../assets/logo_wia.jpg";
 
 function SideImage() {
     return (
