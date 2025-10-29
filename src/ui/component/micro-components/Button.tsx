@@ -1,11 +1,14 @@
 type ButtonProps = {
     nameButton: string;
+    onClick?: () => void;
+};
+
+function Button({ nameButton, onClick }: ButtonProps) {
+    return (
+        <button className="button" onClick={onClick}>
+            {nameButton}
+        </button>
+    );
 }
 
-function Button({nameButton}:ButtonProps) {
-    return(
-        <button>{nameButton}</button>
-    )
-}
-
-export default Button
+export default Button;

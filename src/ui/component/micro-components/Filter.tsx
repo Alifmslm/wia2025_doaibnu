@@ -1,15 +1,23 @@
+import { useState } from "react";
 import PopUpFilter from "../micro-components/PopupFilter.tsx";
 
 function Filter() {
-    return(
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
         <>
-            <button className="button-filter">
-                <img src="" alt="filter-icon" className="filter-icon"/>
+            <button 
+                className="button-filter" 
+                onClick={() => setIsOpen(true)}
+            >
+                <img src="" alt="filter-icon" className="filter-icon" />
             </button>
-            {/* <PopUpFilter/> */}
-            <PopUpFilter/>
+
+            {isOpen && (
+                <PopUpFilter onClose={() => setIsOpen(false)} />
+            )}
         </>
-    )
+    );
 }
 
-export default Filter
+export default Filter;
