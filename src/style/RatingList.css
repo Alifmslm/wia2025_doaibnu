@@ -61,3 +61,18 @@
         grid-template-columns: 1fr 1fr; /* jadi 2 kolom */
     }
 }
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.pagination-container .MuiPaginationItem-root.Mui-selected {
+    background-color: var(--main-color);
+    color: white;
+}
+
+.pagination-container .MuiPaginationItem-root:hover {
+  background-color: rgba(0, 128, 0, 0.1);
+}
