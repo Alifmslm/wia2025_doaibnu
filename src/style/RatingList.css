@@ -5,6 +5,12 @@
     gap: 10px;
 }
 
+.rating-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
 .rating-list-container h1 {
     font-size: 16px;
 }
@@ -48,4 +54,10 @@
 .rate p {
     color: var(--main-color);
     font-weight: 600;
+}
+
+@media (min-width: 768px) {
+    .rating-list {
+        grid-template-columns: 1fr 1fr; /* jadi 2 kolom */
+    }
 }

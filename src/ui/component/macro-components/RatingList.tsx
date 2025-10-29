@@ -8,6 +8,8 @@ function RatingList() {
                 <h1>Ulasan</h1>
                 <section className="rating-list">
                     <RatingCard />
+                    <RatingCard />
+                    <RatingCard />
                 </section>
             </section>
 
