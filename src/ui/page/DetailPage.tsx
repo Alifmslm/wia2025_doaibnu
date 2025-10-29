@@ -11,6 +11,9 @@ function DetailPage() {
         <>
             <HeaderDefault/>
             <HeroDetail images={images}/>
+            <section className="detail-content">
+                
+            </section>
         </>
     )
 }
