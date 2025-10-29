@@ -1,0 +1,21 @@
+.location-tab {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+    text-align: start;
+}
+
+.location-tab h1 {
+    font-size: 16px;
+}
+
+.location-tab p {
+    font-size: 14px;
+    color: var(--text-color-secondary);
+}
+
+.embed-gmaps {
+    width: 100%;
+    height: 150px;
+    border-radius: 10px;
+}
