@@ -1,0 +1,79 @@
+.detail-content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.detail-content {
+    max-width: 770px;
+    width: 100%;
+    height: fit-content;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.label-detail__on {
+    width: fit-content;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    font-weight: 400;
+    transition: all 0.25s ease;
+    background-color: color-mix(in srgb, var(--main-color) 15%, transparent);
+    color: var(--main-color);
+    border-color: var(--main-color);
+    font-weight: 500;
+    text-align: center;
+}
+
+.label-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-save-detail {
+    background: 0;
+    padding: 0;
+    display: flex;
+    gap: 8px;
+    color: var(--text-color-secondary);
+    font-weight: 400;
+    font-size: 14px;
+    align-items: center;
+}
+
+.button-save-detail img {
+    width: 20px;
+    height: auto;
+}
+
+.text-container-detail h1 {
+    font-size: 20px;
+}
+
+.text-container-detail p {
+    color: var(--text-color-secondary);
+}
+
+.description-detail {
+    color: var(--text-color-secondary);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    /* jumlah baris yang ditampilkan */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (min-width: 768px) {
+    .detail-content {
+        padding: 20px 72px;
+    }
+}
+
+@media (min-width: 1025px) {
+    
+}
