@@ -7,9 +7,12 @@ import "../../style/DetailPage.css"
 import img1 from "../../assets/card-image.png";
 import img2 from "../../assets/card-image.png";
 import img3 from "../../assets/card-image.png";
+import img4 from "../../assets/card-image.png";
+import img5 from "../../assets/card-image.png";
+import img6 from "../../assets/card-image.png";
 
 function DetailPage() {
-    const images = [img1, img2, img3]
+    const images = [img1, img2, img3, img4, img5, img6]
     return (
         <>
             <HeaderDefault />
@@ -35,7 +38,7 @@ function DetailPage() {
                     <p className="see-all-desc">
                         Lihat Selengkapnya
                     </p>
-                    <PlaceMediaContent />
+                    <PlaceMediaContent images={images}/>
                 </section>
             </div>
         </>
