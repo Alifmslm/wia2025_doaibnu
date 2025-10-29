@@ -1,0 +1,51 @@
+.rating-list-container {
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rating-list-container h1 {
+    font-size: 16px;
+}
+
+.rating-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+}
+
+.header-rate {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.desc-rate {
+    color: var(--text-color-secondary);
+}
+
+.rate {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.rate img {
+    width: 20px;
+    height: 20px;
+}
+
+.rate-time {
+    width: 100%;
+    text-align: end;
+}
+
+.rate p {
+    color: var(--main-color);
+    font-weight: 600;
+}
