@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PopUpFilter from "../micro-components/PopupFilter.tsx";
+import FilterIcon from "../../../assets/filter-icon.png"
 
 function Filter() {
     const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +11,7 @@ function Filter() {
                 className="button-filter" 
                 onClick={() => setIsOpen(true)}
             >
-                <img src="" alt="filter-icon" className="filter-icon" />
+                <img src={FilterIcon} alt="filter-icon" className="filter-icon" />
             </button>
 
             {isOpen && (

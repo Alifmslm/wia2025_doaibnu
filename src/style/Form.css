@@ -79,7 +79,7 @@
     width: 100%;
     max-width: 400px;
     /* lebar maksimum */
-    background-color: #e0e0e0;
+    background-color: white;
     border-radius: 20px;
     overflow: hidden;
 }
@@ -96,7 +96,11 @@
 .complexity-feedback{
     display: flex;
     gap: 6px;
+}
 
+.complexity-feedback img {
+    width: 20px;
+    height: 20px;
 }
 
 @media (min-width: 600px) and (max-width: 1024px) {

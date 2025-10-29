@@ -1,3 +1,7 @@
+import ErrorIcon from '../../../assets/error-icon.png'
+import SuccesIcon from '../../../assets/success-icon.png'
+import WarningIcon from '../../../assets/warning-icon.png'
+
 type FormProps = {
     nameInput: string;
     placeholderInput: string;
@@ -23,7 +27,7 @@ function FormInput({
                     name={nameInput.toLowerCase()} />
                 {/* Label buat email dan password salah (Login Page) */}
                 <label className="label-error" htmlFor={nameInput}>
-                    <img src="" alt="error-icon" />
+                    <img src={ErrorIcon} alt="error-icon" />
                     <p>{nameInput} anda salah!</p>
                 </label>
                 {/* Label buat password complexity (Register Page) */}
@@ -36,8 +40,9 @@ function FormInput({
                             }} />
                         </div>
                         <div className="complexity-feedback">
-                            <img src="" alt="error-icon" />
-                            <img src="" alt="success-icon" />
+                            <img src={ErrorIcon} alt="error-icon" />
+                            <img src={WarningIcon} alt="warning-icon" />
+                            <img src={SuccesIcon} alt="success-icon" />
                             <p>{nameInput}</p>
                         </div>
                     </label>
