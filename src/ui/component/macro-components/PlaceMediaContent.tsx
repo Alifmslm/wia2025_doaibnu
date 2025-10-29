@@ -2,9 +2,13 @@ import { useState } from "react";
 import GalleryTabs from "./GalleryTabs";
 import ReviewTabs from "./ReviewTabs";
 import LocationTabs from "./LocationTabs";
-import "../../../style/PlaceMediaContent.css"
+import "../../../style/PlaceMediaContent.css";
 
-function PlaceMediaContent() {
+type PlaceMediaContentProps = {
+    images: string[];
+};
+
+function PlaceMediaContent({ images }: PlaceMediaContentProps) {
     const [activeTab, setActiveTab] = useState("gallery");
 
     const tabs = [
@@ -16,7 +20,7 @@ function PlaceMediaContent() {
     const renderContent = () => {
         switch (activeTab) {
             case "gallery":
-                return <GalleryTabs />;
+                return <GalleryTabs images={images} />;
             case "ulasan":
                 return <ReviewTabs />;
             case "lokasi":
@@ -30,12 +34,15 @@ function PlaceMediaContent() {
         <section className="tabview-container">
             <div className="tab-header">
                 {tabs.map((tab) => (
-                    <a key={tab.id} onClick={(e) => {
+                    <a
+                        key={tab.id}
+                        href="#"
+                        onClick={(e) => {
                             e.preventDefault();
                             setActiveTab(tab.id);
                         }}
-                        href="#"
-                        className={`tab-link ${activeTab === tab.id ? "active" : ""}`}>
+                        className={`tab-link ${activeTab === tab.id ? "active" : ""}`}
+                    >
                         {tab.label}
                         <span className="tab-indicator"></span>
                     </a>
@@ -47,4 +54,4 @@ function PlaceMediaContent() {
     );
 }
 
-export default PlaceMediaContent
+export default PlaceMediaContent;

@@ -1,7 +1,9 @@
+import "../../../style/ReviewTabs.css";
+
 function ReviewTabs () {
     return(
         <>
-            <h1>Ini adalah Ulasan</h1>
+            
         </>
     )
 }
