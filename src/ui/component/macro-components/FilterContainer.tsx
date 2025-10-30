@@ -3,9 +3,10 @@ import { useState } from "react";
 type FilterContainerProps = {
     title: string;
     labels: string[];
+    onLabelClick?: (label: string) => void; // ✅ tambahkan optional callback
 };
 
-function FilterContainer({ title, labels }: FilterContainerProps) {
+function FilterContainer({ title, labels, onLabelClick }: FilterContainerProps) {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
     return (
@@ -15,10 +16,11 @@ function FilterContainer({ title, labels }: FilterContainerProps) {
                 {labels.map((item, index) => (
                     <button
                         key={index}
-                        className={
-                            activeIndex === index ? "label-detail__on" : "label-detail"
-                        }
-                        onClick={() => setActiveIndex(index)}
+                        className={activeIndex === index ? "label-detail__on" : "label-detail"}
+                        onClick={() => {
+                            setActiveIndex(index); // ubah tampilan aktif
+                            if (onLabelClick) onLabelClick(item); // ✅ kirim label ke parent
+                        }}
                     >
                         {item}
                     </button>

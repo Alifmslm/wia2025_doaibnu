@@ -3,16 +3,18 @@ import { createPortal } from "react-dom";
 import Button from "./Button.tsx";
 
 type PopUpFilterProps = {
-    onClose: () => void; // ✅ terima fungsi penutup dari parent
+    onClose: () => void;
+    onCategorySelect: (cat: string) => void;
 };
 
-function PopUpFilter({ onClose }: PopUpFilterProps) {
+
+function PopUpFilter({ onClose, onCategorySelect }: PopUpFilterProps) {
     return createPortal(
         <>
             <div className="popup-overlay" onClick={onClose}>
                 <div
                     className="popup-content"
-                    onClick={(e) => e.stopPropagation()} // cegah klik di dalam popup menutup popup
+                    onClick={(e) => e.stopPropagation()}
                 >
                     {/* Tombol X */}
                     <p className="close-popup-btn" onClick={onClose}>
@@ -33,6 +35,7 @@ function PopUpFilter({ onClose }: PopUpFilterProps) {
                     <FilterContainer
                         title="Kategori UMKM"
                         labels={["Makanan", "Minuman", "Jasa"]}
+                        onLabelClick={onCategorySelect} // ✅ panggil dari sini
                     />
 
                     {/* Tombol Simpan */}

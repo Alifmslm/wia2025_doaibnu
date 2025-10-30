@@ -1,32 +1,44 @@
 import RatingLabel from "../micro-components/RatingLabel.tsx";
 import SaveButton from "../../../assets/save-button-colored.png";
+import type { Umkm } from "../../../shared/types/Umkm";
+import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
+import HomeImage from '../../../assets/gallery-image-1.png' 
 
-function UmkmCard() {
+function UmkmCard({ umkm }: { umkm: Umkm }) {
+    const avgRating = UmkmRepository.getAverageRating(umkm);
+    const totalRatings = umkm.ratings?.length || 0;
+
     return (
-        <>
-            <a href="/detail-page" className="card-link">
-                <section className="card">
-                    <div className="card-image">
-                        <div className="card-meta">
-                            <div className="category-label">
-                                <p>Makanan</p>
-                            </div>
-                            <div className="save-button">
-                                <img src={SaveButton} alt="saved-button" />
-                            </div>
+        <a href={`/detail-page/${umkm.id}`} className="card-link">
+            <section className="card">
+                <div
+                    className="card-image"
+                    style={{
+                        backgroundImage: `url(${HomeImage})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    }}
+                >
+                    <div className="card-meta">
+                        <div className="category-label">
+                            <p>{umkm.kategori}</p>
+                        </div>
+                        <div className="save-button">
+                            <img src={SaveButton} alt="saved-button" />
                         </div>
                     </div>
-                    <div className="card-content">
-                        <RatingLabel />
-                        <div className="card-text">
-                            <h1>Soto Ayam Bu Carti</h1>
-                            <p>Malang, Jawa Timur</p>
-                        </div>
+                </div>
+
+                <div className="card-content">
+                    <RatingLabel rating={avgRating} total={totalRatings} />
+                    <div className="card-text">
+                        <h1>{umkm.nama}</h1>
+                        <p>{umkm.lokasi?.lokasi_general}</p>
                     </div>
-                </section>
-            </a>
-        </>
+                </div>
+            </section>
+        </a>
     );
 }
 
-export default UmkmCard
+export default UmkmCard;

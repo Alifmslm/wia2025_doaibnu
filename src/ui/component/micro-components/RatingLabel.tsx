@@ -1,14 +1,19 @@
 import Star from "../../../assets/Star.png";
 
-function RatingLabel() {
-    return(
-        <>
-            <div className="rating-label-home">
-                <img src={Star} alt="star rating" className="star-label"/>
-                <p>4.8 (120)</p>
-            </div>
-        </>
+type RatingLabelProps = {
+    rating: number;      // nilai rating rata-rata
+    total?: number;      // opsional: jumlah penilai
+};
+
+function RatingLabel({ rating, total }: RatingLabelProps) {
+    return (
+        <div className="rating-label-home">
+            <img src={Star} alt="star rating" className="star-label" />
+            <p>
+                {rating.toFixed(1)}{total ? ` (${total})` : ""}
+            </p>
+        </div>
     );
 }
 
-export default RatingLabel
+export default RatingLabel;
