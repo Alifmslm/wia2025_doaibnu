@@ -1,0 +1,111 @@
+.gallery-page {
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(15, 15, 15);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.icon-item {
+    background-color: white;
+}
+
+.icon-group {
+    width: 100%;
+    padding: 24px;
+}
+
+.img-main {
+    width: 100%;
+    max-height: 529px;
+    object-fit: contain;
+}
+
+.carousel-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gallery-carousel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+}
+
+.carousel-header h1 {
+    font-size: 16px;
+    color: white;
+}
+
+.carousell-list {
+    width: 100%;
+    display: flex;
+    overflow-x: scroll;
+    align-items: center;
+    gap: 8px;
+}
+
+.carousell-list img {
+    object-fit: cover;
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+}
+
+.carousell-list {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    scroll-behavior: smooth;
+}
+
+/* Wrapper setiap item agar overlay bisa ditumpuk */
+.carousel-item-wrapper {
+    position: relative;
+    border-radius: 5px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+/* Gambar di carousel */
+.carousel-item {
+    object-fit: cover;
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Overlay gelap untuk gambar yang tidak aktif */
+.carousel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    transition: opacity 0.3s ease;
+}
+
+/* Gambar aktif */
+.carousel-item-wrapper.active {
+    border: 4px solid white;
+}
+
+/* Hover memberi efek lebih terang */
+.carousel-item-wrapper:hover .carousel-overlay {
+    opacity: 0.2;
+}
+
+@media (min-width: 1025px) {
+    .icon-group,
+    .gallery-carousel {
+        padding: 24px 80px;
+    }
+}
