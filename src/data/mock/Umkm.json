@@ -1,0 +1,281 @@
+{
+    "umkm": [
+        {
+            "id": 1,
+            "nama": "Soto Ayam Bu Carti",
+            "kategori": "Makanan",
+            "deskripsi": "Soto ayam legendaris dengan kuah gurih dan suwiran ayam kampung khas Jawa Tengah.",
+            "lokasi": {
+                "alamat": "Jl. Kaliurang No. 22, Sleman, Yogyakarta",
+                "lokasi_general": "Yogyakarta, DI Yogyakarta",
+                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8148.424799200996!2d107.61754315008173!3d-6.887510983728445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e6e33227d863%3A0x1bdb90c18f112062!2sSoto%20Ayam%20Bu%20Carti!5e0!3m2!1sid!2sid!4v1761740393081!5m2!1sid!2sid"
+            },
+            "gambarUtama": "https://example.com/images/soto-ayam-bu-carti.jpg",
+            "gallery": [
+                "https://example.com/gallery/soto1.jpg",
+                "https://example.com/gallery/soto2.jpg",
+                "https://example.com/gallery/soto3.jpg",
+                "https://example.com/gallery/soto4.jpg"
+            ],
+            "ratings": [
+                {
+                    "user": "Andi",
+                    "nilai": 4.8,
+                    "komentar": "Rasanya enak banget!"
+                },
+                {
+                    "user": "Rina",
+                    "nilai": 4.5,
+                    "komentar": "Kuahnya gurih dan porsi pas."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "nama": "Bakso Pak Kumis",
+            "kategori": "Makanan",
+            "deskripsi": "Bakso urat legendaris dengan kuah kaldu yang gurih dan bola daging besar.",
+            "lokasi": {
+                "alamat": "Jl. Pahlawan No. 10, Semarang",
+                "lokasi_general": "Semarang, Jawa Tengah",
+                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.0289999999997!2d110.4203!3d-6.9823"
+            },
+            "gambarUtama": "https://example.com/images/bakso-pak-kumis.jpg",
+            "gallery": [
+                "https://example.com/gallery/bakso1.jpg",
+                "https://example.com/gallery/bakso2.jpg"
+            ],
+            "ratings": [
+                {
+                    "user": "Dimas",
+                    "nilai": 4.7,
+                    "komentar": "Baksonya empuk dan gurih."
+                },
+                {
+                    "user": "Lina",
+                    "nilai": 4.3,
+                    "komentar": "Harga sesuai rasa."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "nama": "Warung Padang Lestari",
+            "kategori": "Makanan",
+            "deskripsi": "Menyajikan hidangan Padang autentik dengan rendang khas Minang yang kaya rempah.",
+            "lokasi": {
+                "alamat": "Jl. Sudirman No. 45, Padang",
+                "lokasi_general": "Padang, Sumatera Barat",
+                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.023999!2d100.3603!3d-0.9553"
+            },
+            "gambarUtama": "https://example.com/images/warung-padang-lestari.jpg",
+            "gallery": [
+                "https://example.com/gallery/padang1.jpg",
+                "https://example.com/gallery/padang2.jpg"
+            ],
+            "ratings": [
+                {
+                    "user": "Rafi",
+                    "nilai": 5.0,
+                    "komentar": "Rendangnya luar biasa!"
+                },
+                {
+                    "user": "Nadia",
+                    "nilai": 4.8,
+                    "komentar": "Tempat bersih dan nyaman."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "nama": "Kopi Senja",
+            "kategori": "Minuman",
+            "deskripsi": "Kopi arabika pilihan dengan suasana nyaman, cocok untuk bekerja maupun bersantai.",
+            "lokasi": {
+                "alamat": "Jl. Dago No. 88, Bandung",
+                "lokasi_general": "Bandung, Jawa Barat",
+                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.0289999999997!2d107.619123!3d-6.893838"
+            },
+            "gambarUtama": "https://example.com/images/kopi-senja.jpg",
+            "gallery": [
+                "https://example.com/gallery/kopi1.jpg",
+                "https://example.com/gallery/kopi2.jpg",
+                "https://example.com/gallery/kopi3.jpg"
+            ],
+            "ratings": [
+                {
+                    "user": "Budi",
+                    "nilai": 5.0,
+                    "komentar": "Kopi terbaik di Bandung!"
+                },
+                {
+                    "user": "Sari",
+                    "nilai": 4.7,
+                    "komentar": "Tempatnya cozy banget."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "nama": "Teh Mawar",
+            "kategori": "Minuman",
+            "deskripsi": "Teh melati segar buatan rumah dengan aroma lembut dan rasa menenangkan.",
+            "lokasi": {
+                "alamat": "Jl. Merdeka No. 8, Bogor",
+                "lokasi_general": "Bogor, Jawa Barat",
+                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.8!2d106.795!3d-6.597"
+            },
+            "gambarUtama": "https://example.com/images/teh-mawar.jpg",
+            "gallery": [
+                "https://example.com/gallery/teh1.jpg",
+                "https://example.com/gallery/teh2.jpg"
+            ],
+            "ratings": [
+                {
+                    "user": "Lusi",
+                    "nilai": 4.6,
+                    "komentar": "Rasanya lembut dan menyegarkan."
+                },
+                {
+                    "user": "Andra",
+                    "nilai": 4.4,
+                    "komentar": "Tehnya wangi alami."
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "nama": "Jus Sehat Barokah",
+            "kategori": "Minuman",
+            "deskripsi": "Jus buah segar tanpa pengawet, 100% bahan alami.",
+            "lokasi": {
+                "alamat": "Jl. Gajah Mada No. 9, Surabaya",
+                "lokasi_general": "Surabaya, Jawa Timur",
+                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.8!2d112.735!3d-7.265"
+            },
+            "gambarUtama": "https://example.com/images/jus-sehat-barokah.jpg",
+            "gallery": [
+                "https://example.com/gallery/jus1.jpg",
+                "https://example.com/gallery/jus2.jpg"
+            ],
+            "ratings": [
+                {
+                    "user": "Winda",
+                    "nilai": 4.8,
+                    "komentar": "Segar banget dan manis alami."
+                },
+                {
+                    "user": "Rizky",
+                    "nilai": 4.5,
+                    "komentar": "Enak diminum siang hari."
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "nama": "Laundry Bersih Jaya",
+            "kategori": "Jasa",
+            "deskripsi": "Jasa laundry profesional dengan layanan cepat dan harga terjangkau.",
+            "lokasi": {
+                "alamat": "Jl. Melati No. 22, Depok",
+                "lokasi_general": "Depok, Jawa Barat",
+                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.0289!2d106.818!3d-6.390"
+            },
+            "gambarUtama": "https://example.com/images/laundry-bersih-jaya.jpg",
+            "gallery": [
+                "https://example.com/gallery/laundry1.jpg",
+                "https://example.com/gallery/laundry2.jpg"
+            ],
+            "ratings": [
+                {
+                    "user": "Rani",
+                    "nilai": 4.9,
+                    "komentar": "Cepat dan pakaian wangi banget!"
+                },
+                {
+                    "user": "Eko",
+                    "nilai": 4.6,
+                    "komentar": "Pelayanan ramah dan profesional."
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "nama": "Barber Ganteng",
+            "kategori": "Jasa",
+            "deskripsi": "Barbershop modern dengan potongan kekinian dan pelayanan ramah.",
+            "lokasi": {
+                "alamat": "Jl. Veteran No. 55, Malang",
+                "lokasi_general": "Malang, Jawa Timur",
+                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.8!2d112.615!3d-7.982"
+            },
+            "gambarUtama": "https://example.com/images/barber-ganteng.jpg",
+            "gallery": [
+                "https://example.com/gallery/barber1.jpg",
+                "https://example.com/gallery/barber2.jpg"
+            ],
+            "ratings": [
+                {
+                    "user": "Rico",
+                    "nilai": 4.8,
+                    "komentar": "Potongannya rapi banget!"
+                },
+                {
+                    "user": "Andi",
+                    "nilai": 4.7,
+                    "komentar": "Tempatnya bersih dan wangi."
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "nama": "Tukang Servis Elektronik Maju",
+            "kategori": "Jasa",
+            "deskripsi": "Melayani servis TV, kulkas, dan mesin cuci dengan garansi 30 hari.",
+            "lokasi": {
+                "alamat": "Jl. Gatot Subroto No. 31, Medan",
+                "lokasi_general": "Medan, Sumatera Utara",
+                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.8!2d98.678!3d3.595"
+            },
+            "gambarUtama": "https://example.com/images/servis-elektronik-maju.jpg",
+            "gallery": [
+                "https://example.com/gallery/servis1.jpg"
+            ],
+            "ratings": [
+                {
+                    "user": "Hendra",
+                    "nilai": 4.5,
+                    "komentar": "Servis cepat dan harga bersahabat."
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "nama": "Warung Es Degan Bahagia",
+            "kategori": "Minuman",
+            "deskripsi": "Es degan segar dengan campuran gula merah asli, pas untuk siang hari.",
+            "lokasi": {
+                "alamat": "Jl. Pantai Losari No. 7, Makassar",
+                "lokasi_general": "Makassar, Sulawesi Selatan",
+                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.4!2d119.412!3d-5.143"
+            },
+            "gambarUtama": "https://example.com/images/es-degan-bahagia.jpg",
+            "gallery": [
+                "https://example.com/gallery/esdegan1.jpg",
+                "https://example.com/gallery/esdegan2.jpg"
+            ],
+            "ratings": [
+                {
+                    "user": "Dina",
+                    "nilai": 4.9,
+                    "komentar": "Segar dan asli kelapanya!"
+                },
+                {
+                    "user": "Yoga",
+                    "nilai": 4.7,
+                    "komentar": "Cocok buat cuaca panas."
+                }
+            ]
+        }
+    ]
+}
