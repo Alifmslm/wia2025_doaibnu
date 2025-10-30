@@ -38,10 +38,12 @@ function GalleryTabs({ images }: GalleryTabsProps) {
                         <img src={previewImages[3]} alt="Foto 4" className="gallery-img" />
                         {hasMoreImages && (
                             <div className="overlay">
-                                <div className="overlay-content">
-                                    <img src={ImageIcon} alt="" className="overlay-icon" />
-                                    <p>Lihat Semua Foto</p>
-                                </div>
+                                <a href="/gallery-page-">
+                                    <div className="overlay-content">
+                                        <img src={ImageIcon} alt="" className="overlay-icon" />
+                                        <p>Lihat Semua Foto</p>
+                                    </div>
+                                </a>
                             </div>
                         )}
                     </div>

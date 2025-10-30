@@ -5,6 +5,7 @@
     align-items: center;
     padding: 12px 16px;
     box-shadow: 0px 4px 50px #189655;
+    z-index: 100;
 }
 
 .logo-home {
@@ -14,9 +15,11 @@
 .icon-group {
     display: flex;
     gap: 10px;
+    justify-content: flex-end;
 }
 
 .icon-item {
+    width: fit-content;
     padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: 100px;

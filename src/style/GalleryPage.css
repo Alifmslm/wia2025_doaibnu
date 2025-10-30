@@ -11,7 +11,7 @@
     background-color: white;
 }
 
-.icon-group {
+.icon-container {
     width: 100%;
     padding: 24px;
 }
@@ -104,7 +104,7 @@
 }
 
 @media (min-width: 1025px) {
-    .icon-group,
+    .icon-container,
     .gallery-carousel {
         padding: 24px 80px;
     }
