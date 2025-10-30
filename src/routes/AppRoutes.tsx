@@ -4,6 +4,7 @@ import LoginPage from "../ui/page/LoginPage.tsx";
 import HomePage from "../ui/page/HomePage.tsx";
 import DetailPage from "../ui/page/DetailPage.tsx";
 import GalleryPage from "../ui/page/GalleryPage.tsx";
+import NotificationPage from "../ui/page/NotificationPage.tsx";
 
 function AppRoutes() {
     return (
@@ -13,6 +14,7 @@ function AppRoutes() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/detail-page" element={<DetailPage />} />
             <Route path="/gallery-page-" element={<GalleryPage />} />
+            <Route path="/notification" element={<NotificationPage/>} />
         </Routes>
     );
 }

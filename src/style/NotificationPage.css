@@ -1,0 +1,52 @@
+.notification {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 24px;
+    gap: 48px;
+}
+
+.notification .header h1{
+    color: var(--text-color-primary);
+}
+
+.subheader-notif,
+.desc-notif {
+    color: var(--text-color-secondary);
+}
+
+.content .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.notification .content .header h1{
+    font-size: 20px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    width: 100%;
+}
+
+.notif-time {
+    color: var(--main-color);
+}
+
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+@media (min-width: 1025px) {
+    .notification {
+        padding: 0px 80px;
+    }
+}
