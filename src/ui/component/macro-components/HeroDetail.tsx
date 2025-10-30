@@ -10,18 +10,18 @@ function HeroDetail({ images }: HeroDetailProps) {
     const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
     const nextSlide = useCallback(() => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex === images.length - 1 ? 0 : prevIndex + 1
-        );
-    }, [images.length]);
+        if (currentIndex < images.length - 1) {
+            setCurrentIndex((prevIndex) => prevIndex + 1);
+        }
+    }, [currentIndex, images.length]);
 
     const prevSlide = useCallback(() => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? images.length - 1 : prevIndex - 1
-        );
-    }, [images.length]);
+        if (currentIndex > 0) {
+            setCurrentIndex((prevIndex) => prevIndex - 1);
+        }
+    }, [currentIndex]);
 
-    // Swipe handling
+    // Swipe gesture
     const handleTouchStart = (e: React.TouchEvent) => {
         setTouchStartX(e.touches[0].clientX);
     };
@@ -31,8 +31,8 @@ function HeroDetail({ images }: HeroDetailProps) {
         const touchEndX = e.changedTouches[0].clientX;
         const distance = touchStartX - touchEndX;
 
-        if (distance > 50) nextSlide(); // geser kiri
-        if (distance < -50) prevSlide(); // geser kanan
+        if (distance > 50) nextSlide();
+        if (distance < -50) prevSlide();
 
         setTouchStartX(null);
     };
@@ -49,16 +49,37 @@ function HeroDetail({ images }: HeroDetailProps) {
                         key={index}
                         src={img}
                         alt={`slide-${index}`}
-                        className={`hero-image ${index === currentIndex ? "active" : "inactive"}`}
+                        className={`hero-image ${index === currentIndex ? "active" : "inactive"
+                            }`}
                     />
                 ))}
 
-                {/* Indicator di atas gambar */}
+                {/* Tombol Prev & Next */}
+                <button
+                    className="nav-btn prev-btn"
+                    onClick={prevSlide}
+                    disabled={currentIndex === 0}
+                    aria-label="Previous slide"
+                >
+                    ❮
+                </button>
+
+                <button
+                    className="nav-btn next-btn"
+                    onClick={nextSlide}
+                    disabled={currentIndex === images.length - 1}
+                    aria-label="Next slide"
+                >
+                    ❯
+                </button>
+
+                {/* Indicator */}
                 <div className="indicator-container">
                     {images.map((_, index) => (
                         <div
                             key={index}
-                            className={`indicator-dot ${index === currentIndex ? "active" : ""}`}
+                            className={`indicator-dot ${index === currentIndex ? "active" : ""
+                                }`}
                             onClick={() => setCurrentIndex(index)}
                         ></div>
                     ))}

@@ -29,6 +29,51 @@
     opacity: 1;
 }
 
+/* Tombol Navigasi */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    color: var(--text-color-secondary);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 20;
+
+    /* Bikin tombol bulat sempurna */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.nav-btn:hover:not(:disabled) {
+    background: var(--main-color);
+    color: white;
+}
+
+.prev-btn {
+    left: 16px;
+}
+
+.next-btn {
+    right: 16px;
+}
+
+/* Disabled state */
+.nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Indicator */
 .indicator-container {
     position: absolute;
     bottom: 15px;
@@ -58,11 +103,5 @@
 @media (min-width: 768px) {
     .hero-slider {
         height: 350px;
-    }
-}
-
-@media (min-width: 1025px) {
-    .search-bar input {
-        font-size: 16px;
     }
 }
