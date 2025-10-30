@@ -3,13 +3,14 @@ import SaveButton from "../../../assets/save-button-colored.png";
 import type { Umkm } from "../../../shared/types/Umkm";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
 import HomeImage from '../../../assets/gallery-image-1.png' 
+import { Link } from "react-router-dom";
 
 function UmkmCard({ umkm }: { umkm: Umkm }) {
     const avgRating = UmkmRepository.getAverageRating(umkm);
     const totalRatings = umkm.ratings?.length || 0;
 
     return (
-        <a href={`/detail-page/${umkm.id}`} className="card-link">
+        <Link to={`/detail-page/${umkm.id}`} className="card-link">
             <section className="card">
                 <div
                     className="card-image"
@@ -37,7 +38,7 @@ function UmkmCard({ umkm }: { umkm: Umkm }) {
                     </div>
                 </div>
             </section>
-        </a>
+        </Link>
     );
 }
 

@@ -12,7 +12,7 @@ function AppRoutes() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/home" element={<HomePage />} />
-            <Route path="/detail-page" element={<DetailPage />} />
+            <Route path="/detail-page/:id" element={<DetailPage />} />
             <Route path="/gallery-page-" element={<GalleryPage />} />
             <Route path="/notification" element={<NotificationPage/>} />
         </Routes>
