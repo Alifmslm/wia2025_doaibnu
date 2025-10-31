@@ -11,7 +11,7 @@ function GalleryTabs() {
 
     // ambil hanya 4 foto pertama untuk tampilan grid
     const previewImages = images.slice(0, 4);
-    const hasMoreImages = images.length > 4;
+    const hasMoreImages = images.length == 4;
 
     return (
         <>
