@@ -1,10 +1,14 @@
 import ImageIcon from "../../../assets/image-icon.png";
 
-type GalleryTabsProps = {
-    images: string[];
-};
+import GalleryImage1 from '../../../assets/gallery-image-1.png';
+import GalleryImage2 from '../../../assets/gallery-image-2.png';
+import GalleryImage3 from '../../../assets/gallery-image-3.png';
+import GalleryImage4 from '../../../assets/gallery-image-4.png';
 
-function GalleryTabs({ images }: GalleryTabsProps) {
+function GalleryTabs() {
+    // Buat array semua gambar gallery
+    const images = [GalleryImage1, GalleryImage2, GalleryImage3, GalleryImage4];
+
     // ambil hanya 4 foto pertama untuk tampilan grid
     const previewImages = images.slice(0, 4);
     const hasMoreImages = images.length > 4;
@@ -49,7 +53,7 @@ function GalleryTabs({ images }: GalleryTabsProps) {
                     </div>
                 )}
             </section>
-            <a href="">Tambah Foto</a>
+            <a href="/gallery-page-">Tambah Foto</a>
         </>
     );
 }

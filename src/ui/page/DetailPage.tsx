@@ -26,7 +26,7 @@ function DetailPage() {
     return (
         <>
             <HeaderDefault />
-            <HeroDetail images={umkm.gallery || []} />
+            <HeroDetail />
             <div className="detail-content-container">
                 <section className="detail-content">
                     <section className="label-content">
@@ -46,7 +46,7 @@ function DetailPage() {
                     <p className="description-detail">{umkm.deskripsi}</p>
                     <p className="see-all-desc">Lihat Selengkapnya</p>
 
-                    <PlaceMediaContent images={umkm.gallery || []} />
+                    <PlaceMediaContent />
                 </section>
             </div>
         </>

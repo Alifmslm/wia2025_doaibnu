@@ -1,13 +1,18 @@
 import { useState, useCallback } from "react";
 import "../../../style/HeroDetail.css";
 
-type HeroDetailProps = {
-    images: string[];
-};
+import HeroImage from '../../../assets/card-image.png';
+import GalleryImage1 from '../../../assets/gallery-image-1.png';
+import GalleryImage2 from '../../../assets/gallery-image-2.png';
+import GalleryImage3 from '../../../assets/gallery-image-3.png';
+import GalleryImage4 from '../../../assets/gallery-image-4.png';
 
-function HeroDetail({ images }: HeroDetailProps) {
+function HeroDetail() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+    // Array semua gambar untuk slider
+    const images = [HeroImage, GalleryImage1, GalleryImage2, GalleryImage3, GalleryImage4];
 
     const nextSlide = useCallback(() => {
         if (currentIndex < images.length - 1) {
@@ -49,8 +54,7 @@ function HeroDetail({ images }: HeroDetailProps) {
                         key={index}
                         src={img}
                         alt={`slide-${index}`}
-                        className={`hero-image ${index === currentIndex ? "active" : "inactive"
-                            }`}
+                        className={`hero-image ${index === currentIndex ? "active" : "inactive"}`}
                     />
                 ))}
 
@@ -78,8 +82,7 @@ function HeroDetail({ images }: HeroDetailProps) {
                     {images.map((_, index) => (
                         <div
                             key={index}
-                            className={`indicator-dot ${index === currentIndex ? "active" : ""
-                                }`}
+                            className={`indicator-dot ${index === currentIndex ? "active" : ""}`}
                             onClick={() => setCurrentIndex(index)}
                         ></div>
                     ))}

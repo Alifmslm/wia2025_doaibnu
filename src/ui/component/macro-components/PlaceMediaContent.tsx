@@ -4,11 +4,7 @@ import ReviewTabs from "./ReviewTabs";
 import LocationTabs from "./LocationTabs";
 import "../../../style/PlaceMediaContent.css";
 
-type PlaceMediaContentProps = {
-    images: string[];
-};
-
-function PlaceMediaContent({ images }: PlaceMediaContentProps) {
+function PlaceMediaContent() {
     const [activeTab, setActiveTab] = useState("gallery");
 
     const tabs = [
@@ -20,7 +16,7 @@ function PlaceMediaContent({ images }: PlaceMediaContentProps) {
     const renderContent = () => {
         switch (activeTab) {
             case "gallery":
-                return <GalleryTabs images={images} />;
+                return <GalleryTabs />;
             case "ulasan":
                 return <ReviewTabs />;
             case "lokasi":
