@@ -33,7 +33,7 @@ function FormInput({
                 {/* Label buat password complexity (Register Page) */}
                 {nameInput.toLowerCase() === "password" && (
                     <label className="label-password-complexity" htmlFor={nameInput}>
-                        <div className="progress-container">
+                        <div className="progress-container-form">
                             <div className="progress-bar" style={{
                                 width: `30%`,
                                 background: `var(--error-color)`,

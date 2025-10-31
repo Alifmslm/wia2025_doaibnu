@@ -68,6 +68,7 @@
 }
 
 .label-password-complexity {
+    width: 100%;
     font-size: 0.85rem;
     display: flex;
     flex-direction: column;
@@ -75,11 +76,10 @@
     margin-top: 4px;
 }
 
-.progress-container {
+.progress-container-form {
     width: 100%;
-    max-width: 400px;
     /* lebar maksimum */
-    background-color: white;
+    background-color: var(--border-color);
     border-radius: 20px;
     overflow: hidden;
 }
