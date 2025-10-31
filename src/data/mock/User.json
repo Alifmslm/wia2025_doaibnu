@@ -1,0 +1,22 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "Andi Pratama",
+            "email": "andi@example.com",
+            "password": "password123"
+        },
+        {
+            "id": 2,
+            "name": "Siti Nur",
+            "email": "siti@example.com",
+            "password": "sitiSecret!"
+        },
+        {
+            "id": 3,
+            "name": "Budi Santoso",
+            "email": "budi@example.com",
+            "password": "budiPass2025"
+        }
+    ]
+}

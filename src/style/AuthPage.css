@@ -5,7 +5,7 @@
     margin: 24px 16px;
 }
 
-.side_image {
+.side_image-login {
     display: none;
 }
 
@@ -37,14 +37,14 @@
         display: none;
     }
 
-    .side_image {
+    .side_image-login {
         display: block;
         position: relative;
         height: 100vh;
         background: url("../assets/") center/cover no-repeat;
     }
 
-    .overlay {
+    .overlay-login {
         position: absolute;
         inset: 0;
         background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #3A8F63 100%);
@@ -59,26 +59,26 @@
         width: 140px;
     }
 
-    .side_content {
+    .side_content-login {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
-    .side_content .quote {
+    .side_content-login .quote-login {
         color: white;
         font-size: 22px;
         font-weight: 600;
         line-height: 1.5;
     }
 
-    .user_info .name {
+    .user_info-login .name {
         color: white;
         font-size: 16px;
         font-weight: 500;
     }
 
-    .user_info .role {
+    .user_info-login .role {
         color: white;
         font-size: 14px;
         opacity: 0.9;
