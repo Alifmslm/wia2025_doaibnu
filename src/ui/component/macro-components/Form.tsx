@@ -13,7 +13,9 @@ type FormProps = {
 };
 
 function Form({ name }: FormProps) {
+    console.log('PROP "name" YANG DITERIMA:', name);
     const isLogin = name === "Login Akun";
+    console.log('isLogin BERNILAI:', isLogin);
 
     // [TAMBAHKAN] State untuk menampung semua data input
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
@@ -56,8 +58,10 @@ function Form({ name }: FormProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        console.log('--- FORM DISUBMIT ---');
         
         if (isLogin) {
+            console.log('--- BLOK LOGIN DIJALANKAN ---');
             setIsLoading(true);
             setLoginError(null);
             
@@ -83,9 +87,9 @@ function Form({ name }: FormProps) {
 
         } else {
             // --- Logika untuk Register ---
+            console.log('--- BLOK REGISTER DIJALANKAN ---');
             setIsLoading(true);
-            console.log("Mendaftarkan user dengan data:", formData);
-            setIsLoading(false);
+            window.location.href = '/home';
         }
     };
 

@@ -7,14 +7,14 @@ import LogoWia from "../../assets/logo_wia.jpg";
 function RegisterPage() {
   return (
     <>
-      <form className="auth_form">
+      <div className="auth_form">
         <SideImage />
         <section className="container_login">
           <img src={LogoWia} alt="" className="img_logo" />
           <HeaderAuth />
           <Form name="Daftar Akun" />
         </section>
-      </form>
+      </div>
     </>
     // test
   );
