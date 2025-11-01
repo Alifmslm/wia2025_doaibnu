@@ -54,17 +54,22 @@
     color: var(--main-color);
 }
 
-/* .label-error {
-    color: var(--error-color);
+.label-error {
     font-size: 0.85rem;
     display: flex;
     align-items: center;
     gap: 6px;
-    margin-top: 4px;
-} */
+}
 
-.label-error {
-    display: none;
+
+.label-error p {
+    color: var(--error-color);
+    font-weight: 500;
+}
+
+.label-error img {
+    width: 24px;
+    height: 24px;
 }
 
 .label-password-complexity {

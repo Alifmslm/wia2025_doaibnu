@@ -1,11 +1,13 @@
 type ButtonProps = {
     nameButton: string;
+    cekLogin: boolean;
     onClick?: () => void;
 };
 
 function Button({ nameButton, onClick }: ButtonProps) {
+
     return (
-        <button className="button" onClick={onClick}>
+        <button className="button" type="submit" onClick={onClick}>
             {nameButton}
         </button>
     );
