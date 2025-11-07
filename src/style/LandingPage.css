@@ -1,3 +1,6 @@
+/* =================================
+   NAV STYLES (From Your Code)
+   ================================= */
 .nav-landing {
     background-color: #ffff;
     padding: 16px;
@@ -26,6 +29,93 @@
     font-size: 24px;
 }
 
+/* =================================
+   HERO STYLES (Optimized)
+   ================================= */
+.hero-landing {
+    background-color: #F6F6F4;
+    position: relative; /* Anchor for absolute images */
+    overflow: hidden; /* Prevents images from bleeding out */
+}
+
+.hero-content {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 56px 16px;
+    align-items: center;
+    position: relative; /* To stack on top of images */
+    z-index: 2;
+}
+
+.hero-text {
+    text-align: center;
+}
+
+.hero-subtitle {
+    color: var(--text-color-secondary);
+}
+
+.hero-button {
+    width: fit-content;
+    padding: 10px 16px;
+    background-color: var(--main-color);
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none; /* Good practice for links styled as buttons */
+}
+
+.label-landing {
+    background-color: #fff;
+    display: flex;
+    gap: 8px;
+    padding: 10px 16px;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 100px;
+}
+
+.hero-title {
+    width: 100%;
+    font-size: 32px;
+}
+
+.hero-title span {
+    color: var(--warning-color);
+    text-decoration: underline;
+    font-style: italic;
+}
+
+.label-landing p,
+.label-landing i {
+    color: var(--main-color);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.bg-landing1,
+.bg-landing2 {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1; /* Behind the hero-content */
+    height: 50%; /* Example size, adjust as needed */
+    width: auto;
+}
+
+.bg-landing1 {
+    left: 0;
+}
+
+.bg-landing2 {
+    right: 0;
+}
+
+/* =================================
+   MEDIA QUERIES (From Your Code)
+   ================================= */
 @media (min-width: 1024px) {
     .icon-bar {
         display: none;
