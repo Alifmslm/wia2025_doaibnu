@@ -118,6 +118,58 @@
 }
 
 /* =================================
+   HERO DECORATION STYLES (FIXED)
+   (Bagian ini telah diganti)
+   ================================= */
+.hero-decoration-wrapper {
+    position: relative; 
+    width: 100%;
+    height: 100px; /* Beri tinggi agar 'overflow' berfungsi */
+    overflow: hidden; /* WAJIB: memotong banner yang miring */
+}
+
+.banner {
+    position: absolute; /* Penting untuk tumpang tindih & rotasi */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    
+    /* Membuatnya memanjang keluar layar */
+    width: 150%; 
+    left: -25%; 
+    
+    padding: 12px 0;
+    
+    /* INI ADALAH KUNCINYA AGAR TIDAK MENUMPUK KE BAWAH */
+    white-space: nowrap; 
+}
+
+.banner-green {
+    background-color: var(--main-color);
+    transform: rotate(-4deg); /* Putar berlawanan jarum jam */
+    top: 35px; 
+    z-index: 1; 
+}
+
+.banner-orange {
+    background-color: #FF9D1F;
+    transform: rotate(5deg); /* Putar searah jarum jam */
+    top: 15px; 
+    z-index: 2; 
+}
+
+.banner p {
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.separator-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* =================================
    MEDIA QUERIES (From Your Code)
    ================================= */
 @media (min-width: 1024px) {
