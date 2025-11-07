@@ -169,6 +169,47 @@
     height: 16px;
 }
 
+.footer-landing {
+    padding: 24px 16px;
+    background-color: var(--main-color);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.footer-landing p {
+    color: #fff;
+}
+
+.footer-main {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-main h1,
+.footer-main p {
+    color: #fff;
+}
+
+.footer-main h1 {
+    font-size: 16px;
+    width: 100%;
+}
+
+.footer-main img {
+    height: 20px;
+    width: 110px;
+}
+
+.footer-main p {
+    font-size: 14px;
+}
+
+.copyright {
+    font-size: 14px;
+}
+
 /* =================================
    MEDIA QUERIES (From Your Code)
    ================================= */
