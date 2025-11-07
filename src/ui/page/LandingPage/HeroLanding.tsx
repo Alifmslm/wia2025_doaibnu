@@ -11,7 +11,7 @@ function HeroLanding() {
                 </div>
                 <div className="hero-text">
                     <h1 className="hero-title"><span>Temukan Umkm </span>Terbaik <br /> di Sekitarmu</h1>
-                    <p className="hero-subtitle">Aplikasi terbaik untuk kebutuhan Anda</p>
+                    <p className="hero-subtitle">Satu platform untuk menemukan dan mendukung UMKM di sekitar kita.</p>
                 </div>
                 <a href="/register" className="hero-button">Jelajahi Sekarang!</a>
             </div>

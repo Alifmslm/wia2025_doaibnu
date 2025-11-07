@@ -52,9 +52,13 @@
 
 .hero-text {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .hero-subtitle {
+    width: 270px;
     color: var(--text-color-secondary);
 }
 
@@ -145,5 +149,33 @@
     .nav-img {
         height: 36px;
         width: auto;
+    }
+}
+
+@media (min-width: 1440px) {
+    .hero-content {
+        padding: 80px 16px;
+    }
+
+    .hero-title {
+        font-size: 48px;
+    }
+
+    .hero-subtitle {
+        width: 450px;
+        font-size: 18px;
+    }
+
+    .label-landing p {
+        font-size: 18px;
+    }
+
+    .hero-button {
+        font-size: 18px;
+    }
+
+    .bg-landing1,
+    .bg-landing2 {
+        height: 80%;
     }
 }
