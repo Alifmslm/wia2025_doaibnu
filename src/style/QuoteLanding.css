@@ -1,0 +1,193 @@
+.quote-landing {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px 16px;
+    align-items: center;
+    text-align: center;
+}
+
+.quote-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.quote-header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color-primary);
+}
+
+.quote-header p {
+    font-size: 14px;
+    color: var(--text-color-secondary);
+}
+
+.quote-carousel-wrapper {
+    width: 100vw;
+    margin-left: -16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.quote-carousel-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.quote-carousel {
+    display: flex;
+    gap: 16px;
+    padding: 0 16px;
+    width: max-content;
+}
+
+.quote-carousel__item {
+    width: 200px;
+    height: 120px;
+    background-color: #E0E0E0;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.quote-testimonial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.quote-text {
+    font-size: 18px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--text-color-primary);
+    max-width: 600px;
+}
+
+.quote-author {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color-primary);
+}
+
+.quote-author-desc {
+    font-size: 14px;
+    color: var(--text-color-secondary);
+}
+
+.quote-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.carousel-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.btn-prev {
+    background-color: #fff;
+    border: 1px solid var(--border-color, #EAEAEA);
+    color: var(--text-color-secondary, #C4C4C4);
+}
+
+.btn-next {
+    background-color: var(--main-color, #2FB06D);
+    color: #fff;
+    border: none;
+}
+
+/* =================================
+   RESPONSIVE: TABLET & SMALL LAPTOP (1024px)
+   ================================= */
+@media (min-width: 1024px) {
+    .quote-landing {
+        padding: 48px 80px;
+        gap: 32px;
+    }
+
+    .quote-header h1 {
+        font-size: 24px; /* Diperbesar dari 18px */
+    }
+
+    .quote-header p {
+        font-size: 16px; /* Diperbesar dari 14px */
+    }
+
+    /* Reset lebar carousel agar tidak keluar container di desktop */
+    .quote-carousel-wrapper {
+        width: 100%;
+        margin-left: 0;
+        /* Opsional: Tambahkan padding jika ingin ada ruang di kiri/kanan */
+        /* padding: 0 40px; */
+    }
+
+    .quote-carousel {
+        padding: 0; /* Hilangkan padding samping mobile */
+        gap: 24px;  /* Perbesar jarak antar item */
+        /* Agar carousel bisa di-center jika isinya sedikit */
+        margin: 0 auto; 
+    }
+
+    .quote-carousel__item {
+        width: 280px;  /* Perbesar ukuran card */
+        height: 160px;
+    }
+
+    .quote-text {
+        font-size: 24px; /* Diperbesar dari 18px */
+        max-width: 700px; /* Beri batas lebar agar enak dibaca */
+    }
+
+    .quote-author {
+        font-size: 18px; /* Diperbesar dari 16px */
+    }
+
+    .quote-author-desc {
+        font-size: 16px; /* Diperbesar dari 14px */
+    }
+}
+
+/* =================================
+   RESPONSIVE: LARGE DESKTOP (1440px)
+   ================================= */
+@media (min-width: 1440px) {
+    .quote-landing {
+        padding: 64px 120px;
+        gap: 40px;
+    }
+
+    .quote-header h1 {
+        font-size: 28px;
+    }
+
+    .quote-header p {
+        font-size: 18px;
+    }
+
+    .quote-carousel__item {
+        width: 320px;
+        height: 180px;
+    }
+
+    .quote-text {
+        font-size: 28px;
+        max-width: 800px;
+    }
+
+    .carousel-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+    }
+}

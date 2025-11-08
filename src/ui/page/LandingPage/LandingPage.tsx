@@ -4,6 +4,7 @@ import HeroLanding from "./HeroLanding";
 // import HeroDecoration from "./HeroDecoration";
 // import FooterLanding from "./FooterLanding";
 import UmkmFavorit from "./UmkmFavorit";
+import QuoteLanding from "./QuoteLanding";
 
 function LandingPage() {
     return(
@@ -12,6 +13,7 @@ function LandingPage() {
             <HeroLanding />
             {/* <HeroDecoration /> */}
             <UmkmFavorit />
+            <QuoteLanding />
             {/* <FooterLanding />    */}
         </>
     )
