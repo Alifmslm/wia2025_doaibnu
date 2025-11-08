@@ -170,6 +170,19 @@
 }
 
 .footer-landing {
+    position: relative;
+}
+
+.bg-footer {
+    position: absolute;
+    top: 24px;
+    right: 0;
+    width: 25%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.footer-wrapper {
     padding: 24px 16px;
     background-color: var(--main-color);
     display: flex;
@@ -177,7 +190,7 @@
     gap: 16px;
 }
 
-.footer-landing p {
+.footer-wrapper p {
     color: #fff;
 }
 
