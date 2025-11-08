@@ -13,7 +13,7 @@ function QuoteLanding() {
                     <div className="quote-carousel">
                         <div className="quote-carousel__item"></div>
                         <div className="quote-carousel__item"></div>
-                        <div className="quote-carousel__item"></div>
+                        <div className="quote-carousel__item "></div>
                         <div className="quote-carousel__item"></div>
                         <div className="quote-carousel__item"></div>
                         <div className="quote-carousel__item"></div>

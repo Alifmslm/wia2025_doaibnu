@@ -38,7 +38,7 @@
 .quote-carousel {
     display: flex;
     gap: 16px;
-    padding: 0 16px;
+    padding: 0 32px;
     width: max-content;
 }
 
@@ -108,7 +108,7 @@
 }
 
 /* =================================
-   RESPONSIVE: TABLET & SMALL LAPTOP (1024px)
+RESPONSIVE: TABLET & SMALL LAPTOP (1024px)
    ================================= */
 @media (min-width: 1024px) {
     .quote-landing {
