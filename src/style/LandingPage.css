@@ -1,6 +1,3 @@
-/* =================================
-   NAV STYLES (From Your Code)
-   ================================= */
 .nav-landing {
     background-color: #ffff;
     padding: 16px;
@@ -29,15 +26,10 @@
     font-size: 24px;
 }
 
-/* =================================
-   HERO STYLES (Optimized)
-   ================================= */
 .hero-landing {
     background-color: #F6F6F4;
     position: relative;
-    /* Anchor for absolute images */
     overflow: hidden;
-    /* Prevents images from bleeding out */
 }
 
 .hero-content {
@@ -49,7 +41,6 @@
     padding: 56px 16px;
     align-items: center;
     position: relative;
-    /* To stack on top of images */
     z-index: 2;
 }
 
@@ -72,7 +63,6 @@
     color: #fff;
     border-radius: 5px;
     text-decoration: none;
-    /* Good practice for links styled as buttons */
 }
 
 .label-landing {
@@ -109,9 +99,7 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 1;
-    /* Behind the hero-content */
     height: 50%;
-    /* Example size, adjust as needed */
     width: auto;
 }
 
@@ -123,56 +111,42 @@
     right: 0;
 }
 
-/* =================================
-   HERO DECORATION STYLES (FIXED)
-   (Bagian ini telah diganti)
-   ================================= */
 .hero-decoration-wrapper {
     position: relative;
-    width: 100%;
-    height: 100px;
-    /* Beri tinggi agar 'overflow' berfungsi */
+    height: 110px;
     overflow: hidden;
-    /* WAJIB: memotong banner yang miring */
+    z-index: 5;
+    margin-top: -55px; /* Diperbaiki: Setengah dari height 110px */
 }
 
 .banner {
+    top: 50%;
+    left: -25%;
     position: absolute;
-    /* Penting untuk tumpang tindih & rotasi */
     display: flex;
     align-items: center;
     gap: 8px;
     font-weight: 500;
-
-    /* Membuatnya memanjang keluar layar */
     width: 150%;
-    left: -25%;
-
-    padding: 12px 0;
-
-    /* INI ADALAH KUNCINYA AGAR TIDAK MENUMPUK KE BAWAH */
-    white-space: nowrap;
+    padding: 16px 0;
 }
 
 .banner-green {
     background-color: var(--main-color);
-    transform: rotate(-4deg);
-    /* Putar berlawanan jarum jam */
-    top: 35px;
+    transform: translateY(-50%) rotate(6deg); /* Diperbaiki: Positif */
     z-index: 1;
 }
 
 .banner-orange {
     background-color: #FF9D1F;
-    transform: rotate(5deg);
-    /* Putar searah jarum jam */
-    top: 15px;
     z-index: 2;
+    transform: translateY(-50%) rotate(-6deg); /* Diperbaiki: Negatif */
 }
 
 .banner p {
     color: #fff;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .separator-icon {
@@ -236,8 +210,50 @@
 }
 
 /* =================================
-   MEDIA QUERIES (From Your Code)
+   MEDIA QUERIES
    ================================= */
+
+/* --- Tablet (768px) --- */
+@media (min-width: 768px) {
+    .nav-landing {
+        padding: 16px 40px;
+    }
+
+    .hero-content {
+        padding: 56px 40px;
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .hero-subtitle {
+        width: 350px;
+    }
+
+    .hero-decoration-wrapper {
+        height: 120px;
+        margin-top: -60px; /* Diperbaiki: Setengah dari 120px */
+    }
+
+    .banner-green {
+        transform: translateY(-50%) rotate(4deg); /* Diperbaiki */
+    }
+
+    .banner-orange {
+        transform: translateY(-50%) rotate(-4deg); /* Diperbaiki */
+    }
+
+    .footer-wrapper {
+        padding: 32px 40px;
+    }
+
+    .footer-main h1 {
+        font-size: 18px;
+    }
+}
+
+/* --- Laptop Kecil (1024px) --- */
 @media (min-width: 1024px) {
     .icon-bar {
         display: none;
@@ -269,6 +285,19 @@
         width: auto;
     }
 
+    .hero-decoration-wrapper {
+        height: 150px;
+        margin-top: -75px;
+    }
+
+    .banner-green {
+        transform: translateY(-50%) rotate(3deg); /* Diperbaiki */
+    }
+
+    .banner-orange {
+        transform: translateY(-50%) rotate(-3deg); /* Diperbaiki */
+    }
+
     .footer-wrapper {
         flex-direction: row;
         justify-content: space-between;
@@ -277,7 +306,6 @@
     }
 
     .footer-main {
-        /* Batasi lebar agar teks tidak terlalu panjang */
         flex-basis: 60%;
         max-width: 550px;
         gap: 12px;
@@ -300,18 +328,16 @@
         font-size: 16px;
         text-align: right;
         flex-shrink: 0;
-        /* Mencegah teks copyright terpotong */
     }
 
     .bg-footer {
-        /* Posisikan agar mengisi tinggi footer di desktop */
         top: 0;
         height: 100%;
         width: 30%;
-        /* Perbesar gambar background */
     }
 }
 
+/* --- Laptop Besar (1440px) --- */
 @media (min-width: 1440px) {
     .hero-content {
         padding: 80px 16px;
@@ -337,5 +363,18 @@
     .bg-landing1,
     .bg-landing2 {
         height: 80%;
+    }
+
+    
+    .banner p {
+        font-size: 18px;
+    }
+    
+    .banner-green {
+        transform: translateY(-50%) rotate(2deg); /* Ditambahkan */
+    }
+
+    .banner-orange {
+        transform: translateY(-50%) rotate(-2deg); /* Ditambahkan */
     }
 }

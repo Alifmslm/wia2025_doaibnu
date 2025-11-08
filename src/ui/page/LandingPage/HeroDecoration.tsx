@@ -13,8 +13,22 @@ function HeroDecoration() {
             <div className="banner banner-green">
                 <BannerContent />
                 <BannerContent />
+                <BannerContent />
+                <BannerContent />
+                <BannerContent />
+                <BannerContent />
+                <BannerContent />
+                <BannerContent />
+                <BannerContent />
             </div>
             <div className="banner banner-orange">
+                <BannerContent />
+                <BannerContent />
+                <BannerContent />
+                <BannerContent />
+                <BannerContent />
+                <BannerContent />
+                <BannerContent />
                 <BannerContent />
                 <BannerContent />
             </div>

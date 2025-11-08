@@ -18,7 +18,7 @@ function Form({ name }: FormProps) {
     console.log('isLogin BERNILAI:', isLogin);
 
     // [TAMBAHKAN] State untuk menampung semua data input
-    const [formData, setFormData] = useState<{ [key: string]: string }>({});
+    const [formData, setFormData] = useState<{ [key: string]: string }>({"email": "", "password": "", "nama": ""});
     
     // [TAMBAHKAN] State untuk menangani pesan error login
     const [loginError, setLoginError] = useState<string | null>(null);
@@ -65,8 +65,8 @@ function Form({ name }: FormProps) {
             setIsLoading(true);
             setLoginError(null);
             
-            const email = formData.email || '';
-            const password = formData.password || '';
+            const email = formData.email;
+            const password = formData.password;
 
             try {
                 // Panggil fungsi login dari repository
