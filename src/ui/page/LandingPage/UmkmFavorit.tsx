@@ -15,6 +15,11 @@ function UmkmFavorit() {
                         <UmkmFavoritCard isOff={true} />
                         <UmkmFavoritCard isOff={true} />
                         <UmkmFavoritCard isOff={true} />
+                        <UmkmFavoritCard isOff={true} />
+                        <UmkmFavoritCard isOff={true} />
+                        <UmkmFavoritCard isOff={true} />
+                        <UmkmFavoritCard isOff={true} />
+                        <UmkmFavoritCard isOff={true} />
                     </div>
                 </div>
                 <div className="umkm-favorit__button">
