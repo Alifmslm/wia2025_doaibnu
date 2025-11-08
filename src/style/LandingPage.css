@@ -186,9 +186,10 @@
 
 .bg-footer {
     position: absolute;
-    top: 1rem;
+    top: 0;
     right: 0;
-    width: 25%;
+    width: 40%;
+    height: 100%;
     object-fit: cover;
     z-index: 0;
 }
