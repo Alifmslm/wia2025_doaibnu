@@ -21,7 +21,7 @@
 }
 
 .nav-links li {
-    height: 100% ;
+    height: 100%;
 }
 
 .icon-bar {
@@ -34,8 +34,10 @@
    ================================= */
 .hero-landing {
     background-color: #F6F6F4;
-    position: relative; /* Anchor for absolute images */
-    overflow: hidden; /* Prevents images from bleeding out */
+    position: relative;
+    /* Anchor for absolute images */
+    overflow: hidden;
+    /* Prevents images from bleeding out */
 }
 
 .hero-content {
@@ -46,7 +48,8 @@
     gap: 30px;
     padding: 56px 16px;
     align-items: center;
-    position: relative; /* To stack on top of images */
+    position: relative;
+    /* To stack on top of images */
     z-index: 2;
 }
 
@@ -68,7 +71,8 @@
     background-color: var(--main-color);
     color: #fff;
     border-radius: 5px;
-    text-decoration: none; /* Good practice for links styled as buttons */
+    text-decoration: none;
+    /* Good practice for links styled as buttons */
 }
 
 .label-landing {
@@ -104,8 +108,10 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1; /* Behind the hero-content */
-    height: 50%; /* Example size, adjust as needed */
+    z-index: 1;
+    /* Behind the hero-content */
+    height: 50%;
+    /* Example size, adjust as needed */
     width: auto;
 }
 
@@ -122,41 +128,46 @@
    (Bagian ini telah diganti)
    ================================= */
 .hero-decoration-wrapper {
-    position: relative; 
+    position: relative;
     width: 100%;
-    height: 100px; /* Beri tinggi agar 'overflow' berfungsi */
-    overflow: hidden; /* WAJIB: memotong banner yang miring */
+    height: 100px;
+    /* Beri tinggi agar 'overflow' berfungsi */
+    overflow: hidden;
+    /* WAJIB: memotong banner yang miring */
 }
 
 .banner {
-    position: absolute; /* Penting untuk tumpang tindih & rotasi */
+    position: absolute;
+    /* Penting untuk tumpang tindih & rotasi */
     display: flex;
     align-items: center;
     gap: 8px;
     font-weight: 500;
-    
+
     /* Membuatnya memanjang keluar layar */
-    width: 150%; 
-    left: -25%; 
-    
+    width: 150%;
+    left: -25%;
+
     padding: 12px 0;
-    
+
     /* INI ADALAH KUNCINYA AGAR TIDAK MENUMPUK KE BAWAH */
-    white-space: nowrap; 
+    white-space: nowrap;
 }
 
 .banner-green {
     background-color: var(--main-color);
-    transform: rotate(-4deg); /* Putar berlawanan jarum jam */
-    top: 35px; 
-    z-index: 1; 
+    transform: rotate(-4deg);
+    /* Putar berlawanan jarum jam */
+    top: 35px;
+    z-index: 1;
 }
 
 .banner-orange {
     background-color: #FF9D1F;
-    transform: rotate(5deg); /* Putar searah jarum jam */
-    top: 15px; 
-    z-index: 2; 
+    transform: rotate(5deg);
+    /* Putar searah jarum jam */
+    top: 15px;
+    z-index: 2;
 }
 
 .banner p {
@@ -175,7 +186,7 @@
 
 .bg-footer {
     position: absolute;
-    top: 24px;
+    top: 1rem;
     right: 0;
     width: 25%;
     object-fit: cover;
@@ -255,6 +266,48 @@
     .nav-img {
         height: 36px;
         width: auto;
+    }
+
+    .footer-wrapper {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 48px 80px;
+    }
+
+    .footer-main {
+        /* Batasi lebar agar teks tidak terlalu panjang */
+        flex-basis: 60%;
+        max-width: 550px;
+        gap: 12px;
+    }
+
+    .footer-main h1 {
+        font-size: 24px;
+    }
+
+    .footer-main p {
+        font-size: 16px;
+    }
+
+    .footer-main img {
+        width: 150px;
+        height: 28px;
+    }
+
+    .copyright {
+        font-size: 16px;
+        text-align: right;
+        flex-shrink: 0;
+        /* Mencegah teks copyright terpotong */
+    }
+
+    .bg-footer {
+        /* Posisikan agar mengisi tinggi footer di desktop */
+        top: 0;
+        height: 100%;
+        width: 30%;
+        /* Perbesar gambar background */
     }
 }
 
