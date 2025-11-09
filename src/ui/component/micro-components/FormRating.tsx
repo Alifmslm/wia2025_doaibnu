@@ -1,6 +1,8 @@
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton'; // Ganti Button dengan IconButton
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 interface FormRatingProps {
     open: boolean;
@@ -24,10 +26,10 @@ function FormRating({ open, onClose }: FormRatingProps) {
                     <i className="fa-solid fa-xmark"></i>
                 </IconButton>
 
-                <h2 id="modal-title">My Modal Title</h2>
-                <p id="modal-description">
-                    This is the content displayed inside the modal.
-                </p>
+                <h2 className="modal-title">Tulis Ulasan Anda</h2>
+                <TextField id="outlined-multiline-flexible" label="Rating yang anda berikan" variant="outlined" multiline className='input-modal' />
+                <TextField id="outlined-multiline-flexible" label="Review Anda" variant="outlined" className='input-modal' multiline/>
+                <Button onClick={onClose} variant="contained">Submit</Button>
             </Box>
         </Modal>
     );

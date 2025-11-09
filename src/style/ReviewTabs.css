@@ -113,6 +113,17 @@ hr {
     padding: 24px 16px;
 }
 
+.modal-title {
+    margin: 0;
+    margin-bottom: 16px;
+    font-size: 20px;
+}
+
+.input-modal {
+    width: 100%;
+    margin-bottom: 16px !important;
+}
+
 .modal-close-button {
     position: absolute !important;
     right: 16px !important;
