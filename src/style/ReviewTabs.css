@@ -47,7 +47,8 @@
 .rating-bar {
     flex: 1;
     height: 10px;
-    background-color: var(--border-color); /* abu-abu */
+    background-color: var(--border-color);
+    /* abu-abu */
     border-radius: 6px;
     overflow: hidden;
     position: relative;
@@ -55,7 +56,8 @@
 
 .rating-fill {
     height: 100%;
-    background-color: #ffc107; /* kuning */
+    background-color: #ffc107;
+    /* kuning */
     transition: width 0.3s ease;
     border-radius: 6px;
 }
@@ -67,7 +69,7 @@
     justify-content: center;
 }
 
-.star-container img{
+.star-container img {
     width: 16px;
 }
 
@@ -97,4 +99,23 @@
 
 hr {
     border: 1px dashed var(--border-color);
+}
+
+.modal-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background-color: white;
+    border: 1px solid #E0E5F2;
+    border-radius: 5px;
+    padding: 24px 16px;
+}
+
+.modal-close-button {
+    position: absolute !important;
+    right: 16px !important;
+    top: 8px !important;
+    color: var(--text-color-secondary) !important;
 }
