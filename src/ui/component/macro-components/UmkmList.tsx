@@ -1,4 +1,3 @@
-// src/component/macro-components/UmkmList.tsx
 import { useEffect, useState } from "react";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
 import type { Umkm } from "../../../shared/types/Umkm";

@@ -13,3 +13,8 @@
 .save-page .header p {
     color: var(--text-color-secondary);
 }
+
+.simpan-item-row {
+    display: flex; 
+    align-items: center; 
+}
