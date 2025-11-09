@@ -1,8 +1,13 @@
+/* --- Mobile First (Default Anda) --- */
 .save-page {
     display: flex;
     padding: 0px 16px;
     flex-direction: column;
     gap: 24px;
+
+    /* Tambahan: Pastikan 100% dan pusatkan */
+    width: 100%;
+    margin: 0 auto;
 }
 
 .save-page .header {
@@ -10,11 +15,31 @@
     flex-direction: column;
     gap: 8px;
 }
+
 .save-page .header p {
     color: var(--text-color-secondary);
 }
 
 .simpan-item-row {
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
+    /* (Saya tambahkan dari kode Anda sebelumnya agar lengkap) */
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .save-page {
+        padding: 0px 32px;
+        gap: 32px;
+    }
+}
+
+/* --- Laptop (1024px ke atas) --- */
+@media (min-width: 1024px) {
+    .save-page {
+        max-width: 800px;
+        padding-left: 0;
+        padding-right: 0;
+    }
 }

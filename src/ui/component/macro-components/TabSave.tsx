@@ -7,7 +7,7 @@ function TabSave() {
 
     const tabs = [
         { id: "disimpan", label: "Umkm Disimpan" },
-        { id: "dikunjugi", label: "Telah Dikunjugi" },
+        { id: "dikunjungi", label: "Telah Dikunjugi" },
     ];
 
     const renderContent = () => {

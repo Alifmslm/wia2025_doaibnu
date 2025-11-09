@@ -4,7 +4,8 @@ import type { Umkm } from "../../shared/types/Umkm";
 
 // simple in-memory "db"
 const DB: Umkm[] = raw.umkm as Umkm[];
-const SAVED_KEY = "saved_umkms"; // Kunci untuk localStorage
+const SAVED_KEY = "saved_umkms";
+const VISITED_KEY = "visited_umkms";
 
 /**
  * Opsi: simulate network latency
@@ -116,5 +117,37 @@ export const UmkmRepository = {
         const ids = this.getSavedIds();
         // Memfilter DB di memori berdasarkan ID dari localStorage
         return DB.filter(umkm => ids.includes(umkm.id));
+    },
+
+    /**
+     * Mengambil ID yang ada di daftar 'Dikunjungi'
+     */
+    getVisitedIds(): number[] {
+        const data = localStorage.getItem(VISITED_KEY);
+        return data ? (JSON.parse(data) as number[]) : [];
+    },
+
+    /**
+     * Mengambil full data UMKM untuk tab 'Dikunjungi'
+     */
+    async getVisitedUmkms(): Promise<Umkm[]> {
+        await delay(50);
+        const ids = this.getVisitedIds();
+        return DB.filter(umkm => ids.includes(umkm.id));
+    },
+
+    /**
+     * FITUR UTAMA: Memindahkan dari 'Disimpan' ke 'Dikunjungi'
+     */
+    moveToVisited(id: number): void {
+        // 1. Hapus dari daftar 'Saved'
+        this.unsave(id);
+
+        // 2. Tambahkan ke daftar 'Visited' (jika belum ada)
+        const visitedIds = this.getVisitedIds();
+        if (!visitedIds.includes(id)) {
+            visitedIds.push(id);
+            localStorage.setItem(VISITED_KEY, JSON.stringify(visitedIds));
+        }
     }
 };
