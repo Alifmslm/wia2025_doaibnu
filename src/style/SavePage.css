@@ -1,0 +1,15 @@
+.save-page {
+    display: flex;
+    padding: 0px 16px;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.save-page .header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.save-page .header p {
+    color: var(--text-color-secondary);
+}

@@ -6,6 +6,7 @@ import DetailPage from "../ui/page/DetailPage.tsx";
 import GalleryPage from "../ui/page/GalleryPage.tsx";
 import NotificationPage from "../ui/page/NotificationPage.tsx";
 import LandingPage from "../ui/page/LandingPage/LandingPage.tsx";
+import SavePage from "../ui/page/SavePage.tsx";
 
 function AppRoutes() {
     return (
@@ -16,6 +17,7 @@ function AppRoutes() {
             <Route path="/detail-page/:id" element={<DetailPage />} />
             <Route path="/gallery-page-" element={<GalleryPage />} />
             <Route path="/notification" element={<NotificationPage/>} />
+            <Route path="/save-page" element={<SavePage/>} />
             <Route path="/" element={<LandingPage/>} />
         </Routes>
     );
