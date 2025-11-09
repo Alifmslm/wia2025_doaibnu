@@ -1,11 +1,16 @@
 import Rating from '@mui/material/Rating';
 
-function AverageRating() {
+interface AverageRatingProps {
+    average: number;
+}
+
+function AverageRating({ average }: AverageRatingProps) {
+    console.log(typeof average, average);
     return(
         <>
             <section className="average-rating">
-                <h1>4.8</h1>
-                <Rating className='rating-star' name="read-only" value={4} readOnly />
+                <h1>{average}</h1>
+                <Rating className='rating-star' name="read-only" value={average} readOnly />
                 <p>120 Ulasan</p>
             </section>
         </>

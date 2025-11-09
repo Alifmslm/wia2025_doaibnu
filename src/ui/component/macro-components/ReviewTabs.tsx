@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../../style/ReviewTabs.css";
 import RatingResume from "./RatingResume";
 import RatingList, { type RatingItem } from "./RatingList";
@@ -14,13 +14,25 @@ const INITIAL_RATINGS: RatingItem[] = Array.from({ length: 6 }, (_, i) => ({
 
 function ReviewTabs() {
     const [open, setOpen] = useState(false);
-    
     const [ratings, setRatings] = useState<RatingItem[]>(INITIAL_RATINGS);
+    const [averageRating, setAverageRating] = useState(0);
+
+    // 🔹 Hitung rata-rata setiap kali ratings berubah
+    useEffect(() => {
+        if (ratings.length === 0) {
+            setAverageRating(0);
+            return;
+        }
+
+        const total = ratings.reduce((acc, curr) => acc + parseFloat(curr.score), 0);
+        const avg = total / ratings.length;
+        setAverageRating(parseFloat(avg.toFixed(1)));
+    }, [ratings]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const handleAddRating = (newData: { rating: number, review: string }) => {
+    const handleAddRating = (newData: { rating: number; review: string }) => {
         const newRating: RatingItem = {
             id: new Date().getTime(),
             name: "Pengguna Anonim",
@@ -29,21 +41,22 @@ function ReviewTabs() {
             time: "Baru saja",
         };
 
-        setRatings(prevRatings => [newRating, ...prevRatings]);
+        setRatings((prevRatings) => [newRating, ...prevRatings]);
     };
 
     return (
         <>
-            <RatingResume onOpen={handleOpen} />
+            {/* 🔹 Kirim averageRating ke komponen RatingResume */}
+            <RatingResume onOpen={handleOpen} average={averageRating} />
 
             <hr />
-            
+
             <RatingList ratings={ratings} />
 
-            <FormRating 
-                open={open} 
-                onClose={handleClose} 
-                onAddRating={handleAddRating} 
+            <FormRating
+                open={open}
+                onClose={handleClose}
+                onAddRating={handleAddRating}
             />
         </>
     );

@@ -4,15 +4,16 @@ import PenIcon from "../../../assets/pen-icon.png"
 
 interface RatingResumeProps {
     onOpen: () => void;
+    average: number;
 }
 
-function RatingResume({ onOpen }: RatingResumeProps) {
+function RatingResume({ onOpen, average }: RatingResumeProps) {
     return (
         <>
             <h1 className="title-review">Ringkasan Ulasan</h1>
             <section className="rating-resume">
                 <RatingDistribution />
-                <AverageRating />
+                <AverageRating average={average}/>
             </section>
             <div className="add-review">
                 <img src={PenIcon} alt="pen-icon" />
