@@ -17,14 +17,16 @@ function ReviewTabs() {
     const [ratings, setRatings] = useState<RatingItem[]>(INITIAL_RATINGS);
     const [averageRating, setAverageRating] = useState(0);
 
-    // 🔹 Hitung rata-rata setiap kali ratings berubah
     useEffect(() => {
         if (ratings.length === 0) {
             setAverageRating(0);
             return;
         }
 
-        const total = ratings.reduce((acc, curr) => acc + parseFloat(curr.score), 0);
+        const total = ratings.reduce(
+            (acc, curr) => acc + parseFloat(curr.score),
+            0
+        );
         const avg = total / ratings.length;
         setAverageRating(parseFloat(avg.toFixed(1)));
     }, [ratings]);
@@ -46,8 +48,12 @@ function ReviewTabs() {
 
     return (
         <>
-            {/* 🔹 Kirim averageRating ke komponen RatingResume */}
-            <RatingResume onOpen={handleOpen} average={averageRating} />
+            {/* ✅ Kirim ratings ke RatingResume */}
+            <RatingResume
+                onOpen={handleOpen}
+                average={averageRating}
+                ratings={ratings}
+            />
 
             <hr />
 
