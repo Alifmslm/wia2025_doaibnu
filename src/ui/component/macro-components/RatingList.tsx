@@ -1,33 +1,41 @@
+// RatingList.tsx
+
 import { useState } from "react";
 import RatingCard from "../micro-components/RatingCard";
 import Pagination from "@mui/material/Pagination";
 import "../../../style/RatingList.css";
 
-function RatingList() {
-    // Dummy data ulasan
-    const ratings = Array.from({ length: 10 }, (_, i) => ({
-        id: i + 1,
-        name: `User ${i + 1}`,
-        score: (Math.random() * 5).toFixed(1),
-        desc: "Lorem ipsum dolor sit amet consectetur. Nunc nunc phasellus elit sed non.",
-        time: `${i + 1} hari yang lalu`,
-    }));
+// 1. Ekspor tipe data agar 'ReviewTabs' bisa menggunakannya
+export interface RatingItem {
+    id: number;
+    name: string;
+    score: string;
+    desc: string;
+    time: string;
+}
+
+// 2. Tentukan props yang diterima, termasuk 'ratings'
+interface RatingListProps {
+    ratings: RatingItem[];
+}
+
+function RatingList({ ratings }: RatingListProps) { // <-- 3. Terima 'ratings' dari props
+    // HAPUS DATA HARDCODED INI DARI SINI
+    // const ratings = Array.from({ length: 10 }, (_, i) => ({ ... }));
 
     const [page, setPage] = useState(1);
     const itemsPerPage = 4;
 
-    // Hitung total halaman
+    // Logika paginasi sekarang menggunakan 'ratings' dari props
     const pageCount = Math.ceil(ratings.length / itemsPerPage);
-
-    // Potong data sesuai halaman
     const startIndex = (page - 1) * itemsPerPage;
     const currentItems = ratings.slice(startIndex, startIndex + itemsPerPage);
 
-    // Handle perubahan halaman
     const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
 
+    // ... (sisa JSX tetap sama) ...
     return (
         <section className="rating-list-container">
             <h1>Ulasan</h1>

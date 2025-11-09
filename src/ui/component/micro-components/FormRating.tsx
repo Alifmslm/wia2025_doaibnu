@@ -9,9 +9,10 @@ import { ratingValidation } from '../../../shared/utils/validator/ratingvalidati
 interface FormRatingProps {
     open: boolean;
     onClose: () => void;
+    onAddRating: (newData: { rating: number, review: string }) => void;
 }
 
-function FormRating({ open, onClose }: FormRatingProps) {
+function FormRating({ open, onClose, onAddRating }: FormRatingProps) {
     const [rating, setRating] = useState('');
     const [review, setReview] = useState('');
 
@@ -23,11 +24,10 @@ function FormRating({ open, onClose }: FormRatingProps) {
         setReview('');
         setRatingError('');
         setReviewError('');
-        onClose(); // Panggil prop onClose asli
+        onClose();
     };
 
     const handleSubmit = () => {
-        // Jalankan validasi
         const newRatingError = ratingValidation(rating);
         const newReviewError = review.trim() === '' ? 'Review tidak boleh kosong.' : '';
 
@@ -35,7 +35,7 @@ function FormRating({ open, onClose }: FormRatingProps) {
         setReviewError(newReviewError);
 
         if (newRatingError === '' && newReviewError === '') {
-            console.log('Data siap disubmit:', {
+            onAddRating({
                 rating: Number(rating),
                 review: review,
             });
