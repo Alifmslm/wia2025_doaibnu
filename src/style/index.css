@@ -5,7 +5,7 @@
   --border-color: #E0E5F2;
   --error-color: #F13C3C;
   --warning-color: #F18A3C;
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'roboto', Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
 
   background-color: #ffff;
@@ -23,7 +23,6 @@
 
 /* 2. Remove default margin */
 * {
-  color: var(--text-color-primary);
   margin: 0;
 }
 
@@ -54,6 +53,7 @@ input, button, textarea, select {
 
 /* 8. Avoid text overflows */
 p, h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color-primary);
   overflow-wrap: break-word;
 }
 
