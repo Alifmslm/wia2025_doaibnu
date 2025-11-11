@@ -28,7 +28,9 @@
                     "nilai": 4.5,
                     "komentar": "Kuahnya gurih dan porsi pas."
                 }
-            ]
+            ],
+            "monthlyEats": 1200,
+            "totalVisits": 980
         },
         {
             "id": 2,
@@ -56,7 +58,9 @@
                     "nilai": 4.3,
                     "komentar": "Harga sesuai rasa."
                 }
-            ]
+            ],
+            "monthlyEats": 1550,
+            "totalVisits": 1005
         },
         {
             "id": 3,
@@ -84,7 +88,9 @@
                     "nilai": 4.8,
                     "komentar": "Tempat bersih dan nyaman."
                 }
-            ]
+            ],
+            "monthlyEats": 2500,
+            "totalVisits": 35200
         },
         {
             "id": 4,
@@ -113,7 +119,9 @@
                     "nilai": 4.7,
                     "komentar": "Tempatnya cozy banget."
                 }
-            ]
+            ],
+            "monthlyEats": 2000,
+            "totalVisits": 850
         },
         {
             "id": 5,
@@ -141,7 +149,9 @@
                     "nilai": 4.4,
                     "komentar": "Tehnya wangi alami."
                 }
-            ]
+            ],
+            "monthlyEats": 900,
+            "totalVisits": 600
         },
         {
             "id": 6,
@@ -169,7 +179,9 @@
                     "nilai": 4.5,
                     "komentar": "Enak diminum siang hari."
                 }
-            ]
+            ],
+            "monthlyEats": 1100,
+            "totalVisits": 14500
         },
         {
             "id": 7,
@@ -197,7 +209,9 @@
                     "nilai": 4.6,
                     "komentar": "Pelayanan ramah dan profesional."
                 }
-            ]
+            ],
+            "monthlyEats": 800,
+            "totalVisits": 9500
         },
         {
             "id": 8,
@@ -225,7 +239,9 @@
                     "nilai": 4.7,
                     "komentar": "Tempatnya bersih dan wangi."
                 }
-            ]
+            ],
+            "monthlyEats": 650,
+            "totalVisits": 7800
         },
         {
             "id": 9,
@@ -247,7 +263,9 @@
                     "nilai": 4.5,
                     "komentar": "Servis cepat dan harga bersahabat."
                 }
-            ]
+            ],
+            "monthlyEats": 300,
+            "totalVisits": 4500
         },
         {
             "id": 10,
@@ -275,7 +293,9 @@
                     "nilai": 4.7,
                     "komentar": "Cocok buat cuaca panas."
                 }
-            ]
+            ],
+            "monthlyEats": 1350,
+            "totalVisits": 17800
         }
     ]
 }

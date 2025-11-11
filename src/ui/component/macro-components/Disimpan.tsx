@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"; // Pastikan React diimpor
+import { useState, useEffect } from "react"; 
 import type { Umkm } from "../../../shared/types/Umkm";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
 import UmkmCard from "../micro-components/UmkmCard";
@@ -21,10 +21,10 @@ function Disimpan() {
     // --- HANDLER UNTUK CHECKBOX ---
     const handleCheckboxChange = (umkmId: number) => {
         // 1. Panggil Repository untuk memindahkan data di localStorage
+        // Panggilan ini sekarang memicu Event Emitter di Repository
         UmkmRepository.moveToVisited(umkmId);
 
         // 2. Update state lokal agar UI langsung berubah (kartu hilang)
-        // Kita filter array 'savedUmkms' untuk membuang ID yang baru dipindahkan
         setSavedUmkms(prevList => prevList.filter(item => item.id !== umkmId));
     };
     // ---
@@ -36,21 +36,17 @@ function Disimpan() {
         <section className="umkm-tersimpan-list">
             <div className="card-grid-simpan">
                 {savedUmkms.map((umkm) => (
-                    // Berikan style flex agar Checkbox dan Card sejajar
                     <div 
                         key={umkm.id} 
                         className="simpan-item-row"
                     >
                         
-                        {/* 1. Checkbox dengan handler onChange */}
                         <Checkbox 
-                            // Panggil handler dengan ID UMKM saat ini
                             onChange={() => handleCheckboxChange(umkm.id)}
                             inputProps={{ 'aria-label': `Tandai ${umkm.nama} sebagai dikunjungi` }}
                             title="Tandai sudah dikunjungi"
                         />
 
-                        {/* 2. Kartu UMKM */}
                         <div style={{ flex: 1 }}>
                             <UmkmCard umkm={umkm} />
                         </div>

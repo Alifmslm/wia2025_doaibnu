@@ -5,9 +5,22 @@ import type { Umkm } from "../../../shared/types/Umkm";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
 import HomeImage from '../../../assets/gallery-image-1.png';
 
+/**
+ * Fungsi utilitas untuk memformat jumlah kunjungan menjadi 999+ jika lebih.
+ */
+const formatVisits = (count: number): string => {
+    if (count > 999) {
+        return "999+";
+    }
+    return count.toString();
+}
+
 function UmkmCard({ umkm }: { umkm: Umkm }) {
     const avgRating = UmkmRepository.getAverageRating(umkm);
     const totalRatings = umkm.ratings?.length || 0;
+    
+    // Mengambil totalVisits dan memformatnya
+    const formattedVisits = formatVisits(umkm.totalVisits);
 
     // State untuk melacak status 'isSaved'
     const [isSaved, setIsSaved] = useState(() => UmkmRepository.isSaved(umkm.id));
@@ -50,12 +63,9 @@ function UmkmCard({ umkm }: { umkm: Umkm }) {
                             }}
                             aria-label={isSaved ? "Hapus dari simpanan" : "Simpan UMKM"}
                         >
-                            {/* Logika pemilihan ikon Font Awesome */}
                             {isSaved ? (
-                                // Ikon TERISI (Solid) jika disimpan
                                 <i className="fa-solid fa-bookmark"></i>
                             ) : (
-                                // Ikon GARIS (Regular) jika belum disimpan
                                 <i className="fa-regular fa-bookmark"></i>
                             )}
                         </button>
@@ -71,7 +81,8 @@ function UmkmCard({ umkm }: { umkm: Umkm }) {
                     <div className="visit-container">
                         <div className="visited-counter">
                             <i className="fa-solid fa-person-running"></i>
-                            <p>999 pengunjung sudah kesini</p>
+                            {/* Menggunakan formattedVisits yang dinamis */}
+                            <p>{formattedVisits} pengunjung sudah kesini</p> 
                         </div>
                     </div>
                 </div>

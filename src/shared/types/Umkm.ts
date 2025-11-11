@@ -1,4 +1,3 @@
-
 export type Rating = {
     user: string;
     nilai: number;
@@ -20,6 +19,7 @@ export type Umkm = {
     gambarUtama: string;
     gallery: string[];
     ratings: Rating[];
+    // Properti baru
     monthlyEats: number;
-    totalVisits: number;
+    totalVisits: number; 
 };

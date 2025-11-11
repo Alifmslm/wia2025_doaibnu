@@ -6,6 +6,10 @@ const DB: Umkm[] = raw.umkm as Umkm[]; // simple in-memory "db"
 const SAVED_KEY = "saved_umkms";
 const VISITED_KEY = "visited_umkms";
 
+// type VisitCountUpdater = (newCount: number) => void;
+type DataChangeListener = () => void;
+const visitedListeners: DataChangeListener[] = []; // Array untuk menyimpan semua fungsi refresh
+
 /**
  * Opsi: simulate network latency
  */
@@ -66,6 +70,21 @@ export const UmkmRepository = {
         if (!list.length) return 0;
         const sum = list.reduce((s, r) => s + (r.nilai || 0), 0);
         return Math.round((sum / list.length) * 10) / 10; // satu desimal
+    },
+
+    onVisitedDataChange(listener: DataChangeListener): () => void {
+        visitedListeners.push(listener);
+        // Mengembalikan fungsi untuk membersihkan listener saat komponen di-unmount
+        return () => {
+            const index = visitedListeners.indexOf(listener);
+            if (index > -1) {
+                visitedListeners.splice(index, 1);
+            }
+        };
+    },
+
+    emitVisitedDataChange(): void {
+        visitedListeners.forEach(listener => listener());
     },
 
     // === METODE BARU UNTUK FUNGSI "SIMPAN" ===
@@ -144,11 +163,13 @@ export const UmkmRepository = {
         // 1. Hapus dari daftar 'Saved'
         this.unsave(id);
 
-        // 2. Tambahkan ke daftar 'Visited' (jika belum ada)
         const visitedIds = this.getVisitedIds();
         if (!visitedIds.includes(id)) {
             visitedIds.push(id);
             localStorage.setItem(VISITED_KEY, JSON.stringify(visitedIds));
+            
+            // PENTING: Beri tahu komponen DikunjungiTabs bahwa ada perubahan data
+            this.emitVisitedDataChange(); 
         }
         
         // 3. Tambahkan ke counter publik (totalVisits)
@@ -161,7 +182,8 @@ export const UmkmRepository = {
         const umkmIndex = DB.findIndex(u => u.id === id);
         if (umkmIndex !== -1) {
             DB[umkmIndex].totalVisits += 1;
-            console.log(`UMKM ID ${id} totalVisits diperbarui menjadi ${DB[umkmIndex].totalVisits}`);
+            const newCount = DB[umkmIndex].totalVisits;
+            console.log(`UMKM ID ${id} totalVisits diperbarui menjadi ${newCount}`);
         } else {
             console.warn(`UMKM dengan ID ${id} tidak ditemukan.`);
         }
