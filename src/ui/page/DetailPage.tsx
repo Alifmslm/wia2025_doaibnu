@@ -8,6 +8,7 @@ import RatingLabel from "../component/micro-components/RatingLabel";
 import PlaceMediaContent from "../component/macro-components/PlaceMediaContent";
 import "../../style/DetailPage.css";
 import SaveIcon from "../../assets/save-button-grey.png";
+import { formatVisits } from '../../shared/utils/formater/Formatters.ts'
 
 function DetailPage() {
     const { id } = useParams();
@@ -22,6 +23,8 @@ function DetailPage() {
     }, [id]);
 
     if (!umkm) return <p>Loading...</p>;
+    
+    const formattedVisits = formatVisits(umkm.totalVisits);
 
     return (
         <>
@@ -46,7 +49,7 @@ function DetailPage() {
                         <RatingLabel rating={UmkmRepository.getAverageRating(umkm)} />
                         <div className="visited-counter">
                             <i className="fa-solid fa-person-running"></i>
-                            <p> pengunjung sudah kesini</p> 
+                            <p>{formattedVisits} pengunjung sudah kesini</p> 
                         </div>
                     </div>
                     <hr className="hr-detail"/>

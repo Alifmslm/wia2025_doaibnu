@@ -4,13 +4,7 @@ import RatingLabel from "../micro-components/RatingLabel.tsx";
 import type { Umkm } from "../../../shared/types/Umkm";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
 import HomeImage from '../../../assets/gallery-image-1.png';
-
-const formatVisits = (count: number): string => {
-    if (count > 999) {
-        return "999+";
-    }
-    return count.toString();
-}
+import { formatVisits } from "../../../shared/utils/formater/Formatters.ts";
 
 function UmkmCard({ umkm }: { umkm: Umkm }) {
     const avgRating = UmkmRepository.getAverageRating(umkm);
