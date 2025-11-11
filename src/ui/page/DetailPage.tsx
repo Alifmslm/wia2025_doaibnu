@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { UmkmRepository } from "../../data/repositories/UmkmRepository";
 import type { Umkm } from "../../shared/types/Umkm";
@@ -13,6 +13,10 @@ function DetailPage() {
     const { id } = useParams();
     const [umkm, setUmkm] = useState<Umkm | null>(null);
     const [isSaved, setIsSaved] = useState(false);
+
+    const isMakanan = useMemo(() => {
+        return umkm?.kategori === 'Makanan';
+    }, [umkm]);
 
     useEffect(() => {
         async function fetchData() {
@@ -78,6 +82,10 @@ function DetailPage() {
                     </div>
                     <hr className="hr-detail" />
                     <p className="description-detail">{umkm.deskripsi}</p>
+
+                    {isMakanan && (
+                        <button className="button-lihat-menu">Lihat Menu</button>
+                    )}
 
                     <PlaceMediaContent />
                 </section>
