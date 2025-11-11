@@ -2,12 +2,14 @@ import { useState } from "react";
 import GalleryTabs from "./GalleryTabs";
 import ReviewTabs from "./ReviewTabs";
 import LocationTabs from "./LocationTabs";
+import MenuPage from "../../page/MenuPage/MenuPage";
 import "../../../style/PlaceMediaContent.css";
 
 function PlaceMediaContent() {
-    const [activeTab, setActiveTab] = useState("gallery");
+    const [activeTab, setActiveTab] = useState("menu");
 
     const tabs = [
+        { id: "menu", label: "Menu" },
         { id: "gallery", label: "Gallery" },
         { id: "ulasan", label: "Ulasan" },
         { id: "lokasi", label: "Lokasi" },
@@ -21,6 +23,8 @@ function PlaceMediaContent() {
                 return <ReviewTabs />;
             case "lokasi":
                 return <LocationTabs />;
+            case "menu":
+                return <MenuPage />
             default:
                 return null;
         }
