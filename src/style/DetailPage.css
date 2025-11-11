@@ -73,6 +73,10 @@
     gap: 24px;
 }
 
+.fa-bookmark-detail {
+    font-size: 20px;
+}
+
 .hr-detail {
     margin: 8px 0;
 }

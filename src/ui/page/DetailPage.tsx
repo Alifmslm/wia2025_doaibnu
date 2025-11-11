@@ -7,12 +7,12 @@ import HeroDetail from "../component/macro-components/HeroDetail";
 import RatingLabel from "../component/micro-components/RatingLabel";
 import PlaceMediaContent from "../component/macro-components/PlaceMediaContent";
 import "../../style/DetailPage.css";
-import SaveIcon from "../../assets/save-button-grey.png";
 import { formatVisits } from '../../shared/utils/formater/Formatters.ts'
 
 function DetailPage() {
     const { id } = useParams();
     const [umkm, setUmkm] = useState<Umkm | null>(null);
+    const [isSaved, setIsSaved] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -22,8 +22,27 @@ function DetailPage() {
         fetchData();
     }, [id]);
 
+    useEffect(() => {
+        if (umkm) {
+            setIsSaved(UmkmRepository.isSaved(umkm.id));
+        }
+    }, [umkm]);
+
     if (!umkm) return <p>Loading...</p>;
-    
+
+    const handleSaveClick = (event: React.MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (isSaved) {
+            UmkmRepository.unsave(umkm.id);
+            setIsSaved(false);
+        } else {
+            UmkmRepository.save(umkm.id);
+            setIsSaved(true);
+        }
+    };
+
     const formattedVisits = formatVisits(umkm.totalVisits);
 
     return (
@@ -34,9 +53,14 @@ function DetailPage() {
                 <section className="detail-content">
                     <section className="label-content">
                         <div className="label-detail__on">{umkm.kategori}</div>
-                        <button className="button-save-detail">
-                            <img src={SaveIcon} alt="tombol simpan" />
-                            Simpan Umkm
+                        <button onClick={handleSaveClick} className="button-save-detail" style={{
+                            color: isSaved ? '#FFD700' : '#ccc'
+                        }}>
+                            {isSaved ? (
+                                <i className="fa-solid fa-bookmark fa-bookmark-detail"></i>
+                            ) : (
+                                <i className="fa-regular fa-bookmark fa-bookmark-detail"></i>
+                            )}
                         </button>
                     </section>
 
@@ -49,10 +73,10 @@ function DetailPage() {
                         <RatingLabel rating={UmkmRepository.getAverageRating(umkm)} />
                         <div className="visited-counter">
                             <i className="fa-solid fa-person-running"></i>
-                            <p>{formattedVisits} pengunjung sudah kesini</p> 
+                            <p>{formattedVisits} pengunjung sudah kesini</p>
                         </div>
                     </div>
-                    <hr className="hr-detail"/>
+                    <hr className="hr-detail" />
                     <p className="description-detail">{umkm.deskripsi}</p>
 
                     <PlaceMediaContent />
