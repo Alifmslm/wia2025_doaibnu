@@ -5,9 +5,6 @@ import type { Umkm } from "../../../shared/types/Umkm";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
 import HomeImage from '../../../assets/gallery-image-1.png';
 
-/**
- * Fungsi utilitas untuk memformat jumlah kunjungan menjadi 999+ jika lebih.
- */
 const formatVisits = (count: number): string => {
     if (count > 999) {
         return "999+";
@@ -19,13 +16,10 @@ function UmkmCard({ umkm }: { umkm: Umkm }) {
     const avgRating = UmkmRepository.getAverageRating(umkm);
     const totalRatings = umkm.ratings?.length || 0;
     
-    // Mengambil totalVisits dan memformatnya
     const formattedVisits = formatVisits(umkm.totalVisits);
 
-    // State untuk melacak status 'isSaved'
     const [isSaved, setIsSaved] = useState(() => UmkmRepository.isSaved(umkm.id));
 
-    // Handler untuk tombol simpan
     const handleSaveClick = (event: React.MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
@@ -81,7 +75,6 @@ function UmkmCard({ umkm }: { umkm: Umkm }) {
                     <div className="visit-container">
                         <div className="visited-counter">
                             <i className="fa-solid fa-person-running"></i>
-                            {/* Menggunakan formattedVisits yang dinamis */}
                             <p>{formattedVisits} pengunjung sudah kesini</p> 
                         </div>
                     </div>

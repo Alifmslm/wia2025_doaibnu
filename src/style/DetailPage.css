@@ -63,9 +63,18 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
-    /* jumlah baris yang ditampilkan */
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.detail-label {
+    width: 100%;
+    display: flex;
+    gap: 24px;
+}
+
+.hr-detail {
+    margin: 8px 0;
 }
 
 @media (min-width: 768px) {

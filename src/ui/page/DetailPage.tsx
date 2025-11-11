@@ -42,9 +42,15 @@ function DetailPage() {
                         <p>{umkm.lokasi?.lokasi_general}</p>
                     </div>
 
-                    <RatingLabel rating={UmkmRepository.getAverageRating(umkm)} />
+                    <div className="detail-label">
+                        <RatingLabel rating={UmkmRepository.getAverageRating(umkm)} />
+                        <div className="visited-counter">
+                            <i className="fa-solid fa-person-running"></i>
+                            <p> pengunjung sudah kesini</p> 
+                        </div>
+                    </div>
+                    <hr className="hr-detail"/>
                     <p className="description-detail">{umkm.deskripsi}</p>
-                    <p className="see-all-desc">Lihat Selengkapnya</p>
 
                     <PlaceMediaContent />
                 </section>
