@@ -1,11 +1,9 @@
-/* --- Mobile First (Default Anda) --- */
 .save-page {
     display: flex;
     padding: 0px 16px;
     flex-direction: column;
     gap: 24px;
 
-    /* Tambahan: Pastikan 100% dan pusatkan */
     width: 100%;
     margin: 0 auto;
 }
@@ -23,7 +21,6 @@
 .simpan-item-row {
     display: flex;
     align-items: center;
-    /* (Saya tambahkan dari kode Anda sebelumnya agar lengkap) */
     gap: 1rem;
     margin-bottom: 1rem;
 }
@@ -35,7 +32,6 @@
     }
 }
 
-/* --- Laptop (1024px ke atas) --- */
 @media (min-width: 1024px) {
     .save-page {
         max-width: 800px;

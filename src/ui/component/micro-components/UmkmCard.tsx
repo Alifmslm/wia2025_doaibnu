@@ -5,10 +5,6 @@ import type { Umkm } from "../../../shared/types/Umkm";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
 import HomeImage from '../../../assets/gallery-image-1.png';
 
-// HAPUS: Impor gambar lama tidak lagi diperlukan
-// import SaveButtonFilled from "../../../assets/save-button-colored.png";
-// import SaveButtonEmpty from "../../../assets/save-button-empty.png";
-
 function UmkmCard({ umkm }: { umkm: Umkm }) {
     const avgRating = UmkmRepository.getAverageRating(umkm);
     const totalRatings = umkm.ratings?.length || 0;
@@ -18,7 +14,7 @@ function UmkmCard({ umkm }: { umkm: Umkm }) {
 
     // Handler untuk tombol simpan
     const handleSaveClick = (event: React.MouseEvent) => {
-        event.preventDefault(); // Mencegah navigasi Link
+        event.preventDefault();
         event.stopPropagation();
 
         if (isSaved) {
@@ -49,19 +45,8 @@ function UmkmCard({ umkm }: { umkm: Umkm }) {
                         <button
                             className="save-button"
                             onClick={handleSaveClick}
-                            // Style dasar agar tombol terlihat transparan
-                            style={{ 
-                                background: 'white', // Background putih kecil agar ikon terlihat jelas
-                                border: 'none', 
-                                borderRadius: '50%',
-                                width: '32px',
-                                height: '32px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                fontSize: '16px', // Ukuran ikon
-                                color: isSaved ? '#FFD700' : '#ccc' // Warna emas jika disimpan, abu jika belum
+                            style={{
+                                color: isSaved ? '#FFD700' : '#ccc'
                             }}
                             aria-label={isSaved ? "Hapus dari simpanan" : "Simpan UMKM"}
                         >
@@ -82,6 +67,12 @@ function UmkmCard({ umkm }: { umkm: Umkm }) {
                     <div className="card-text">
                         <h1>{umkm.nama}</h1>
                         <p>{umkm.lokasi?.lokasi_general}</p>
+                    </div>
+                    <div className="visit-container">
+                        <div className="visited-counter">
+                            <i className="fa-solid fa-person-running"></i>
+                            <p>999 pengunjung sudah kesini</p>
+                        </div>
                     </div>
                 </div>
             </section>

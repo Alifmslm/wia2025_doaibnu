@@ -31,7 +31,7 @@
 .card-content {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 10px;
 }
 
 .card-text h1 {
@@ -92,12 +92,37 @@
 }
 
 .save-button {
-    width: fit-content;
     padding: 10px;
     border-radius: 100px;
-    background-color: white;
+    background-color: white; 
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 .save-button img {
     width: 16px;
+}
+
+.visited-counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-color-secondary);
+}
+
+.visited-counter p {
+    font-size: 14px;
+    color: var(--text-color-secondary);
+}
+
+.visit-button {
+    padding: 0;
+    background-color: white;
+    color: var(--text-color-primary);
+    font-size: 14px;
 }

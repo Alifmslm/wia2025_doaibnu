@@ -10,7 +10,6 @@ function DikunjungiTabs() {
     useEffect(() => {
         async function fetchVisitedData() {
             setLoading(true);
-            // PENTING: Mengambil data dari 'getVisitedUmkms', BUKAN 'getSavedUmkms'
             const data = await UmkmRepository.getVisitedUmkms();
             setVisitedUmkms(data);
             setLoading(false);
@@ -23,7 +22,6 @@ function DikunjungiTabs() {
 
     return (
         <section className="umkm-dikunjungi-list">
-            {/* Kita gunakan grid standar karena di sini mungkin tidak butuh checkbox lagi */}
             <div className="card-grid-dikunjngi"> 
                 {visitedUmkms.map((umkm) => (
                     <UmkmCard key={umkm.id} umkm={umkm} />
