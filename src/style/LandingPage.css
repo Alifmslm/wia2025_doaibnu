@@ -5,6 +5,8 @@
     justify-content: space-between;
     align-items: center;
     height: fit-content;
+    position: relative;
+    z-index: 100;
 }
 
 .nav-img {
@@ -15,15 +17,49 @@
 .nav-links {
     height: fit-content;
     display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.nav-links li {
-    height: 100%;
+.nav-links.active {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 16px;
+    z-index: 100;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-links.active .register-button,
+.nav-links.active .login-button {
+    padding: 10px 16px;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    display: block;
+}
+
+.nav-links.active .register-button {
+    background-color: var(--main-color);
+    color: #fff;
+}
+
+.nav-links.active .login-button {
+    background-color: #fff;
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
 }
 
 .icon-bar {
     color: var(--text-color-primary);
     font-size: 24px;
+    cursor: pointer;
 }
 
 .hero-landing {
@@ -116,7 +152,7 @@
     height: 110px;
     overflow: hidden;
     z-index: 5;
-    margin-top: -55px; /* Diperbaiki: Setengah dari height 110px */
+    margin-top: -55px;
 }
 
 .banner {
@@ -133,14 +169,14 @@
 
 .banner-green {
     background-color: var(--main-color);
-    transform: translateY(-50%) rotate(6deg); /* Diperbaiki: Positif */
+    transform: translateY(-50%) rotate(6deg);
     z-index: 1;
 }
 
 .banner-orange {
     background-color: #FF9D1F;
     z-index: 2;
-    transform: translateY(-50%) rotate(-6deg); /* Diperbaiki: Negatif */
+    transform: translateY(-50%) rotate(-6deg);
 }
 
 .banner p {
@@ -152,6 +188,11 @@
 .separator-icon {
     width: 16px;
     height: 16px;
+}
+
+.register-button,
+.login-button {
+    width: 100%;
 }
 
 .footer-landing {
@@ -210,11 +251,16 @@
 }
 
 /* =================================
-   MEDIA QUERIES
+    MEDIA QUERIES
    ================================= */
 
 /* --- Tablet (768px) --- */
 @media (min-width: 768px) {
+    .register-button,
+    .login-button {
+        width: 100%;
+    }
+
     .nav-landing {
         padding: 16px 40px;
     }
@@ -233,15 +279,15 @@
 
     .hero-decoration-wrapper {
         height: 120px;
-        margin-top: -60px; /* Diperbaiki: Setengah dari 120px */
+        margin-top: -60px;
     }
 
     .banner-green {
-        transform: translateY(-50%) rotate(4deg); /* Diperbaiki */
+        transform: translateY(-50%) rotate(4deg);
     }
 
     .banner-orange {
-        transform: translateY(-50%) rotate(-4deg); /* Diperbaiki */
+        transform: translateY(-50%) rotate(-4deg);
     }
 
     .footer-wrapper {
@@ -261,8 +307,15 @@
 
     .nav-links {
         display: flex;
+        flex-direction: row;
         gap: 16px;
         list-style: none;
+        position: static;
+        width: auto;
+        background-color: transparent;
+        padding: 0;
+        box-shadow: none;
+        border: none;
     }
 
     .nav-links .register-button {
@@ -270,6 +323,7 @@
         background-color: var(--main-color);
         color: #fff;
         border-radius: 5px;
+        border: none;
     }
 
     .nav-links .login-button {
@@ -291,11 +345,11 @@
     }
 
     .banner-green {
-        transform: translateY(-50%) rotate(3deg); /* Diperbaiki */
+        transform: translateY(-50%) rotate(3deg);
     }
 
     .banner-orange {
-        transform: translateY(-50%) rotate(-3deg); /* Diperbaiki */
+        transform: translateY(-50%) rotate(-3deg);
     }
 
     .footer-wrapper {
@@ -364,17 +418,16 @@
     .bg-landing2 {
         height: 80%;
     }
-
     
     .banner p {
         font-size: 18px;
     }
     
     .banner-green {
-        transform: translateY(-50%) rotate(2deg); /* Ditambahkan */
+        transform: translateY(-50%) rotate(2deg);
     }
 
     .banner-orange {
-        transform: translateY(-50%) rotate(-2deg); /* Ditambahkan */
+        transform: translateY(-50%) rotate(-2deg);
     }
 }
