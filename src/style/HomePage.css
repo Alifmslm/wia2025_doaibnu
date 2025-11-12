@@ -8,3 +8,34 @@
     width: 100%;
     height: auto;
 }
+
+
+.filter-rekomendasi {
+    margin: 32px 16px 16px 16px;
+    display: flex;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.button-filter-rekomendasi-on p{
+    padding: 8px 10px;
+    font-weight: 500;
+    background-color: var(--main-color);
+    border-radius: 100px;
+    color: white;
+}
+
+.button-filter-rekomendasi-off p{
+    border: 1px solid var(--border-color);
+    border-radius: 100px;
+    background-color: white;
+    padding: 8px;
+    border-radius: 100px;
+    color: var(--text-color-secondary);
+}
+
+@media (min-width: 768px) {
+    .filter-rekomendasi {
+        justify-content: center;
+    }
+}

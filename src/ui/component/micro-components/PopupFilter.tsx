@@ -23,14 +23,6 @@ function PopUpFilter({ onClose, onCategorySelect }: PopUpFilterProps) {
 
                     <h1>Pilih Filter</h1>
 
-                    {/* Filter 1 */}
-                    <FilterContainer
-                        title="Filter Populer"
-                        labels={["Terpopuler", "Terdekat", "Termurah", "Terbaik"]}
-                    />
-
-                    <hr className="divider" />
-
                     {/* Filter 2 */}
                     <FilterContainer
                         title="Kategori UMKM"
@@ -39,7 +31,7 @@ function PopUpFilter({ onClose, onCategorySelect }: PopUpFilterProps) {
                     />
 
                     {/* Tombol Simpan */}
-                    <Button nameButton="Simpan Filter" onClick={onClose} />
+                    <Button cekLogin nameButton="Simpan Filter" onClick={onClose} />
                 </div>
             </div>
         </>,
