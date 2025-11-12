@@ -29,6 +29,7 @@
     margin-left: -16px;
     overflow-x: auto;
     scrollbar-width: none;
+    scroll-behavior: smooth;
 }
 
 .quote-carousel-wrapper::-webkit-scrollbar {
@@ -48,6 +49,15 @@
     background-color: #E0E0E0;
     border-radius: 8px;
     flex-shrink: 0;
+    cursor: pointer;
+    transform: scale(0.85);
+    opacity: 0.7;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.quote-carousel__item.active {
+    transform: scale(1);
+    opacity: 1;
 }
 
 .quote-testimonial {
@@ -107,6 +117,18 @@
     border: none;
 }
 
+.carousel-btn:disabled {
+    background-color: #f0f0f0;
+    color: #ccc;
+    border-color: #eee;
+    cursor: not-allowed;
+}
+
+.carousel-btn:disabled .fa-chevron-left,
+.carousel-btn:disabled .fa-chevron-right {
+    color: #ccc;
+}
+
 /* =================================
 RESPONSIVE: TABLET & SMALL LAPTOP (1024px)
    ================================= */
@@ -117,44 +139,47 @@ RESPONSIVE: TABLET & SMALL LAPTOP (1024px)
     }
 
     .quote-header h1 {
-        font-size: 24px; /* Diperbesar dari 18px */
+        font-size: 24px;
     }
 
     .quote-header p {
-        font-size: 16px; /* Diperbesar dari 14px */
+        font-size: 16px;
     }
 
-    /* Reset lebar carousel agar tidak keluar container di desktop */
     .quote-carousel-wrapper {
         width: 100%;
         margin-left: 0;
-        /* Opsional: Tambahkan padding jika ingin ada ruang di kiri/kanan */
-        /* padding: 0 40px; */
     }
 
     .quote-carousel {
-        padding: 0; /* Hilangkan padding samping mobile */
-        gap: 24px;  /* Perbesar jarak antar item */
-        /* Agar carousel bisa di-center jika isinya sedikit */
+        padding: 0;
+        gap: 24px; 
         margin: 0 auto; 
     }
 
     .quote-carousel__item {
-        width: 280px;  /* Perbesar ukuran card */
+        width: 280px;
         height: 160px;
+        transform: scale(0.9);
+        opacity: 0.7;
+    }
+
+    .quote-carousel__item.active {
+        transform: scale(1);
+        opacity: 1;
     }
 
     .quote-text {
-        font-size: 24px; /* Diperbesar dari 18px */
-        max-width: 700px; /* Beri batas lebar agar enak dibaca */
+        font-size: 24px;
+        max-width: 700px;
     }
 
     .quote-author {
-        font-size: 18px; /* Diperbesar dari 16px */
+        font-size: 18px;
     }
 
     .quote-author-desc {
-        font-size: 16px; /* Diperbesar dari 14px */
+        font-size: 16px;
     }
 }
 
@@ -178,6 +203,13 @@ RESPONSIVE: TABLET & SMALL LAPTOP (1024px)
     .quote-carousel__item {
         width: 320px;
         height: 180px;
+        transform: scale(0.9);
+        opacity: 0.7;
+    }
+
+    .quote-carousel__item.active {
+        transform: scale(1);
+        opacity: 1;
     }
 
     .quote-text {
