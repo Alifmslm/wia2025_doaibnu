@@ -38,6 +38,7 @@
     scroll-snap-type: x mandatory;
     padding: 0 16px;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
 }
 
 .umkm-favorit__carousell::-webkit-scrollbar {
