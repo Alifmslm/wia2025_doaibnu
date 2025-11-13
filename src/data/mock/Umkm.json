@@ -8,7 +8,8 @@
             "lokasi": {
                 "alamat": "Jl. Kaliurang No. 22, Sleman, Yogyakarta",
                 "lokasi_general": "Yogyakarta, DI Yogyakarta",
-                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8148.424799200996!2d107.61754315008173!3d-6.887510983728445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e6e33227d863%3A0x1bdb90c18f112062!2sSoto%20Ayam%20Bu%20Carti!5e0!3m2!1sid!2sid!4v1761740393081!5m2!1sid!2sid"
+                "latitude": -6.870628729269212,
+                "longitude": 107.60464201164476 
             },
             "gambarUtama": "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
             "gallery": [
@@ -41,7 +42,8 @@
             "lokasi": {
                 "alamat": "Jl. Pahlawan No. 10, Semarang",
                 "lokasi_general": "Semarang, Jawa Tengah",
-                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.0289999999997!2d110.4203!3d-6.9823"
+                "latitude": -6.870628729269212,
+                "longitude": 107.60464201164476            
             },
             "gambarUtama": "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
             "gallery": [
@@ -72,7 +74,8 @@
             "lokasi": {
                 "alamat": "Jl. Sudirman No. 45, Padang",
                 "lokasi_general": "Padang, Sumatera Barat",
-                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.023999!2d100.3603!3d-0.9553"
+                "latitude": -6.870628729269212,
+                "longitude": 107.60464201164476 
             },
             "gambarUtama": "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
             "gallery": [
@@ -103,7 +106,8 @@
             "lokasi": {
                 "alamat": "Jl. Dago No. 88, Bandung",
                 "lokasi_general": "Bandung, Jawa Barat",
-                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.0289999999997!2d107.619123!3d-6.893838"
+                "latitude": -6.870628729269212,
+                "longitude": 107.60464201164476 
             },
             "gambarUtama": "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
             "gallery": [
@@ -135,7 +139,8 @@
             "lokasi": {
                 "alamat": "Jl. Merdeka No. 8, Bogor",
                 "lokasi_general": "Bogor, Jawa Barat",
-                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.8!2d106.795!3d-6.597"
+                "latitude": -6.870628729269212,
+                "longitude": 107.60464201164476 
             },
             "gambarUtama": "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
             "gallery": [
@@ -166,8 +171,8 @@
             "lokasi": {
                 "alamat": "Jl. Gajah Mada No. 9, Surabaya",
                 "lokasi_general": "Surabaya, Jawa Timur",
-                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.8!2d112.735!3d-7.265"
-            },
+                "latitude": -6.870628729269212,
+                "longitude": 107.60464201164476            },
             "gambarUtama": "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
             "gallery": [
                 "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
@@ -197,8 +202,8 @@
             "lokasi": {
                 "alamat": "Jl. Melati No. 22, Depok",
                 "lokasi_general": "Depok, Jawa Barat",
-                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.0289!2d106.818!3d-6.390"
-            },
+                "latitude": -6.870628729269212,
+                "longitude": 107.60464201164476            },
             "gambarUtama": "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
             "gallery": [
                 "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
@@ -228,7 +233,8 @@
             "lokasi": {
                 "alamat": "Jl. Veteran No. 55, Malang",
                 "lokasi_general": "Malang, Jawa Timur",
-                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.8!2d112.615!3d-7.982"
+                "latitude": -6.870628729269212,
+                "longitude": 107.60464201164476           
             },
             "gambarUtama": "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
             "gallery": [
@@ -259,7 +265,8 @@
             "lokasi": {
                 "alamat": "Jl. Gatot Subroto No. 31, Medan",
                 "lokasi_general": "Medan, Sumatera Utara",
-                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.8!2d98.678!3d3.595"
+                "latitude": -6.870628729269212,
+                "longitude": 107.60464201164476            
             },
             "gambarUtama": "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
             "gallery": [
@@ -284,7 +291,8 @@
             "lokasi": {
                 "alamat": "Jl. Pantai Losari No. 7, Makassar",
                 "lokasi_general": "Makassar, Sulawesi Selatan",
-                "map_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.4!2d119.412!3d-5.143"
+                "latitude": -6.870628729269212,
+                "longitude": 107.60464201164476 
             },
             "gambarUtama": "https://drive.google.com/uc?export=view&id=1STFpw4kH6n8Bv6EV9Q5Zes3OmBM-x38B",
             "gallery": [

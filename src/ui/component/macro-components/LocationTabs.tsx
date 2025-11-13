@@ -1,4 +1,5 @@
 import '../../../style/LocationTab.css'
+import { useEffect, useState } from 'react';
 import {
     MapContainer,
     TileLayer,
@@ -6,24 +7,73 @@ import {
     Popup,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { UmkmRepository } from '../../../data/repositories/UmkmRepository';
+import type { Lokasi } from "../../../shared/types/Umkm";
+import type { LatLngExpression } from 'leaflet';
 
-function LocationTabs() {
+interface LocationTabsProps {
+    umkmId: number;
+}
+
+function LocationTabs({ umkmId }: LocationTabsProps) {
+    const [lokasi, setLokasi] = useState<Lokasi | null>(null);
+    const [nama, setNama] = useState("");
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+            const umkm = await UmkmRepository.getById(umkmId);
+
+            if (umkm && umkm.lokasi && umkm.lokasi.latitude && umkm.lokasi.longitude) {
+                setLokasi(umkm.lokasi);
+                setNama(umkm.nama);
+            } else {
+                console.error("Data lokasi tidak ditemukan atau tidak memiliki koordinat.");
+                setLokasi(null);
+            }
+            setLoading(false);
+        }
+        fetchData();
+    }, [umkmId]);
+
+    if (loading) {
+        return (
+            <section className="location-tab">
+                <h1>Lokasi</h1>
+                <p>Memuat peta...</p>
+            </section>
+        );
+    }
+
+    // --- 8. Tambahkan penanganan jika data tidak ada ---
+    if (!lokasi) {
+        return (
+            <section className="location-tab">
+                <h1>Lokasi</h1>
+                <p>Data lokasi tidak tersedia.</p>
+            </section>
+        );
+    }
+
+    const position: LatLngExpression = [lokasi.latitude, lokasi.longitude];
+
     return (
         <>
             <section className="location-tab">
                 <h1>Lokasi</h1>
-                <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false} id='map'>
+                <MapContainer center={position} zoom={13} scrollWheelZoom={false} id='map'>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[51.505, -0.09]}>
+                    <Marker position={position}>
                         <Popup>
-                            A pretty CSS3 popup. <br /> Easily customizable.
+                            {nama}<br />{lokasi.alamat}
                         </Popup>
                     </Marker>
                 </MapContainer>
-                <p>Jl. Rancakendal No.7, Ciburial, Kec. Cibeunying Kaler, Kabupaten Bandung, Jawa Barat</p>
+                <p>{lokasi.alamat}</p>
             </section>
         </>
     )

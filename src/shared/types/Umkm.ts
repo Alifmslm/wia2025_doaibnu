@@ -7,7 +7,8 @@ export type Rating = {
 export type Lokasi = {
     alamat: string;
     lokasi_general: string;
-    map_embed?: string;
+    latitude: number;
+    longitude: number;
 };
 
 export type Umkm = {

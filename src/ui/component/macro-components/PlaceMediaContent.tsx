@@ -25,7 +25,7 @@ function PlaceMediaContent({ umkmId }: PlaceMediaContentProps) {
             case "ulasan":
                 return <ReviewTabs umkmId={umkmId}/>;
             case "lokasi":
-                return <LocationTabs />;
+                return <LocationTabs umkmId={umkmId}/>;
             case "menu":
                 return <MenuPage />
             default:
