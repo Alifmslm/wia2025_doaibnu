@@ -21,16 +21,24 @@ function UmkmList({ searchQuery, category, activeFilter }: UmkmListProps) {
 
             if (searchQuery) {
                 result = await UmkmRepository.search(searchQuery);
-            } 
-            else if (category) {
+            } else if (category) {
                 result = await UmkmRepository.findByCategory(category);
-            } 
-            else if (activeFilter === "Terdekat") {
+            } else if (activeFilter === "Terdekat") {
                 result = [];
             } else if (activeFilter === "Hidden Gem") {
-                result = [];
-            }
-            else {
+                const allData = await UmkmRepository.getAll();
+
+                result = allData.filter(umkm => {
+
+                    return (
+                        umkm.monthlyEats < 100 &&
+                        umkm.totalVisits < 50 &&
+                        umkm.averageRating >= 4.5
+                    );
+                });
+
+            } else {
+                // Defaultnya adalah "Semua"
                 result = await UmkmRepository.getAll();
             }
 
@@ -42,6 +50,13 @@ function UmkmList({ searchQuery, category, activeFilter }: UmkmListProps) {
     }, [searchQuery, category, activeFilter]);
 
     if (loading) return <p style={{ color: "white" }}>Memuat data...</p>;
+
+    // Tambahan: Tampilkan pesan jika hasil filter kosong
+    if (umkmList.length === 0) {
+        return <p style={{ color: "white", textAlign: "center", width: "100%" }}>
+            Tidak ada UMKM yang ditemukan dengan kriteria ini.
+        </p>;
+    }
 
     return (
         <section className="card-grid-container">
