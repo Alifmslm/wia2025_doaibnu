@@ -20,7 +20,6 @@ export type Umkm = {
     gallery: string[];
     ratings: Rating[];
     averageRating: number;
-    // Properti baru
     monthlyEats: number;
     totalVisits: number; 
 };
