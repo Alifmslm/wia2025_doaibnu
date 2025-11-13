@@ -54,6 +54,10 @@
     color: var(--main-color);
 }
 
+.no-data-text {
+    text-align: center;
+}
+
 .card-image {
     background-image: url(../assets/card-image.png);
     background-size: cover;        /* Biar gambarnya penuh */

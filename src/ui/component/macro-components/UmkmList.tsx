@@ -38,7 +38,6 @@ function UmkmList({ searchQuery, category, activeFilter }: UmkmListProps) {
                 });
 
             } else {
-                // Defaultnya adalah "Semua"
                 result = await UmkmRepository.getAll();
             }
 
@@ -49,11 +48,10 @@ function UmkmList({ searchQuery, category, activeFilter }: UmkmListProps) {
         fetchData();
     }, [searchQuery, category, activeFilter]);
 
-    if (loading) return <p style={{ color: "white" }}>Memuat data...</p>;
+    if (loading) return <p className="no-data-text">Memuat data...</p>;
 
-    // Tambahan: Tampilkan pesan jika hasil filter kosong
     if (umkmList.length === 0) {
-        return <p style={{ color: "white", textAlign: "center", width: "100%" }}>
+        return <p className="no-data-text">
             Tidak ada UMKM yang ditemukan dengan kriteria ini.
         </p>;
     }
