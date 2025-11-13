@@ -81,6 +81,16 @@
     margin-bottom: 16px;
 }
 
+.product-footer {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-stock {
+    font-size: 12px;
+    color: var(--main-color);
+}
+
 @media (min-width: 768px) {
     .product-list {
         flex-direction: row;

@@ -21,6 +21,7 @@ function Product() {
 
                         <div className="product-footer">
                             <span className="product-price">Rp 125.000</span>
+                            <span className='product-stock'>15 Stok Tersedia</span>
                         </div>
                     </div>
 
