@@ -91,3 +91,7 @@
 .hidden-file-input {
     display: none;
 }
+
+.tab-content {
+    text-align: start;
+}

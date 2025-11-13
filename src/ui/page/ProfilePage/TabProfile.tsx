@@ -1,5 +1,5 @@
 import { useState } from "react"
-import MenuPage from "../MenuPage/MenuPage";
+import UmkmListProfile from "./UmkmListProfile";
 import ProfileInfo from "./ProfileInfoPage";
 
 function TabProfile() {
@@ -15,7 +15,7 @@ function TabProfile() {
             case "profile":
                 return <ProfileInfo />;
             case "menu":
-                return <MenuPage />;
+                return <UmkmListProfile />;
             default:
                 return null;
         }
