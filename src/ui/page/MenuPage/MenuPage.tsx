@@ -5,7 +5,10 @@ function MenuPage() {
     return (
         <>
             <section className="menu-page">
-                <h2>Makanan Terfavorit Kami</h2>
+                <div className="menu-page-header">
+                    <h3>Makanan Terfavorit Kami</h3>
+                    <a href="">Edit Menu Anda?</a>
+                </div>
                 <div className="product-list">
                     <Product />
                     <Product />

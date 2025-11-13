@@ -1,0 +1,93 @@
+.profile-page {
+    padding: 24px 16px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.profile-info-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.profile-info-header .profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    background-color: var(--main-color);
+}
+
+.profile-picture {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-picture p {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.profile-info {
+    text-align: start;
+}
+
+.form-profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-info-header button {
+    width: 100%;
+    margin: 12px 0;
+}
+
+.profile-info button {
+    width: 100%;
+    color: var(--main-color);
+    background-color: white !important;
+    border: 1px solid var(--main-color)!important;
+}
+
+.input-modal-image {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 120px;
+    padding: 20px;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    background-color: #fafafa;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-sizing: border-box; 
+    margin-bottom: 16px;
+}
+
+.input-modal-image:hover {
+    border-color: var(--main-color);
+    background-color: #f4fcf5;
+    color: var(--main-color);
+}
+
+.input-modal-image i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.input-modal-image span {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.hidden-file-input {
+    display: none;
+}
