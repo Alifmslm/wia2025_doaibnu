@@ -5,7 +5,10 @@ import LocationTabs from "./LocationTabs";
 import MenuPage from "../../page/MenuPage/MenuPage";
 import "../../../style/PlaceMediaContent.css";
 
-function PlaceMediaContent() {
+interface PlaceMediaContentProps {
+    umkmId: number;
+}
+function PlaceMediaContent({ umkmId }: PlaceMediaContentProps) {
     const [activeTab, setActiveTab] = useState("menu");
 
     const tabs = [
@@ -20,7 +23,7 @@ function PlaceMediaContent() {
             case "gallery":
                 return <GalleryTabs />;
             case "ulasan":
-                return <ReviewTabs />;
+                return <ReviewTabs umkmId={umkmId}/>;
             case "lokasi":
                 return <LocationTabs />;
             case "menu":

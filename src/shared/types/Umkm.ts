@@ -19,6 +19,7 @@ export type Umkm = {
     gambarUtama: string;
     gallery: string[];
     ratings: Rating[];
+    averageRating: number;
     // Properti baru
     monthlyEats: number;
     totalVisits: number; 

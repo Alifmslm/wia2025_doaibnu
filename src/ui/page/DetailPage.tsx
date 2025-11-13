@@ -78,7 +78,7 @@ function DetailPage() {
                     </div>
                     <p className="description-detail">{umkm.deskripsi}</p>
 
-                    <PlaceMediaContent />
+                    <PlaceMediaContent umkmId={umkm.id}/>
                 </section>
             </div>
         </>

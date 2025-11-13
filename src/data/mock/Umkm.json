@@ -30,7 +30,8 @@
                 }
             ],
             "monthlyEats": 1200,
-            "totalVisits": 980
+            "totalVisits": 980,
+            "averageRating": 4.7
         },
         {
             "id": 2,
@@ -60,7 +61,8 @@
                 }
             ],
             "monthlyEats": 1550,
-            "totalVisits": 1005
+            "totalVisits": 1005,
+            "averageRating": 4.5
         },
         {
             "id": 3,
@@ -90,7 +92,8 @@
                 }
             ],
             "monthlyEats": 2500,
-            "totalVisits": 35200
+            "totalVisits": 35200,
+            "averageRating": 4.9
         },
         {
             "id": 4,
@@ -121,7 +124,8 @@
                 }
             ],
             "monthlyEats": 2000,
-            "totalVisits": 850
+            "totalVisits": 850,
+            "averageRating": 4.9
         },
         {
             "id": 5,
@@ -151,7 +155,8 @@
                 }
             ],
             "monthlyEats": 900,
-            "totalVisits": 600
+            "totalVisits": 600,
+            "averageRating": 4.9
         },
         {
             "id": 6,
@@ -181,7 +186,8 @@
                 }
             ],
             "monthlyEats": 1100,
-            "totalVisits": 14500
+            "totalVisits": 14500,
+            "averageRating": 4.9
         },
         {
             "id": 7,
@@ -211,7 +217,8 @@
                 }
             ],
             "monthlyEats": 800,
-            "totalVisits": 9500
+            "totalVisits": 9500,
+            "averageRating": 4.9
         },
         {
             "id": 8,
@@ -241,7 +248,8 @@
                 }
             ],
             "monthlyEats": 650,
-            "totalVisits": 7800
+            "totalVisits": 7800,
+            "averageRating": 4.9
         },
         {
             "id": 9,
@@ -265,7 +273,8 @@
                 }
             ],
             "monthlyEats": 300,
-            "totalVisits": 4500
+            "totalVisits": 4500,
+            "averageRating": 4.9
         },
         {
             "id": 10,
@@ -295,7 +304,8 @@
                 }
             ],
             "monthlyEats": 1350,
-            "totalVisits": 17800
+            "totalVisits": 17800,
+            "averageRating": 4.9
         }
     ]
 }

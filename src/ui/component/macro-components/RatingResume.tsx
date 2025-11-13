@@ -15,7 +15,7 @@ function RatingResume({ onOpen, average, ratings }: RatingResumeProps) {
             <h1 className="title-review">Ringkasan Ulasan</h1>
             <section className="rating-resume">
                 <RatingDistribution ratings={ratings} />
-                <AverageRating average={average} />
+                <AverageRating average={average} totalReviews={ratings.length} />
             </section>
             <div className="add-review">
                 <img src={PenIcon} alt="pen-icon" />

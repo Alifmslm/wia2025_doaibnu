@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { ratingValidation } from '../../../shared/utils/validator/ratingvalidation';
+import { ratingValidation } from '../../../shared/utils/validator/RatingValidation';
 
 interface FormRatingProps {
     open: boolean;

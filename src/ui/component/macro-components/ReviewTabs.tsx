@@ -4,18 +4,43 @@ import RatingResume from "./RatingResume";
 import RatingList, { type RatingItem } from "./RatingList";
 import FormRating from "../micro-components/FormRating";
 
-const INITIAL_RATINGS: RatingItem[] = Array.from({ length: 6 }, (_, i) => ({
-    id: i + 1,
-    name: `User ${i + 1}`,
-    score: (Math.random() * 5).toFixed(1),
-    desc: "Lorem ipsum dolor sit amet consectetur. Nunc nunc phasellus elit sed non.",
-    time: `${i + 1} hari yang lalu`,
-}));
+import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
+import type { Rating as UmkmRating } from "../../../shared/types/Umkm";
 
-function ReviewTabs() {
+function transformUmkmRatingToRatingItem(
+    umkmRating: UmkmRating,
+    index: number
+): RatingItem {
+    return {
+        id: index, 
+        name: umkmRating.user,
+        score: umkmRating.nilai.toFixed(1),
+        desc: umkmRating.komentar || "Tidak ada komentar.",
+        time: "Beberapa waktu lalu",
+    };
+}
+
+interface ReviewTabsProps {
+    umkmId: number;
+}
+
+function ReviewTabs({ umkmId }: ReviewTabsProps) {
     const [open, setOpen] = useState(false);
-    const [ratings, setRatings] = useState<RatingItem[]>(INITIAL_RATINGS);
+
+    // 5. Inisialisasi state sebagai kosong
+    const [ratings, setRatings] = useState<RatingItem[]>([]);
     const [averageRating, setAverageRating] = useState(0);
+
+    useEffect(() => {
+        async function loadRatingData() {
+            const umkm = await UmkmRepository.getById(umkmId);
+            if (umkm && umkm.ratings) {
+                const uiRatings = umkm.ratings.map(transformUmkmRatingToRatingItem);
+                setRatings(uiRatings);
+            }
+        }
+        loadRatingData();
+    }, [umkmId]);
 
     useEffect(() => {
         if (ratings.length === 0) {
@@ -29,7 +54,7 @@ function ReviewTabs() {
         );
         const avg = total / ratings.length;
         setAverageRating(parseFloat(avg.toFixed(1)));
-    }, [ratings]);
+    }, [ratings]); // <-- Kunci: Bergantung pada state 'ratings'
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -48,17 +73,13 @@ function ReviewTabs() {
 
     return (
         <>
-            {/* ✅ Kirim ratings ke RatingResume */}
             <RatingResume
                 onOpen={handleOpen}
                 average={averageRating}
                 ratings={ratings}
             />
-
             <hr />
-
             <RatingList ratings={ratings} />
-
             <FormRating
                 open={open}
                 onClose={handleClose}
