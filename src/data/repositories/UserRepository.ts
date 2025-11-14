@@ -1,5 +1,5 @@
 // src/data/repositories/UserRepository.ts
-import raw from "../mock/user.json";
+import raw from "../mock/User.json";
 import type { User } from "../../shared/types/User";
 
 const DB: User[] = raw.users as User[];

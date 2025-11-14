@@ -1,5 +1,5 @@
 // src/data/repositories/UmkmRepository.ts
-import raw from "../mock/umkm.json";
+import raw from "../mock/Umkm.json";
 import type { Umkm } from "../../shared/types/Umkm";
 
 const DB: Umkm[] = raw.umkm as Umkm[]; // simple in-memory "db"
