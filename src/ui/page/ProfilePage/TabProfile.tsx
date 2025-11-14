@@ -1,10 +1,18 @@
-import { useState } from "react"
+import { useState } from "react";
 import UmkmListProfile from "./UmkmListProfile";
 import ProfileInfo from "./ProfileInfoPage";
+// 1. Import tipe yang telah kita buat
+import type { UserProfile, ProfileUpdateData } from "./ProfilePage";
 
-function TabProfile() {
+// 2. Definisikan props yang akan diterima
+interface TabProfileProps {
+    user: UserProfile;
+    onUpdateProfile: (data: ProfileUpdateData) => void;
+}
+
+function TabProfile({ user, onUpdateProfile }: TabProfileProps) { // 3. Terima props
     const [activeTab, setActiveTab] = useState("profile");
-    
+
     const tabs = [
         { id: "profile", label: "Informasi Pribadi" },
         { id: "menu", label: "List UMKM" },
@@ -13,7 +21,8 @@ function TabProfile() {
     const renderContent = () => {
         switch (activeTab) {
             case "profile":
-                return <ProfileInfo />;
+                // 4. Teruskan props ke ProfileInfoPage
+                return <ProfileInfo user={user} onUpdateProfile={onUpdateProfile} />;
             case "menu":
                 return <UmkmListProfile />;
             default:
@@ -21,7 +30,7 @@ function TabProfile() {
         }
     };
 
-    return(
+    return (
         <>
             <section className="tabview-container">
                 <div className="tab-header">
@@ -40,7 +49,6 @@ function TabProfile() {
                         </a>
                     ))}
                 </div>
-
                 <div className="tab-content">{renderContent()}</div>
             </section>
         </>

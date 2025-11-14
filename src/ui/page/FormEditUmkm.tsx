@@ -139,7 +139,7 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
                     className="input-modal"
                 />
 
-                <h3 className="modal-subtitle" style={{ marginTop: '16px', marginBottom: '0' }}>
+                <h3 className="modal-subtitle" style={{ marginTop: '16px', marginBottom: '16px' }}>
                     Lokasi
                 </h3>
 
