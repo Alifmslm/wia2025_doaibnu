@@ -7,7 +7,7 @@ function MenuPage() {
             <section className="menu-page">
                 <div className="menu-page-header">
                     <h3>Menu UMKM Kami</h3>
-                    <a href="">Edit Menu Anda?</a>
+                    <a href="/edit-menu">Edit Menu Anda?</a>
                 </div>
                 <div className="product-list">
                     <Product />

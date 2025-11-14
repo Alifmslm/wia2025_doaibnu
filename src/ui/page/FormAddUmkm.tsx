@@ -430,7 +430,6 @@ function FormAddUmkm() {
             <section className="add-umkm-page">
                 <div className="form-container">
                     
-                    {/* Tombol kembali ke halaman sebelumnya (misal: /profile) */}
                     <button onClick={() => navigate(-1)} className="back-button-page">
                         <i className="fa-solid fa-chevron-left"></i> Kembali ke Profil
                     </button>
@@ -444,7 +443,6 @@ function FormAddUmkm() {
                         </div>
                     </div>
 
-                    {/* Render form berdasarkan step saat ini */}
                     {step === 1 ? renderStepOne() : renderStepTwo()}
 
                 </div>
