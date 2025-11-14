@@ -6,11 +6,19 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import type { Umkm } from '../../shared/types/Umkm';
 
+// --- Impor tambahan untuk Dropdown (Select) ---
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select, { type SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
+// ----------------------------------------------
+
 // Tipe untuk data yang di-submit dari form (disesuaikan)
 export type FormEditData = {
     nama: string;
     deskripsi: string;
-    kategori: string;
+    kategori: string; // Tipe 'string' tetap dipertahankan agar kompatibel
     lokasiGeneral: string;
     alamat: string;
     images: FileList | null;
@@ -32,7 +40,7 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
     // State untuk semua field form
     const [nama, setNama] = useState('');
     const [deskripsi, setDeskripsi] = useState('');
-    const [kategori, setKategori] = useState('');
+    const [kategori, setKategori] = useState(''); // State ini akan digunakan oleh Select
     const [lokasiGeneral, setLokasiGeneral] = useState('');
     const [alamat, setAlamat] = useState('');
     const [images, setImages] = useState<FileList | null>(null);
@@ -68,7 +76,8 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
         const newErrors: FormErrors = {};
         if (!nama.trim()) newErrors.nama = 'Nama UMKM tidak boleh kosong.';
         if (!deskripsi.trim()) newErrors.deskripsi = 'Deskripsi tidak boleh kosong.';
-        if (!kategori.trim()) newErrors.kategori = 'Kategori tidak boleh kosong.';
+        // Validasi untuk kategori (Select)
+        if (!kategori.trim()) newErrors.kategori = 'Kategori wajib dipilih.';
         if (!lokasiGeneral.trim()) newErrors.lokasiGeneral = 'Lokasi general tidak boleh kosong.';
         if (!alamat.trim()) newErrors.alamat = 'Alamat tidak boleh kosong.';
 
@@ -87,6 +96,11 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
                 images
             });
         }
+    };
+
+    // Handler khusus untuk Select component
+    const handleKategoriChange = (event: SelectChangeEvent) => {
+        setKategori(event.target.value as string);
     };
 
     return (
@@ -129,15 +143,30 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
                     rows={4}
                 />
 
-                <TextField
-                    label="Kategori UMKM"
+                {/* === INI BAGIAN YANG DIUBAH === */}
+                <FormControl
                     variant="outlined"
-                    value={kategori}
-                    onChange={(e) => setKategori(e.target.value)}
-                    error={!!errors.kategori}
-                    helperText={errors.kategori}
                     className="input-modal"
-                />
+                    error={!!errors.kategori}
+                >
+                    <InputLabel id="kategori-select-label">Kategori UMKM</InputLabel>
+                    <Select
+                        labelId="kategori-select-label"
+                        id="kategori-select"
+                        value={kategori}
+                        onChange={handleKategoriChange}
+                        label="Kategori UMKM" // Diperlukan agar label outlined-nya rapi
+                    >
+                        {/* Opsi yang diminta */}
+                        <MenuItem value="Indonesia">Indonesia</MenuItem>
+                        <MenuItem value="Western">Western</MenuItem>
+                        <MenuItem value="Asia">Asia</MenuItem>
+                        <MenuItem value="Lain-lain">Lain-lain</MenuItem>
+                    </Select>
+                    {/* Tampilkan helper text jika ada error */}
+                    {errors.kategori && <FormHelperText>{errors.kategori}</FormHelperText>}
+                </FormControl>
+                {/* === AKHIR BAGIAN YANG DIUBAH === */}
 
                 <h3 className="modal-subtitle" style={{ marginTop: '16px', marginBottom: '16px' }}>
                     Lokasi
