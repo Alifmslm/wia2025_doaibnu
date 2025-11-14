@@ -5,6 +5,7 @@
     flex-direction: column;
     gap: 16px;
 }
+
 .profile-info-header {
     display: flex;
     flex-direction: column;
@@ -50,7 +51,7 @@
     width: 100%;
     color: var(--main-color);
     background-color: white !important;
-    border: 1px solid var(--main-color)!important;
+    border: 1px solid var(--main-color) !important;
 }
 
 .input-modal-image {
@@ -68,7 +69,7 @@
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-sizing: border-box; 
+    box-sizing: border-box;
     margin-bottom: 16px;
 }
 
@@ -94,4 +95,75 @@
 
 .tab-content {
     text-align: start;
+}
+
+/* === New Styles for UMKM List (from UmkmListProfile) === */
+.umkm-list-profile {
+    width: 100%;
+}
+
+.umkm-list-profile-items {
+    display: grid;
+    gap: 16px;
+    /* 1 column by default on mobile */
+    grid-template-columns: 1fr;
+}
+
+.profile-list-message {
+    text-align: center;
+    padding: 32px;
+    color: #555;
+}
+
+/* === Responsive Media Queries === */
+
+/* --- Tablet (e.g., 768px and up) --- */
+@media (min-width: 768px) {
+    .profile-page {
+        /* Constrain the max width and center it */
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 32px 24px;
+        gap: 24px;
+    }
+
+    .profile-info-header button {
+        /* Stop button from being 100% wide */
+        width: auto;
+        padding-left: 24px;
+        padding-right: 24px;
+        max-width: 300px;
+        /* Optional: prevent very long buttons */
+    }
+
+    .profile-info {
+        /* Center the form area within the tab */
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .profile-info button {
+        /* Stop form button from being 100% wide */
+        width: auto;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .umkm-list-profile-items {
+        /* 2-column grid for tablets */
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* --- Desktop (e.g., 1024px and up) --- */
+@media (min-width: 1024px) {
+    .profile-page {
+        /* Widen the container for desktops */
+        max-width: 960px;
+    }
+
+    .umkm-list-profile-items {
+        /* 3-column grid for desktops */
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
