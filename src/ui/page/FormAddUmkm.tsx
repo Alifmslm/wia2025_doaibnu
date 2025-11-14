@@ -77,12 +77,39 @@ function FormAddUmkm() {
     };
 
     /**
-     * Pindah dari Step 1 ke Step 2
+     * Pindah dari Step 1 ke Step 2 (DENGAN VALIDASI KETAT)
      */
     const handleNextStep = (e: FormEvent) => {
         e.preventDefault();
-        // TODO: Tambahkan validasi form di sini sebelum pindah
-        console.log("Data UMKM (Step 1):", umkmData);
+        
+        // Validasi ketat untuk semua field
+        if (umkmData.nama.trim() === '') {
+            alert("Nama UMKM wajib diisi.");
+            return;
+        }
+        if (umkmData.kategori === '') {
+            alert("Jenis Makanan wajib dipilih.");
+            return;
+        }
+        if (umkmData.gallery.length === 0) {
+            alert("Anda wajib mengunggah minimal satu foto UMKM.");
+            return;
+        }
+        if (umkmData.deskripsi.trim() === '') {
+            alert("Deskripsi wajib diisi.");
+            return;
+        }
+        if (umkmData.lokasiGeneral.trim() === '') {
+            alert("Lokasi General wajib diisi.");
+            return;
+        }
+        if (umkmData.linkGmaps.trim() === '') {
+            alert("Link Google Maps wajib diisi.");
+            return;
+        }
+
+        // Jika semua lolos validasi
+        console.log("Data UMKM (Step 1) Lolos Validasi:", umkmData);
         setStep(2);
     };
 
@@ -93,9 +120,19 @@ function FormAddUmkm() {
      */
     const handleMenuChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
+        
+        // Cek jika input number kosong, set sebagai 0 (atau nilai default)
+        let processedValue: string | number = value;
+        if (type === 'number') {
+            processedValue = value === '' ? 0 : parseFloat(value);
+            if (isNaN(processedValue)) {
+                processedValue = 0;
+            }
+        }
+
         setCurrentMenuItem(prev => ({
             ...prev,
-            [name]: type === 'number' ? parseFloat(value) : value,
+            [name]: processedValue,
         }));
     };
 
@@ -114,12 +151,26 @@ function FormAddUmkm() {
     /**
      * Menambahkan menu saat ini ke dalam daftar 'menuItems'
      */
+    // ==========================================================
+    // **PERUBAHAN DI SINI:** Validasi menu yang lebih ketat
+    // ==========================================================
     const handleAddMenuItem = () => {
-        // TODO: Tambahkan validasi untuk form menu
-        if (!currentMenuItem.namaProduk || currentMenuItem.harga <= 0) {
-            alert("Nama produk dan harga wajib diisi.");
+        // Validasi untuk form menu
+        if (!currentMenuItem.namaProduk || currentMenuItem.namaProduk.trim() === "") {
+            alert("Nama produk wajib diisi.");
             return;
         }
+        // Cek harga (termasuk jika user mengetik huruf, akan jadi NaN)
+         if (isNaN(currentMenuItem.harga) || currentMenuItem.harga <= 0) {
+            alert("Harga produk wajib diisi dan harus lebih besar dari 0.");
+            return;
+        }
+        // Cek stok (termasuk jika user mengetik huruf, akan jadi NaN)
+        if (isNaN(currentMenuItem.stok) || currentMenuItem.stok < 0) {
+            alert("Stok wajib diisi dan tidak boleh negatif (minimal 0).");
+            return;
+        }
+        // Foto dan Deskripsi produk opsional, jadi tidak divalidasi
 
         const newMenuItem: MenuItem = {
             ...currentMenuItem,
@@ -141,6 +192,9 @@ function FormAddUmkm() {
         const fileInput = document.getElementById('fotoProduk') as HTMLInputElement;
         if (fileInput) fileInput.value = '';
     };
+    // ==========================================================
+    // **AKHIR PERUBAHAN**
+    // ==========================================================
 
     /**
      * Tombol submit akhir
@@ -178,6 +232,7 @@ function FormAddUmkm() {
      * Render Form untuk Step 1
      */
     const renderStepOne = () => (
+        // Menghapus noValidate agar `required` HTML berfungsi
         <form onSubmit={handleNextStep} className="umkm-form">
             
             <div className="form-group">
@@ -218,6 +273,7 @@ function FormAddUmkm() {
                     onChange={handleUmkmFileChange}
                     multiple // Penting untuk multi-file
                     accept="image/*"
+                    required
                 />
             </div>
 
@@ -229,6 +285,7 @@ function FormAddUmkm() {
                     value={umkmData.deskripsi}
                     onChange={handleUmkmChange}
                     rows={4}
+                    required
                 />
             </div>
 
@@ -253,6 +310,7 @@ function FormAddUmkm() {
                     value={umkmData.linkGmaps}
                     onChange={handleUmkmChange}
                     placeholder="https://maps.app.goo.gl/..."
+                    required
                 />
             </div>
 
@@ -271,7 +329,7 @@ function FormAddUmkm() {
             <form className="menu-add-form" onSubmit={(e) => e.preventDefault()}>
                 <h3>Tambah Item Menu Baru</h3>
                 <div className="form-group">
-                    <label htmlFor="fotoProduk">Foto Produk</label>
+                    <label htmlFor="fotoProduk">Foto Produk (Opsional)</label>
                     <input
                         type="file"
                         id="fotoProduk"
@@ -288,10 +346,11 @@ function FormAddUmkm() {
                         name="namaProduk"
                         value={currentMenuItem.namaProduk}
                         onChange={handleMenuChange}
+                        required // Validasi HTML
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="deskripsiProduk">Deskripsi Produk</label>
+                    <label htmlFor="deskripsiProduk">Deskripsi Produk (Opsional)</label>
                     <textarea
                         id="deskripsiProduk"
                         name="deskripsiProduk"
@@ -307,9 +366,12 @@ function FormAddUmkm() {
                             type="number"
                             id="harga"
                             name="harga"
-                            value={currentMenuItem.harga}
+                            // Kontrol value agar 0 tidak muncul saat input kosong
+                            value={currentMenuItem.harga === 0 ? '' : currentMenuItem.harga}
                             onChange={handleMenuChange}
-                            min="0"
+                            min="1" // Harga minimal 1
+                            placeholder="Contoh: 15000"
+                            required // Validasi HTML
                         />
                     </div>
                     <div className="form-group">
@@ -318,9 +380,12 @@ function FormAddUmkm() {
                             type="number"
                             id="stok"
                             name="stok"
-                            value={currentMenuItem.stok}
+                            // Kontrol value agar 0 tidak muncul saat input kosong
+                            value={currentMenuItem.stok === 0 ? '' : currentMenuItem.stok}
                             onChange={handleMenuChange}
                             min="0"
+                            placeholder="Contoh: 10"
+                            required // Validasi HTML
                         />
                     </div>
                 </div>
