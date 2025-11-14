@@ -14,7 +14,6 @@ function ProfilePage() {
                     </div>
                     <h2>Alif Muslim Abdurrahman</h2>
                     <p>alifmslm01@gmail.com</p>
-                    <button>Daftarkan Umkm Anda!</button>
                 </div>
                 <TabProfile />
             </section>

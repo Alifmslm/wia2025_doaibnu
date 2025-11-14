@@ -115,6 +115,18 @@
     color: #555;
 }
 
+.umkm-list-profile__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.list-empty {
+    flex-direction: column;
+    text-align: center;
+}
+
 /* === Responsive Media Queries === */
 
 /* --- Tablet (e.g., 768px and up) --- */
@@ -128,22 +140,18 @@
     }
 
     .profile-info-header button {
-        /* Stop button from being 100% wide */
         width: auto;
         padding-left: 24px;
         padding-right: 24px;
         max-width: 300px;
-        /* Optional: prevent very long buttons */
     }
 
     .profile-info {
-        /* Center the form area within the tab */
         max-width: 600px;
         margin: 0 auto;
     }
 
     .profile-info button {
-        /* Stop form button from being 100% wide */
         width: auto;
         padding-left: 24px;
         padding-right: 24px;
@@ -155,7 +163,6 @@
     }
 }
 
-/* --- Desktop (e.g., 1024px and up) --- */
 @media (min-width: 1024px) {
     .profile-page {
         /* Widen the container for desktops */

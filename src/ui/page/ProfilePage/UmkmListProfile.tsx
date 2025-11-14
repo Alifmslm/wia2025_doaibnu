@@ -24,7 +24,14 @@ function UmkmListProfile() {
         }
 
         if (umkmList.length === 0) {
-            return <p className="profile-list-message">Tidak ada UMKM yang ditemukan.</p>;
+            return (
+                <>
+                    <div className="umkm-list-profile__header list-empty">
+                        <h3>Anda Belum Memiliki Umkm</h3>
+                        <a href="">Daftarkan Umkm Anda</a>
+                    </div>
+                </>
+            );
         }
 
         return (
@@ -38,7 +45,10 @@ function UmkmListProfile() {
 
     return (
         <section className="umkm-list-profile">
-            <h3>Daftar Umkm Saya </h3>
+            <div className="umkm-list-profile__header">
+                <h3>Daftar Umkm Saya </h3>
+                <a href="">Daftarkan Umkm Anda</a>
+            </div>
             {renderContent()}
         </section>
     );
