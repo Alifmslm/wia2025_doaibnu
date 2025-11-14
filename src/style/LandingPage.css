@@ -1,3 +1,14 @@
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+
 .nav-landing {
     background-color: #ffff;
     padding: 16px;
@@ -155,17 +166,44 @@
     margin-top: -55px;
 }
 
+/* === MODIFIKASI DIMULAI DI SINI === */
+
 .banner {
     top: 50%;
     left: -25%;
     position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    /* Properti flex dipindahkan ke .banner-track */
+    /* display: flex; */
+    /* align-items: center; */
+    /* gap: 8px; */
     font-weight: 500;
     width: 150%;
     padding: 16px 0;
+    overflow: hidden;
+    /* Sembunyikan track yang keluar dari container */
 }
+
+/* Style untuk track yang akan dianimasikan */
+.banner-track {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: max-content;
+    /* Lebar berdasarkan konten di dalamnya */
+
+    /* Terapkan animasi */
+    animation: scroll-left 40s linear infinite;
+}
+
+/* Kelas untuk membalik arah animasi */
+.banner-track.track-reverse {
+    animation-direction: reverse;
+    /* Anda bisa ubah durasi jika mau */
+    /* animation-duration: 30s; */
+}
+
+/* === MODIFIKASI SELESAI === */
+
 
 .banner-green {
     background-color: var(--main-color);
@@ -251,11 +289,12 @@
 }
 
 /* =================================
-    MEDIA QUERIES
-   ================================= */
+    MEDIA QUERIES
+   ================================= */
 
 /* --- Tablet (768px) --- */
 @media (min-width: 768px) {
+
     .register-button,
     .login-button {
         width: 100%;
@@ -418,11 +457,11 @@
     .bg-landing2 {
         height: 80%;
     }
-    
+
     .banner p {
         font-size: 18px;
     }
-    
+
     .banner-green {
         transform: translateY(-50%) rotate(2deg);
     }
