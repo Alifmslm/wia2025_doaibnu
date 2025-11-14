@@ -8,6 +8,7 @@ import NotificationPage from "../ui/page/NotificationPage.tsx";
 import LandingPage from "../ui/page/LandingPage/LandingPage.tsx";
 import SavePage from "../ui/page/SavePage.tsx";
 import ProfilePage from "../ui/page/ProfilePage/ProfilePage.tsx";
+import FormAddUmkm from "../ui/page/FormAddUmkm.tsx";
 
 function AppRoutes() {
     return (
@@ -21,6 +22,7 @@ function AppRoutes() {
             <Route path="/save-page" element={<SavePage/>} />
             <Route path="/" element={<LandingPage/>} />
             <Route path="/profile" element={<ProfilePage/>} />
+            <Route path="/add-umkm" element={<FormAddUmkm/>} />
         </Routes>
     );
 }

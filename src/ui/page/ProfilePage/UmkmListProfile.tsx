@@ -47,7 +47,7 @@ function UmkmListProfile() {
         <section className="umkm-list-profile">
             <div className="umkm-list-profile__header">
                 <h3>Daftar Umkm Saya </h3>
-                <a href="">Daftarkan Umkm Anda</a>
+                <a href="/add-umkm" className="link-add-umkm">Daftarkan Umkm Anda</a>
             </div>
             {renderContent()}
         </section>

@@ -46,7 +46,6 @@ function LocationTabs({ umkmId }: LocationTabsProps) {
         );
     }
 
-    // --- 8. Tambahkan penanganan jika data tidak ada ---
     if (!lokasi) {
         return (
             <section className="location-tab">
@@ -61,7 +60,10 @@ function LocationTabs({ umkmId }: LocationTabsProps) {
     return (
         <>
             <section className="location-tab">
-                <h1>Lokasi</h1>
+                <div className="location-header">
+                    <h1>Lokasi</h1>
+                    <p>{lokasi.alamat}</p>
+                </div>
                 <MapContainer center={position} zoom={13} scrollWheelZoom={false} id='map'>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -73,7 +75,6 @@ function LocationTabs({ umkmId }: LocationTabsProps) {
                         </Popup>
                     </Marker>
                 </MapContainer>
-                <p>{lokasi.alamat}</p>
             </section>
         </>
     )

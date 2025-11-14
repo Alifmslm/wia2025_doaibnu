@@ -127,9 +127,10 @@
     text-align: center;
 }
 
-/* === Responsive Media Queries === */
+.link-add-umkm {
+    font-size: 14px;
+}
 
-/* --- Tablet (e.g., 768px and up) --- */
 @media (min-width: 768px) {
     .profile-page {
         /* Constrain the max width and center it */
