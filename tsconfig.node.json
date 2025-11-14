@@ -8,9 +8,7 @@
     "types": ["node"],
     "skipLibCheck": true,
 
-    // Ini penting: hapus "noEmit": true"
-    // karena tsconfig ini direferensikan oleh root.
-    "noEmit": false,
+    "noEmit": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
