@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Logo from '../../../assets/logo.png';
+import Logo from '../../../assets/logo_ngulikumkm.png';
 
 function NavLanding() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -1,6 +1,6 @@
 import "../../../style/HeaderDefault.css";
 import IconCircular from "../micro-components/IconCircular.tsx";
-import LogoWia from "../../../assets/logo_wia.jpg";
+import LogoWia from "../../../assets/logo_ngulikumkm.png";
 import ProfileIcon from '../../../assets/profile-icon.png'
 import NotificationIcon from '../../../assets/notification-icon.png'
 import SaveIcon from '../../../assets/save_icon.png'
