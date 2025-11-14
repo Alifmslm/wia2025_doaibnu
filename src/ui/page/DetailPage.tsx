@@ -9,11 +9,13 @@ import PlaceMediaContent from "../component/macro-components/PlaceMediaContent";
 import "../../style/DetailPage.css";
 import { formatVisits } from '../../shared/utils/formater/Formatters.ts'
 import Fab from '@mui/material/Fab';
+import FormEditUmkm, { type FormEditData } from "./FormEditUmkm.tsx";
 
 function DetailPage() {
     const { id } = useParams();
     const [umkm, setUmkm] = useState<Umkm | null>(null);
     const [isSaved, setIsSaved] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -28,6 +30,43 @@ function DetailPage() {
             setIsSaved(UmkmRepository.isSaved(umkm.id));
         }
     }, [umkm]);
+
+    const handleOpenEditModal = () => setIsEditModalOpen(true);
+    const handleCloseEditModal = () => setIsEditModalOpen(false);
+
+    // ==================================================================
+    // INI ADALAH BAGIAN YANG DIPERBAIKI
+    // ==================================================================
+    const handleUpdateUmkm = (data: FormEditData) => {
+        if (!umkm) return; // Guard clause
+
+        console.log("Data baru yang akan di-update:", data);
+        console.log("File yang di-upload:", data.images);
+
+        // Update state lokal secara optimistik agar UI langsung berubah
+        const updatedLokasi = {
+            ...umkm.lokasi,
+            // Gunakan data yang benar dari form
+            lokasi_general: data.lokasiGeneral,
+            alamat: data.alamat,
+        };
+
+        setUmkm({
+            ...umkm,
+            nama: data.nama,
+            deskripsi: data.deskripsi,
+            kategori: data.kategori,
+            lokasi: updatedLokasi,
+            // Catatan: Memperbarui gambar akan memerlukan logika upload file
+        });
+
+        handleCloseEditModal(); // Tutup modal setelah update
+    };
+    // ==================================================================
+    // AKHIR DARI PERBAIKAN
+    // ==================================================================
+
+    // Blok useEffect yang duplikat telah saya hapus
 
     if (!umkm) return <p>Loading...</p>;
 
@@ -48,7 +87,7 @@ function DetailPage() {
 
     return (
         <>
-            <Fab color="primary" className="fab-edit-umkm" aria-label="add">
+            <Fab color="primary" className="fab-edit-umkm" aria-label="edit" onClick={handleOpenEditModal}>
                 <i className="fa-solid fa-pen"></i>
             </Fab>
             <HeaderDefault />
@@ -85,6 +124,14 @@ function DetailPage() {
                     <PlaceMediaContent umkmId={umkm.id} />
                 </section>
             </div>
+            {umkm && (
+                <FormEditUmkm
+                    open={isEditModalOpen}
+                    onClose={handleCloseEditModal}
+                    onUpdate={handleUpdateUmkm}
+                    umkm={umkm}
+                />
+            )}
         </>
     );
 }
