@@ -8,6 +8,7 @@ import RatingLabel from "../component/micro-components/RatingLabel";
 import PlaceMediaContent from "../component/macro-components/PlaceMediaContent";
 import "../../style/DetailPage.css";
 import { formatVisits } from '../../shared/utils/formater/Formatters.ts'
+import Fab from '@mui/material/Fab';
 
 function DetailPage() {
     const { id } = useParams();
@@ -47,6 +48,9 @@ function DetailPage() {
 
     return (
         <>
+            <Fab color="primary" className="fab-edit-umkm" aria-label="add">
+                <i className="fa-solid fa-pen"></i>
+            </Fab>
             <HeaderDefault />
             <HeroDetail />
             <div className="detail-content-container">
@@ -78,7 +82,7 @@ function DetailPage() {
                     </div>
                     <p className="description-detail">{umkm.deskripsi}</p>
 
-                    <PlaceMediaContent umkmId={umkm.id}/>
+                    <PlaceMediaContent umkmId={umkm.id} />
                 </section>
             </div>
         </>
