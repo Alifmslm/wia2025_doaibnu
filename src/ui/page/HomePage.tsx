@@ -24,9 +24,6 @@ function HomePage() {
 
     const handleFilterTabClick = (filterTab: FilterType) => {
         setActiveFilterTab(filterTab);
-        setSearchQuery("");
-        setCategory("");
-
         if (filterTab === "Terdekat") {
             if (userLocation) return;
 
@@ -64,6 +61,7 @@ function HomePage() {
             <div className="hero-container">
                 <HeroImage />
                 <SearchFilterContainer
+                    searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
                     onCategorySelect={setCategory}
                 />

@@ -1,13 +1,16 @@
-import { useState } from "react";
+// Search.tsx
 import SearchIcon from "../../../assets/search-icon.png";
 
-function Search({ onSearchChange }: { onSearchChange: (q: string) => void }) {
-    const [value, setValue] = useState("");
+function Search({
+    searchQuery,
+    onSearchChange,
+}: {
+    searchQuery: string;
+    onSearchChange: (q: string) => void;
+}) {
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value;
-        setValue(val);
-        onSearchChange(val);
+        onSearchChange(e.target.value);
     };
 
     return (
@@ -17,7 +20,7 @@ function Search({ onSearchChange }: { onSearchChange: (q: string) => void }) {
                 <input
                     type="text"
                     placeholder="Temukan UMKM favoritmu..."
-                    value={value}
+                    value={searchQuery}
                     onChange={handleInput}
                 />
             </div>
