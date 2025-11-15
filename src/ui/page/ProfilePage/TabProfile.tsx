@@ -8,9 +8,10 @@ import type { UserProfile, ProfileUpdateData } from "./ProfilePage";
 interface TabProfileProps {
     user: UserProfile;
     onUpdateProfile: (data: ProfileUpdateData) => void;
+    isSubmitting: boolean; // <-- Prop ini tetap dipakai
 }
 
-function TabProfile({ user, onUpdateProfile }: TabProfileProps) { // 3. Terima props
+function TabProfile({ user, onUpdateProfile, isSubmitting }: TabProfileProps) { // 3. Terima props
     const [activeTab, setActiveTab] = useState("profile");
 
     const tabs = [
@@ -22,7 +23,11 @@ function TabProfile({ user, onUpdateProfile }: TabProfileProps) { // 3. Terima p
         switch (activeTab) {
             case "profile":
                 // 4. Teruskan props ke ProfileInfoPage
-                return <ProfileInfo user={user} onUpdateProfile={onUpdateProfile} />;
+                return <ProfileInfo 
+                            user={user} 
+                            onUpdateProfile={onUpdateProfile} 
+                            isSubmitting={isSubmitting} // <-- Tetap teruskan
+                        />;
             case "menu":
                 return <UmkmListProfile />;
             default:
@@ -40,7 +45,7 @@ function TabProfile({ user, onUpdateProfile }: TabProfileProps) { // 3. Terima p
                             href="#"
                             onClick={(e) => {
                                 e.preventDefault();
-                                setActiveTab(tab.id);
+                                if (!isSubmitting) setActiveTab(tab.id);
                             }}
                             className={`tab-link ${activeTab === tab.id ? "active" : ""}`}
                         >

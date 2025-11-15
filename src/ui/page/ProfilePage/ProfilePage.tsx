@@ -1,33 +1,111 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import TabProfile from "./TabProfile";
 import HeaderDefault from '../../component/macro-components/HeaderDefault';
 import '../../../style/ProfilePage.css';
 
+// --- Tipe Data (Disederhanakan) ---
 export interface UserProfile {
+    id: string;
     name: string;
     email: string;
+    // 'avatar_url' dihapus
 }
 
-export interface ProfileUpdateData extends UserProfile {
-    image: File | null;
+export interface ProfileUpdateData {
+    name: string;
+    email: string;
+    // 'image' dihapus
 }
+// ------------------------------
+
+import { UserRepository } from '../../../data/repositories/UserRepository';
 
 function ProfilePage() {
+    const navigate = useNavigate();
     const getInitials = (name: string): string => name?.split(' ').filter(Boolean).map(word => word[0].toUpperCase()).join('') || '';
 
-    const [user, setUser] = useState<UserProfile>({
-        name: "Alif Muslim Abdurrahman",
-        email: "alifmslm01@gmail.com"
-    });
+    const [user, setUser] = useState<UserProfile | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    useEffect(() => {
+        async function fetchProfile() {
+            setLoading(true);
+            try {
+                const data = await UserRepository.getCurrentUserProfile();
+                if (data) {
+                    console.log("Profil didapat:", data);
+                    setUser({
+                        id: data.auth.id,
+                        name: data.profile.username || data.auth.email || 'User',
+                        email: data.auth.email || '',
+                        // 'avatar_url' dihapus
+                    });
+                } else {
+                    console.log("Tidak ada sesi, kembali ke login.");
+                    navigate('/login');
+                }
+            } catch (error) {
+                console.error("Gagal fetch profil di halaman:", error);
+                navigate('/login'); 
+            } finally {
+                setLoading(false);
+            }
+        }
+        
+        fetchProfile();
+    }, [navigate]);
 
-    const handleUpdateProfile = (newData: ProfileUpdateData) => {
-        setUser({ name: newData.name, email: newData.email });
+    const handleUpdateProfile = async (newData: ProfileUpdateData) => {
+        if (!user) return; 
 
-        if (newData.image) {
-            console.log("File gambar baru siap di-upload:", newData.image.name);
-            // TODO: Tambahkan logika API untuk upload gambar
+        setIsSubmitting(true);
+        try {
+            // 'newData' sekarang tidak lagi mengandung 'image'
+            const { auth, profile } = await UserRepository.updateUserProfile(
+                user.id,
+                user.email,
+                newData 
+            );
+            
+            setUser({
+                id: auth.id,
+                name: profile.username || auth.email || 'User',
+                email: auth.email || '',
+            });
+            
+            alert("Profil berhasil diperbarui!");
+
+        } catch (error) {
+            console.error("Gagal update profil:", error);
+            alert("Gagal memperbarui profil. Coba lagi.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
+
+    if (loading) {
+        return (
+            <>
+                <HeaderDefault />
+                <section className="profile-page">
+                    <p>Memuat profil...</p>
+                </section>
+            </>
+        );
+    }
+    
+    if (!user) {
+        return (
+             <>
+                <HeaderDefault />
+                <section className="profile-page">
+                    <p>Mengarahkan ke login...</p>
+                </section>
+            </>
+        );
+    }
 
     return (
         <>
@@ -35,15 +113,22 @@ function ProfilePage() {
             <section className="profile-page">
                 <div className="profile-info-header">
                     <div className="profile-picture">
+                        {/* --- Logika Render (Disederhanakan) --- */}
+                        {/* Selalu tampilkan inisial */}
                         <p>{getInitials(user.name)}</p>
                     </div>
                     <h2>{user.name}</h2>
                     <p>{user.email}</p>
                 </div>
-                <TabProfile user={user} onUpdateProfile={handleUpdateProfile} />
+                
+                <TabProfile 
+                    user={user} 
+                    onUpdateProfile={handleUpdateProfile}
+                    isSubmitting={isSubmitting} 
+                />
             </section>
         </>
-    )
+    );
 }
 
 export default ProfilePage;
