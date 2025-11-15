@@ -1,18 +1,22 @@
 import { useState } from "react";
 import type { UmkmFromDB } from "../../../shared/types/Umkm"; 
+import { type User } from "@supabase/supabase-js"; // 1. Impor Tipe User
 import GalleryTabs from "./GalleryTabs";
 import ReviewTabs from "./ReviewTabs";
 import LocationTabs from "./LocationTabs";
 import MenuPage from "../../page/MenuPage/MenuPage";
 import "../../../style/PlaceMediaContent.css";
 
-// 1. Definisikan props baru
+// 2. Definisikan props baru
 interface PlaceMediaContentProps {
     umkm: UmkmFromDB;
-    isOwner: boolean; // <-- Prop baru
+    isOwner: boolean; 
+    currentUser: User | null; // <-- Prop baru
+    onReviewAdded: () => void; // <-- Prop baru
 }
 
-function PlaceMediaContent({ umkm, isOwner }: PlaceMediaContentProps) { // <-- Terima prop baru
+// 3. Terima props baru
+function PlaceMediaContent({ umkm, isOwner, currentUser, onReviewAdded }: PlaceMediaContentProps) { 
     const [activeTab, setActiveTab] = useState("menu");
 
     const tabs = [
@@ -30,9 +34,13 @@ function PlaceMediaContent({ umkm, isOwner }: PlaceMediaContentProps) { // <-- T
                             mainImage={umkm.gambar_utama} 
                         />;
             case "ulasan":
+                // 4. Teruskan props baru ke ReviewTabs
                 return <ReviewTabs 
                             reviews={umkm.reviews} 
                             umkmId={umkm.id} 
+                            isOwner={isOwner}
+                            currentUser={currentUser}
+                            onReviewAdded={onReviewAdded}
                         />;
             case "lokasi":
                 return <LocationTabs 
@@ -40,11 +48,10 @@ function PlaceMediaContent({ umkm, isOwner }: PlaceMediaContentProps) { // <-- T
                             nama={umkm.nama} 
                         />;
             case "menu":
-                // 2. Teruskan prop ke MenuPage
                 return <MenuPage 
                             menuItems={umkm.menu_items} 
-                            isOwner={isOwner} // <-- Teruskan
-                            umkmId={umkm.id}    // <-- Teruskan ID
+                            isOwner={isOwner}
+                            umkmId={umkm.id}
                         />
             default:
                 return null;

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useEffect, useState, useCallback } from "react"; // 1. Impor 'useCallback'
+import { useParams, useNavigate } from "react-router-dom";
 import { UmkmRepository } from "../../data/repositories/UmkmRepository";
 import { UserRepository } from "../../data/repositories/UserRepository"; 
 import type { UmkmFromDB } from "../../shared/types/Umkm"; 
@@ -15,89 +15,73 @@ import { type User } from "@supabase/supabase-js";
 
 function DetailPage() {
     const { id } = useParams();
-    const navigate = useNavigate(); // Tambahkan navigate
+    const navigate = useNavigate(); 
     const [umkm, setUmkm] = useState<UmkmFromDB | null>(null);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isSaved, setIsSaved] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    
-    // State untuk loading modal
     const [isSubmitting, setIsSubmitting] = useState(false);
-    // State untuk otorisasi (kepemilikan)
     const [isOwner, setIsOwner] = useState(false); 
 
-    useEffect(() => {
-        async function fetchData() {
-            if (!id) {
-                setError("ID UMKM tidak ditemukan.");
-                setIsLoading(false);
+    // 2. Bungkus 'fetchData' dengan 'useCallback'
+    // Ini agar kita bisa meneruskannya sebagai prop 'onReviewAdded'
+    const fetchData = useCallback(async (isInitialLoad = false) => {
+        if (!id) {
+            setError("ID UMKM tidak ditemukan.");
+            if (isInitialLoad) setIsLoading(false);
+            return;
+        }
+
+        if (isInitialLoad) setIsLoading(true);
+        setError(null);
+        
+        try {
+            const userPromise = UserRepository.getCurrentUser();
+            const umkmPromise = UmkmRepository.getById(Number(id));
+            const [user, data] = await Promise.all([userPromise, umkmPromise]);
+
+            if (!data) {
+                setError("UMKM tidak ditemukan.");
+                if (isInitialLoad) setIsLoading(false);
                 return;
             }
 
-            setIsLoading(true);
-            setError(null);
-            
-            try {
-                const userPromise = UserRepository.getCurrentUser();
-                const umkmPromise = UmkmRepository.getById(Number(id));
-                const [user, data] = await Promise.all([userPromise, umkmPromise]);
+            setUmkm(data);
+            setCurrentUser(user);
+            setIsOwner(user && data && user.id === data.owner_id);
 
-                if (!data) {
-                    setError("UMKM tidak ditemukan.");
-                    setIsLoading(false);
-                    return;
-                }
-
-                setUmkm(data);
-                setCurrentUser(user);
-
-                // Set state kepemilikan
-                if (user && data && user.id === data.owner_id) {
-                    setIsOwner(true);
-                }
-
-                // Cek status 'saved'
-                if (user && data) {
-                    const savedStatus = await UmkmRepository.isSaved(data.id, user.id);
-                    setIsSaved(savedStatus);
-                }
-
-            } catch (err) {
-                console.error("Gagal fetch data detail:", err);
-                setError("Gagal memuat data UMKM.");
-            } finally {
-                setIsLoading(false);
+            if (user && data) {
+                const savedStatus = await UmkmRepository.isSaved(data.id, user.id);
+                setIsSaved(savedStatus);
             }
-        }
-        fetchData();
-    }, [id]); 
 
+        } catch (err) {
+            console.error("Gagal fetch data detail:", err);
+            setError("Gagal memuat data UMKM.");
+        } finally {
+            if (isInitialLoad) setIsLoading(false);
+        }
+    }, [id]); // Dependensi 'id'
+
+    // 3. 'useEffect' sekarang hanya memanggil 'fetchData' saat mount
+    useEffect(() => {
+        fetchData(true); // Kirim 'true' untuk menandakan ini load pertama
+    }, [fetchData]); // 'fetchData' sekarang adalah dependensi
+
+    
+    // ... (handler lain: handleOpenEditModal, handleCloseEditModal, handleUpdateUmkm, handleSaveClick) ...
+    // (Kode handler ini tidak berubah)
     const handleOpenEditModal = () => setIsEditModalOpen(true);
-    const handleCloseEditModal = () => {
-        if (!isSubmitting) {
-            setIsEditModalOpen(false);
-        }
-    };
-
+    const handleCloseEditModal = () => { if (!isSubmitting) setIsEditModalOpen(false); };
     const handleUpdateUmkm = async (data: FormEditData) => {
         if (!umkm || !umkm.lokasi) return;
-
         setIsSubmitting(true);
-        console.log("Data baru yang akan di-update:", data);
-        
         try {
             const updatedUmkmData = await UmkmRepository.updateById(umkm.id, data, umkm.lokasi);
-
-            // Update state dengan data baru, tapi pertahankan data relasi (menu/reviews)
-            setUmkm(prevUmkm => ({
-                ...(prevUmkm as UmkmFromDB), 
-                ...updatedUmkmData, 
-            }));
-            
+            setUmkm(prevUmkm => ({ ...(prevUmkm as UmkmFromDB), ...updatedUmkmData, }));
             handleCloseEditModal();
-            
         } catch (err) {
             console.error("Gagal meng-update UMKM:", err);
             alert("Gagal menyimpan perubahan. Silakan coba lagi.");
@@ -105,13 +89,11 @@ function DetailPage() {
             setIsSubmitting(false);
         }
     };
-
     const handleSaveClick = async (event: React.MouseEvent) => {
-        event.preventDefault();
-        event.stopPropagation();
+        event.preventDefault(); event.stopPropagation();
         if (!currentUser) {
             alert("Anda harus login untuk menyimpan UMKM.");
-            navigate('/login'); // Arahkan ke login
+            navigate('/login');
             return;
         }
         const newSavedStatus = !isSaved;
@@ -130,7 +112,6 @@ function DetailPage() {
     };
 
     // --- Render Logic ---
-
     if (isLoading) {
         return (
             <>
@@ -139,7 +120,6 @@ function DetailPage() {
             </>
         );
     }
-
     if (error) {
         return (
             <>
@@ -148,7 +128,6 @@ function DetailPage() {
             </>
         );
     }
-    
     if (!umkm) {
          return (
             <>
@@ -157,20 +136,12 @@ function DetailPage() {
             </>
         );
     }
-
     const formattedVisits = formatVisits(umkm.total_visits);
 
     return (
         <>
-            {/* Tampilkan FAB Edit hanya jika 'isOwner' true */}
             {isOwner && (
-                 <Fab 
-                    color="primary" 
-                    className="fab-edit-umkm" 
-                    aria-label="edit" 
-                    onClick={handleOpenEditModal}
-                    disabled={isSubmitting} 
-                 >
+                 <Fab color="primary" className="fab-edit-umkm" aria-label="edit" onClick={handleOpenEditModal} disabled={isSubmitting} >
                     <i className="fa-solid fa-pen"></i>
                  </Fab>
             )}
@@ -184,16 +155,11 @@ function DetailPage() {
             
             <div className="detail-content-container">
                 <section className="detail-content">
+                    {/* ... (sisa JSX: label, h1, rating, visits, description) ... */}
                     <section className="label-content">
                         <div className="label-detail__on">{umkm.kategori}</div>
-                        <button onClick={handleSaveClick} className="button-save-detail" style={{
-                            color: isSaved ? '#FFD700' : '#ccc'
-                        }}>
-                            {isSaved ? (
-                                <i className="fa-solid fa-bookmark fa-bookmark-detail"></i>
-                            ) : (
-                                <i className="fa-regular fa-bookmark fa-bookmark-detail"></i>
-                            )}
+                        <button onClick={handleSaveClick} className="button-save-detail" style={{ color: isSaved ? '#FFD700' : '#ccc' }}>
+                            {isSaved ? ( <i className="fa-solid fa-bookmark fa-bookmark-detail"></i> ) : ( <i className="fa-regular fa-bookmark fa-bookmark-detail"></i> )}
                         </button>
                     </section>
                     <div className="text-container-detail">
@@ -208,16 +174,17 @@ function DetailPage() {
                         </div>
                     </div>
                     <p className="description-detail">{umkm.deskripsi}</p>
-                    
-                    {/* Teruskan 'isOwner' ke PlaceMediaContent */}
+
+                    {/* 4. Teruskan props baru ke PlaceMediaContent */}
                     <PlaceMediaContent 
                         umkm={umkm} 
                         isOwner={isOwner} 
+                        currentUser={currentUser}
+                        onReviewAdded={fetchData} // <-- Kirim fungsi refresh
                     />
                 </section>
             </div>
             
-            {/* Teruskan 'isSubmitting' ke FormEditUmkm */}
             <FormEditUmkm
                 open={isEditModalOpen}
                 onClose={handleCloseEditModal}

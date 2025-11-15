@@ -1,5 +1,3 @@
-// File: src/shared/types/Umkm.ts
-
 // --- Tipe-tipe LAMA (Untuk Form) INI TETAP DIPERLUKAN ---
 export interface UmkmFormData {
     nama: string;
@@ -30,16 +28,6 @@ export type Lokasi = {
 
 // --- TIPE-TIPE BARU (Untuk Data dari Supabase) ---
 
-// Tipe untuk data dari tabel 'reviews'
-export type ReviewFromDB = {
-    id: number;
-    user_id: string; // uuid
-    umkm_id: number; // int8
-    nilai: number; // float8
-    komentar: string; // text
-    created_at: string; // timestamptz
-};
-
 // Tipe untuk data dari tabel 'menu_items'
 export type MenuItemFromDB = {
     id: number;
@@ -51,6 +39,25 @@ export type MenuItemFromDB = {
     foto_produk: string; // text (Ini adalah URL, bukan File)
     created_at: string; // timestamptz
 };
+
+// --- MODIFIKASI DI SINI ---
+// Tipe untuk data dari tabel 'profiles' yang di-join
+export type ReviewerProfile = {
+    username: string;
+};
+
+// Tipe untuk data dari tabel 'reviews'
+export type ReviewFromDB = {
+    id: number;
+    user_id: string; // uuid
+    umkm_id: number; // int8
+    nilai: number; // float8
+    komentar: string; // text
+    created_at: string; // timestamptz
+    profiles: ReviewerProfile | null; // <-- TAMBAHKAN RELASI INI
+};
+// --- AKHIR MODIFIKASI ---
+
 
 /**
  * Tipe UTAMA untuk data UMKM yang diambil dari Supabase.
@@ -69,7 +76,7 @@ export type UmkmFromDB = {
     monthly_visits: number; // int8
     average_rating: number; // float8
     menu_items: MenuItemFromDB[];
-    reviews: ReviewFromDB[];
+    reviews: ReviewFromDB[]; // <-- Tipe ini sekarang sudah ter-update
 };
 
 /**

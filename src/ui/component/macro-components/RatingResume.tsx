@@ -7,9 +7,11 @@ interface RatingResumeProps {
     onOpen: () => void;
     average: number;
     ratings: RatingItem[];
+    canAddReview: boolean; // <-- 1. Terima prop baru
 }
 
-function RatingResume({ onOpen, average, ratings }: RatingResumeProps) {
+// 2. Terima 'canAddReview' dari props
+function RatingResume({ onOpen, average, ratings, canAddReview }: RatingResumeProps) {
     return (
         <>
             <h1 className="title-review">Ringkasan Ulasan</h1>
@@ -17,12 +19,16 @@ function RatingResume({ onOpen, average, ratings }: RatingResumeProps) {
                 <RatingDistribution ratings={ratings} />
                 <AverageRating average={average} totalReviews={ratings.length} />
             </section>
-            <div className="add-review">
-                <img src={PenIcon} alt="pen-icon" />
-                <button className="button-add-review" onClick={onOpen}>
-                    Tulis Ulasan Anda
-                </button>
-            </div>
+            
+            {/* 3. Tampilkan tombol HANYA jika 'canAddReview' true */}
+            {canAddReview && (
+                <div className="add-review">
+                    <img src={PenIcon} alt="pen-icon" />
+                    <button className="button-add-review" onClick={onOpen}>
+                        Tulis Ulasan Anda
+                    </button>
+                </div>
+            )}
         </>
     );
 }

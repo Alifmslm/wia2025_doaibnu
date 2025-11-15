@@ -2,17 +2,23 @@ import { supabase } from '../../shared/supbase';
 import type {
     Lokasi,
     UmkmFormData,
-    MenuItem,
-    MenuItemFromDB, // <-- DITAMBAHKAN, diperlukan untuk fungsi baru
+    MenuItem,       // Tipe form (File | null)
+    MenuItemFromDB, // Tipe DB (string url)
     UmkmFromDB, 
-    NewUmkmData 
+    NewUmkmData,
+    ReviewFromDB    // Tipe DB (dari join)
 } from "../../shared/types/Umkm";
 import { type FormEditData } from '../../ui/page/FormEditUmkm'; 
 
+// JOIN_QUERY ini mengambil UMKM, semua menu, dan semua ulasan
+// TERMASUK username pembuat ulasan dari tabel 'profiles'
 const JOIN_QUERY = `
     *,
     menu_items ( * ),
-    reviews ( * )
+    reviews ( 
+        *, 
+        profiles ( username ) 
+    )
 `;
 
 // --- Listener (Tidak Berubah) ---
@@ -21,12 +27,7 @@ const visitedListeners: DataChangeListener[] = [];
 // ----------------------------------------------------
 
 
-// === FUNGSI HELPER BARU UNTUK UPLOAD GAMBAR ===
-/**
- * Meng-upload file gambar ke Supabase Storage dan mengembalikan URL publiknya.
- * @param file - Objek File yang akan di-upload.
- * @param bucketName - Nama bucket Anda (cth: 'gambar-umkm').
- */
+// === FUNGSI HELPER: UPLOAD GAMBAR ===
 async function uploadImageAndGetUrl(file: File, bucketName: string): Promise<string> {
     
     // 1. Buat nama file yang unik
@@ -58,10 +59,10 @@ async function uploadImageAndGetUrl(file: File, bucketName: string): Promise<str
     console.log("Upload berhasil, URL:", data.publicUrl);
     return data.publicUrl;
 }
-// --- AKHIR FUNGSI HELPER BARU ---
+// --- AKHIR FUNGSI HELPER ---
 
 
-// === FUNGSI HELPER LAMA (DIMODIFIKASI) ===
+// === FUNGSI HELPER: MAP DATA FORM KE DB ===
 function mapFormDataToDb(
     formData: UmkmFormData, 
     ownerId: string,
@@ -93,7 +94,7 @@ function mapFormDataToDb(
 export const UmkmRepository = {
 
     /**
-     * Mengambil SEMUA UMKM dari database Supabase
+     * Mengambil SEMUA UMKM
      */
     async getAll(): Promise<UmkmFromDB[]> { 
         console.log("Mengambil semua UMKM dari Supabase...");
@@ -117,7 +118,7 @@ export const UmkmRepository = {
     },
 
     /**
-     * Meng-update data UMKM di database
+     * Meng-update data UMKM (Info Utama)
      */
     async updateById(id: number, updateData: FormEditData, currentLokasi: Lokasi): Promise<UmkmFromDB> {
         console.log(`Meng-update UMKM dengan ID: ${id}`);
@@ -129,7 +130,6 @@ export const UmkmRepository = {
             nama: updateData.nama, deskripsi: updateData.deskripsi,
             kategori: updateData.kategori, lokasi: updatedLokasi,
         };
-        // Perlu .select() agar mengembalikan data yang diupdate
         const { data, error } = await supabase.from('umkm').update(dataToUpdate).eq('id', id).select().single();
         if (error) { console.error("Error meng-update data:", error); throw error; }
         return data as UmkmFromDB;
@@ -157,7 +157,7 @@ export const UmkmRepository = {
     },
 
     /**
-     * Menghitung rata-rata rating.
+     * Menghitung rata-rata rating (helper sisi klien)
      */
     getAverageRating(umkm: UmkmFromDB): number {
         if (!umkm) return 0;
@@ -313,27 +313,19 @@ export const UmkmRepository = {
     },
 
 
-    // === FUNGSI BARU UNTUK EDIT MENU ===
-
-    /**
-     * Menambahkan SATU item menu baru ke UMKM
-     */
+    // === FUNGSI EDIT MENU ===
     async addMenuItem(umkmId: number, item: MenuItem): Promise<MenuItemFromDB> {
         console.log(`Menambahkan menu baru ke UMKM ID: ${umkmId}`);
-        const BUCKET_NAME = 'gambar-umkm'; // Pastikan nama bucket benar
+        const BUCKET_NAME = 'gambar-umkm'; 
         let fotoProdukUrl = "/images/menu_default.png";
 
-        // 1. Upload foto jika ada
         if (item.fotoProduk) {
             try {
                 fotoProdukUrl = await uploadImageAndGetUrl(item.fotoProduk, BUCKET_NAME);
             } catch (uploadErr) {
                 console.error("Gagal upload foto menu:", uploadErr);
-                // Gagal upload tidak menghentikan proses, pakai foto default
             }
         }
-
-        // 2. Siapkan data untuk di-insert
         const newMenuItemData = {
             umkm_id: umkmId,
             nama_produk: item.namaProduk,
@@ -342,30 +334,21 @@ export const UmkmRepository = {
             stok: item.stok,
             foto_produk: fotoProdukUrl
         };
-
-        // 3. Insert ke database
         const { data, error } = await supabase
             .from('menu_items')
             .insert(newMenuItemData)
             .select()
             .single();
-
         if (error) {
             console.error("Gagal menambah item menu:", error);
             throw error;
         }
-
         return data as MenuItemFromDB;
     },
-
-    /**
-     * Meng-update SATU item menu
-     */
     async updateMenuItem(menuItemId: number, item: MenuItem): Promise<MenuItemFromDB> {
         console.log(`Meng-update menu ID: ${menuItemId}`);
         const BUCKET_NAME = 'gambar-umkm';
         
-        // 1. Siapkan data update (tanpa foto dulu)
         const dataToUpdate: Partial<MenuItemFromDB> = {
             nama_produk: item.namaProduk,
             deskripsi_produk: item.deskripsiProduk,
@@ -373,49 +356,76 @@ export const UmkmRepository = {
             stok: item.stok,
         };
 
-        // 2. Cek jika ada file foto BARU
-        // (Jika item.fotoProduk adalah 'null', kita tidak ubah fotonya)
         if (item.fotoProduk) {
              try {
                 dataToUpdate.foto_produk = await uploadImageAndGetUrl(item.fotoProduk, BUCKET_NAME);
             } catch (uploadErr) {
                 console.error("Gagal upload foto menu baru:", uploadErr);
-                // Jangan gagalkan update jika hanya foto yg gagal
             }
         }
 
-        // 3. Update database
         const { data, error } = await supabase
             .from('menu_items')
             .update(dataToUpdate)
             .eq('id', menuItemId)
             .select()
             .single();
-
         if (error) {
             console.error("Gagal meng-update item menu:", error);
             throw error;
         }
-
         return data as MenuItemFromDB;
     },
-
-    /**
-     * Menghapus SATU item menu
-     */
     async deleteMenuItem(menuItemId: number): Promise<void> {
         console.log(`Menghapus menu ID: ${menuItemId}`);
-        
         const { error } = await supabase
             .from('menu_items')
             .delete()
             .eq('id', menuItemId);
-            
         if (error) {
             console.error("Gagal menghapus item menu:", error);
             throw error;
         }
-    }
+    },
     
-    // === AKHIR FUNGSI BARU ===
+    
+    // === FUNGSI BARU UNTUK TAMBAH REVIEW ===
+    async addReview(
+        umkmId: number, 
+        userId: string, 
+        nilai: number, 
+        komentar: string
+    ): Promise<ReviewFromDB> {
+        
+        console.log(`Menambahkan ulasan baru untuk UMKM ID: ${umkmId} dari user: ${userId}`);
+
+        const newReviewData = {
+            umkm_id: umkmId,
+            user_id: userId,
+            nilai: nilai,
+            komentar: komentar
+        };
+
+        const { data, error } = await supabase
+            .from('reviews')
+            .insert(newReviewData)
+            .select(`
+                *,
+                profiles ( username )
+            `)
+            .single();
+
+        if (error) {
+            console.error("Gagal menambah ulasan:", error);
+            if (error.code === '42501') {
+                throw new Error("Gagal menyimpan ulasan. Anda mungkin tidak diizinkan memberi ulasan.");
+            }
+            throw error;
+        }
+        
+        // TODO: Setelah review berhasil, panggil RPC untuk update 'average_rating' di tabel 'umkm'
+        // await supabase.rpc('update_average_rating', { umkm_id_param: umkmId });
+
+        return data as ReviewFromDB;
+    }
 };
