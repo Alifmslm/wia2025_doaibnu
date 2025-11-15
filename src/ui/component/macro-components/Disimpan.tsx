@@ -1,35 +1,57 @@
+// src/component/macro-components/Disimpan.tsx
 import { useState, useEffect } from "react"; 
-import type { Umkm } from "../../../shared/types/Umkm";
+// 1. Impor tipe BARU
+import type { UmkmFromDB } from "../../../shared/types/Umkm";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
 import UmkmCard from "../micro-components/UmkmCard";
 import Checkbox from "@mui/material/Checkbox";
 
 function Disimpan() {
-    const [savedUmkms, setSavedUmkms] = useState<Umkm[]>([]);
+    // 2. Gunakan tipe BARU
+    const [savedUmkms, setSavedUmkms] = useState<UmkmFromDB[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null); // Tambah state error
 
     useEffect(() => {
         async function fetchSavedData() {
             setLoading(true);
-            const data = await UmkmRepository.getSavedUmkms();
-            setSavedUmkms(data);
-            setLoading(false);
+            setError(null);
+            try {
+                // 3. Panggil fungsi repository yang baru
+                const data = await UmkmRepository.getSavedUmkms();
+                setSavedUmkms(data);
+            } catch (err) {
+                console.error("Gagal fetch data tersimpan:", err);
+                setError("Gagal memuat data tersimpan.");
+            } finally {
+                setLoading(false);
+            }
         }
         fetchSavedData();
     }, []);
 
-    // --- HANDLER UNTUK CHECKBOX ---
-    const handleCheckboxChange = (umkmId: number) => {
-        // 1. Panggil Repository untuk memindahkan data di localStorage
-        // Panggilan ini sekarang memicu Event Emitter di Repository
-        UmkmRepository.moveToVisited(umkmId);
-
-        // 2. Update state lokal agar UI langsung berubah (kartu hilang)
-        setSavedUmkms(prevList => prevList.filter(item => item.id !== umkmId));
+    // 4. Perbarui handler checkbox menjadi async
+    const handleCheckboxChange = async (umkmId: number) => {
+        // Tampilkan konfirmasi
+        if (!window.confirm("Pindahkan UMKM ini ke daftar 'Telah Dikunjungi'?")) {
+            return;
+        }
+        
+        try {
+            // 1. Panggil Repository (sekarang async)
+            await UmkmRepository.moveToVisited(umkmId);
+            
+            // 2. Update state lokal agar UI langsung berubah
+            setSavedUmkms(prevList => prevList.filter(item => item.id !== umkmId));
+        } catch (err) {
+            console.error("Gagal memindahkan ke 'dikunjungi':", err);
+            alert("Gagal memindahkan UMKM. Coba lagi.");
+        }
     };
     // ---
 
     if (loading) return <p>Memuat UMKM yang disimpan...</p>;
+    if (error) return <p>Error: {error}</p>; // Tampilkan error
     if (savedUmkms.length === 0) return <p>Anda belum menyimpan UMKM apapun.</p>;
 
     return (
@@ -48,6 +70,7 @@ function Disimpan() {
                         />
 
                         <div style={{ flex: 1 }}>
+                            {/* 5. UmkmCard sekarang menerima tipe UmkmFromDB (sudah cocok) */}
                             <UmkmCard umkm={umkm} />
                         </div>
 

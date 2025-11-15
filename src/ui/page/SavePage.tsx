@@ -2,7 +2,7 @@ import '../../style/SavePage.css';
 import { useNavigate } from "react-router-dom";
 import HeaderDefault from '../component/macro-components/HeaderDefault';
 import TabSave from '../component/macro-components/TabSave';
-function NotificationPage() {
+function SavePage() {
 
     const navigate = useNavigate();
 
@@ -26,4 +26,4 @@ function NotificationPage() {
     )
 }
 
-export default NotificationPage
+export default SavePage

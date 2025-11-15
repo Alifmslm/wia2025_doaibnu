@@ -1,42 +1,54 @@
 // src/component/micro-components/UmkmCard.tsx
-import React, { useState } from "react";
+import React, { useState } from "react"; // Impor useEffect
 import { Link } from "react-router-dom";
 import RatingLabel from "../micro-components/RatingLabel.tsx";
-// 1. Impor tipe data BARU
 import type { UmkmFromDB } from "../../../shared/types/Umkm"; 
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository"; 
 import HomeImage from '../../../assets/gallery-image-1.png'; // Fallback
 import { formatVisits } from "../../../shared/utils/formater/Formatters.ts";
 
-// 2. Ubah tipe prop menjadi UmkmFromDB
 function UmkmCard({ umkm }: { umkm: UmkmFromDB }) {
     
-    // 3. Panggil fungsi getAverageRating (sekarang sudah ada lagi)
     const avgRating = UmkmRepository.getAverageRating(umkm);
-    const totalRatings = umkm.reviews?.length || 0; // Ganti 'ratings' ke 'reviews'
-    const formattedVisits = formatVisits(umkm.total_visits); // Ganti 'totalVisits' ke 'total_visits'
+    const totalRatings = umkm.reviews?.length || 0;
+    const formattedVisits = formatVisits(umkm.total_visits);
 
-    // 4. Panggil fungsi isSaved (sekarang sudah ada lagi, walau mock)
+    // Kita butuh state loading untuk tombol save
+    const [isSaving, setIsSaving] = useState(false);
+    
+    // Panggil fungsi isSaved (masih mock, akan selalu false)
     const [isSaved, setIsSaved] = useState(() => UmkmRepository.isSaved(umkm.id));
+    
+    // TODO: Nanti, 'isSaved' harus di-fetch dari DB saat Auth sudah ada.
+    // useEffect(() => {
+    //    async function checkSaved() {
+    //        const saved = await UmkmRepository.isSaved(umkm.id);
+    //        setIsSaved(saved);
+    //    }
+    //    checkSaved();
+    // }, [umkm.id]);
 
-    const handleSaveClick = (event: React.MouseEvent) => {
+    const handleSaveClick = async (event: React.MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
         
-        alert("Fitur 'Simpan' akan segera hadir dengan Autentikasi!");
-
-        // 5. Logika lama (isSaved) bisa diaktifkan
-        //    tapi tidak akan melakukan apa-apa sampai 'save/unsave' di repo di-update
-        // if (isSaved) {
-        //     // UmkmRepository.unsave(umkm.id); // Belum ada
-        //     setIsSaved(false);
-        // } else {
-        //     // UmkmRepository.save(umkm.id); // Belum ada
-        //     setIsSaved(true);
-        // }
+        setIsSaving(true);
+        try {
+            if (isSaved) {
+                await UmkmRepository.unsave(umkm.id);
+                setIsSaved(false);
+            } else {
+                await UmkmRepository.save(umkm.id);
+                setIsSaved(true);
+            }
+        } catch (err) {
+            console.error("Gagal menyimpan:", err);
+            alert("Gagal menyimpan. Coba lagi.");
+        } finally {
+            setIsSaving(false);
+        }
     };
 
-    // 6. Ambil URL gambar dari prop (nama kolom sudah benar)
     const imageUrl = umkm.gambar_utama || HomeImage;
 
     return (
@@ -58,6 +70,7 @@ function UmkmCard({ umkm }: { umkm: UmkmFromDB }) {
                         <button
                             className="save-button"
                             onClick={handleSaveClick}
+                            disabled={isSaving} // Nonaktifkan tombol saat loading
                             style={{
                                 color: isSaved ? '#FFD700' : '#ccc'
                             }}
