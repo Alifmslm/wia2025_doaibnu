@@ -1,14 +1,21 @@
+// src/component/macro-components/PlaceMediaContent.tsx
 import { useState } from "react";
+// Impor Tipe BARU
+import type { UmkmFromDB } from "../../../shared/types/Umkm"; 
+
+// Impor komponen tab (asumsi path)
 import GalleryTabs from "./GalleryTabs";
 import ReviewTabs from "./ReviewTabs";
 import LocationTabs from "./LocationTabs";
 import MenuPage from "../../page/MenuPage/MenuPage";
 import "../../../style/PlaceMediaContent.css";
 
+// 1. Tentukan props yang diterima
 interface PlaceMediaContentProps {
-    umkmId: number;
+    umkm: UmkmFromDB;
 }
-function PlaceMediaContent({ umkmId }: PlaceMediaContentProps) {
+
+function PlaceMediaContent({ umkm }: PlaceMediaContentProps) {
     const [activeTab, setActiveTab] = useState("menu");
 
     const tabs = [
@@ -21,13 +28,26 @@ function PlaceMediaContent({ umkmId }: PlaceMediaContentProps) {
     const renderContent = () => {
         switch (activeTab) {
             case "gallery":
-                return <GalleryTabs />;
+                // 2. PERBAIKAN: Kirim 'gambar_utama' juga
+                return <GalleryTabs 
+                            gallery={umkm.gallery} 
+                            mainImage={umkm.gambar_utama} 
+                       />;
             case "ulasan":
-                return <ReviewTabs umkmId={umkmId}/>;
+                // 3. Kirim data reviews (Sudah Benar)
+                return <ReviewTabs 
+                            reviews={umkm.reviews} 
+                            umkmId={umkm.id} 
+                       />;
             case "lokasi":
-                return <LocationTabs umkmId={umkmId}/>;
+                // 4. PERBAIKAN: Kirim 'nama' juga
+                return <LocationTabs 
+                            lokasi={umkm.lokasi} 
+                            nama={umkm.nama} 
+                       />;
             case "menu":
-                return <MenuPage />
+                // 5. Kirim data menu (Sudah Benar)
+                return <MenuPage menuItems={umkm.menu_items} />
             default:
                 return null;
         }

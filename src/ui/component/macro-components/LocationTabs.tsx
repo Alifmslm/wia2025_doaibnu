@@ -1,5 +1,5 @@
+// src/component/macro-components/LocationTabs.tsx
 import '../../../style/LocationTab.css'
-import { useEffect, useState } from 'react';
 import {
     MapContainer,
     TileLayer,
@@ -7,44 +7,37 @@ import {
     Popup,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { UmkmRepository } from '../../../data/repositories/UmkmRepository';
+// 1. Hapus UmkmRepository
+// import { UmkmRepository } from '../../../data/repositories/UmkmRepository';
 import type { Lokasi } from "../../../shared/types/Umkm";
 import type { LatLngExpression } from 'leaflet';
+import { Icon } from 'leaflet'; // Import Icon
 
+// Fix untuk ikon Leaflet yang hilang di React
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+
+const DefaultIcon = new Icon({
+    iconUrl,
+    iconRetinaUrl,
+    shadowUrl,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+// --- Akhir Fix Ikon ---
+
+// 2. Tentukan props
 interface LocationTabsProps {
-    umkmId: number;
+    lokasi: Lokasi | null;
+    nama: string;
 }
 
-function LocationTabs({ umkmId }: LocationTabsProps) {
-    const [lokasi, setLokasi] = useState<Lokasi | null>(null);
-    const [nama, setNama] = useState("");
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        async function fetchData() {
-            setLoading(true);
-            const umkm = await UmkmRepository.getById(umkmId);
-
-            if (umkm && umkm.lokasi && umkm.lokasi.latitude && umkm.lokasi.longitude) {
-                setLokasi(umkm.lokasi);
-                setNama(umkm.nama);
-            } else {
-                console.error("Data lokasi tidak ditemukan atau tidak memiliki koordinat.");
-                setLokasi(null);
-            }
-            setLoading(false);
-        }
-        fetchData();
-    }, [umkmId]);
-
-    if (loading) {
-        return (
-            <section className="location-tab">
-                <h1>Lokasi</h1>
-                <p>Memuat peta...</p>
-            </section>
-        );
-    }
+function LocationTabs({ lokasi, nama }: LocationTabsProps) {
+    // 3. Hapus semua 'useState' dan 'useEffect'
+    //    Data sudah ada di props
 
     if (!lokasi) {
         return (
@@ -54,8 +47,13 @@ function LocationTabs({ umkmId }: LocationTabsProps) {
             </section>
         );
     }
-
-    const position: LatLngExpression = [lokasi.latitude, lokasi.longitude];
+    
+    // 4. Gunakan data latitude/longitude dari prop
+    //    Jika tidak ada, set default ke lokasi (misal: Monas)
+    const position: LatLngExpression = [
+        lokasi.latitude || -6.1754, 
+        lokasi.longitude || 106.8272
+    ];
 
     return (
         <>
@@ -64,12 +62,13 @@ function LocationTabs({ umkmId }: LocationTabsProps) {
                     <h1>Lokasi</h1>
                     <p>{lokasi.alamat}</p>
                 </div>
-                <MapContainer center={position} zoom={13} scrollWheelZoom={false} id='map'>
+                {/* 5. Pastikan map memiliki tinggi, jika tidak ia akan 0px */}
+                <MapContainer center={position} zoom={13} scrollWheelZoom={false} id='map' style={{ height: '300px', width: '100%' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={position}>
+                    <Marker position={position} icon={DefaultIcon}>
                         <Popup>
                             {nama}<br />{lokasi.alamat}
                         </Popup>
@@ -80,4 +79,4 @@ function LocationTabs({ umkmId }: LocationTabsProps) {
     )
 }
 
-export default LocationTabs
+export default LocationTabs;

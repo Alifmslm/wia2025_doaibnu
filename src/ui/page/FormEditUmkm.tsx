@@ -1,34 +1,35 @@
+// src/ui/page/DetailPage/FormEditUmkm.tsx
 import Modal from '@mui/material/Modal';
 import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import type { Umkm } from '../../shared/types/Umkm';
+// 1. Impor Tipe BARU
+import type { UmkmFromDB } from '../../shared/types/Umkm';
 
-// --- Impor tambahan untuk Dropdown (Select) ---
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select, { type SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
-// ----------------------------------------------
 
 // Tipe untuk data yang di-submit dari form (disesuaikan)
 export type FormEditData = {
     nama: string;
     deskripsi: string;
-    kategori: string; // Tipe 'string' tetap dipertahankan agar kompatibel
+    kategori: string;
     lokasiGeneral: string;
     alamat: string;
-    images: FileList | null;
+    images: FileList | null; // Kita biarkan ini, walau belum dipakai
 };
 
 interface FormEditUmkmProps {
     open: boolean;
     onClose: () => void;
     onUpdate: (data: FormEditData) => void;
-    umkm: Umkm;
+    // 2. Gunakan Tipe BARU di props
+    umkm: UmkmFromDB; 
 }
 
 // Tipe untuk state error (disesuaikan)
@@ -40,7 +41,7 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
     // State untuk semua field form
     const [nama, setNama] = useState('');
     const [deskripsi, setDeskripsi] = useState('');
-    const [kategori, setKategori] = useState(''); // State ini akan digunakan oleh Select
+    const [kategori, setKategori] = useState(''); 
     const [lokasiGeneral, setLokasiGeneral] = useState('');
     const [alamat, setAlamat] = useState('');
     const [images, setImages] = useState<FileList | null>(null);
@@ -57,9 +58,10 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
             setLokasiGeneral(umkm.lokasi?.lokasi_general || '');
             setAlamat(umkm.lokasi?.alamat || '');
         }
-    }, [umkm, open]);
+    }, [umkm, open]); // 'open' penting agar form me-reset jika ditutup & dibuka lagi
 
     const handleCloseAndClear = () => {
+        // Reset ke data 'umkm' prop
         if (umkm) {
             setNama(umkm.nama);
             setDeskripsi(umkm.deskripsi);
@@ -76,7 +78,6 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
         const newErrors: FormErrors = {};
         if (!nama.trim()) newErrors.nama = 'Nama UMKM tidak boleh kosong.';
         if (!deskripsi.trim()) newErrors.deskripsi = 'Deskripsi tidak boleh kosong.';
-        // Validasi untuk kategori (Select)
         if (!kategori.trim()) newErrors.kategori = 'Kategori wajib dipilih.';
         if (!lokasiGeneral.trim()) newErrors.lokasiGeneral = 'Lokasi general tidak boleh kosong.';
         if (!alamat.trim()) newErrors.alamat = 'Alamat tidak boleh kosong.';
@@ -98,7 +99,6 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
         }
     };
 
-    // Handler khusus untuk Select component
     const handleKategoriChange = (event: SelectChangeEvent) => {
         setKategori(event.target.value as string);
     };
@@ -143,7 +143,6 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
                     rows={4}
                 />
 
-                {/* === INI BAGIAN YANG DIUBAH === */}
                 <FormControl
                     variant="outlined"
                     className="input-modal"
@@ -155,18 +154,18 @@ function FormEditUmkm({ open, onClose, onUpdate, umkm }: FormEditUmkmProps) {
                         id="kategori-select"
                         value={kategori}
                         onChange={handleKategoriChange}
-                        label="Kategori UMKM" // Diperlukan agar label outlined-nya rapi
+                        label="Kategori UMKM" 
                     >
-                        {/* Opsi yang diminta */}
+                        {/* 3. Pastikan value ini cocok dengan data Anda */}
                         <MenuItem value="Indonesia">Indonesia</MenuItem>
                         <MenuItem value="Western">Western</MenuItem>
                         <MenuItem value="Asia">Asia</MenuItem>
+                        <MenuItem value="Minuman">Minuman</MenuItem>
+                        <MenuItem value="Jasa">Jasa</MenuItem>
                         <MenuItem value="Lain-lain">Lain-lain</MenuItem>
                     </Select>
-                    {/* Tampilkan helper text jika ada error */}
                     {errors.kategori && <FormHelperText>{errors.kategori}</FormHelperText>}
                 </FormControl>
-                {/* === AKHIR BAGIAN YANG DIUBAH === */}
 
                 <h3 className="modal-subtitle" style={{ marginTop: '16px', marginBottom: '16px' }}>
                     Lokasi

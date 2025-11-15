@@ -45,7 +45,7 @@ export type MenuItemFromDB = {
     id: number;
     umkm_id: number; // int8
     nama_produk: string; // text
-    deskripsi_produk: string; // DIPERBAIKI
+    deskripsi_produk: string; // (Sudah diperbaiki)
     harga: number; // numeric
     stok: number; // int8
     foto_produk: string; // text (Ini adalah URL, bukan File)
@@ -63,13 +63,11 @@ export type UmkmFromDB = {
     kategori: string; // text
     deskripsi: string; // text
     lokasi: Lokasi; // jsonb
-    gambar_utama: string; // DIPERBAIKI
+    gambar_utama: string; // (Sudah diperbaiki)
     gallery: string[]; // jsonb (Array of URLs)
     total_visits: number; // int8
     monthly_visits: number; // int8
     average_rating: number; // float8
-    
-    // Ini adalah data join dari Supabase
     menu_items: MenuItemFromDB[];
     reviews: ReviewFromDB[];
 };

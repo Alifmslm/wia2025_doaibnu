@@ -1,31 +1,39 @@
-import GambarProduk from '../../../assets/gallery-image-2.png'
+// src/page/MenuPage/Product.tsx
+import GambarProduk from '../../../assets/gallery-image-2.png' // Fallback
+// 1. Impor Tipe BARU
+import type { MenuItemFromDB } from '../../../shared/types/Umkm';
 
-function Product() {
+// 2. Tentukan props
+interface ProductProps {
+    item: MenuItemFromDB;
+}
+
+function Product({ item }: ProductProps) {
+    // 3. Gunakan data dinamis dari props
+    const imageUrl = item.foto_produk || GambarProduk; // Gunakan gambar asli, atau fallback
+    const price = `Rp ${item.harga.toLocaleString('id-ID')}`;
+    const stock = `${item.stok} Stok Tersedia`;
+
     return (
-
         <>
             <div className="product">
                 <div className="products-card">
                     <div className="product-content">
                         <div className="product-content-text">
-                            <h3 className="product-title">Nasi Ayam Bakar Sambal Matah</h3>
+                            <h3 className="product-title">{item.nama_produk}</h3>
 
                             <p className="product-description">
-                                Nikmati cita rasa autentik Nusantara melalui perpaduan ayam bakar yang dibumbui rempah khas,
-                                disajikan bersama nasi hangat, lalapan segar, dan sambal matah buatan sendiri yang pedasnya
-                                pas di lidah. Semua bahan diolah setiap hari agar tetap segar dan gurih, tanpa pengawet tambahan.
-                                Cocok dinikmati saat makan siang maupun makan malam bersama keluarga.
-                                Kami juga menyediakan opsi level pedas dan paket hemat untuk pemesanan dalam jumlah besar.
+                                {item.deskripsi_produk || "Tidak ada deskripsi."}
                             </p>
                         </div>
 
                         <div className="product-footer">
-                            <span className="product-price">Rp 125.000</span>
-                            <span className='product-stock'>15 Stok Tersedia</span>
+                            <span className="product-price">{price}</span>
+                            <span className='product-stock'>{stock}</span>
                         </div>
                     </div>
 
-                    <img src={GambarProduk} alt="products-image" className="products-image" />
+                    <img src={imageUrl} alt={item.nama_produk} className="products-image" />
                 </div>
                 <hr className='hr-product' />
             </div>
@@ -33,4 +41,4 @@ function Product() {
     )
 }
 
-export default Product
+export default Product;

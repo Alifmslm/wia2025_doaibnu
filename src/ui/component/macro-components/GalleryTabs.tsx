@@ -1,17 +1,26 @@
+// src/component/macro-components/GalleryTabs.tsx
 import ImageIcon from "../../../assets/image-icon.png";
+import NoImage from '../../../assets/gallery-image-1.png'; // Fallback
 
-import GalleryImage1 from '../../../assets/gallery-image-1.png';
-import GalleryImage2 from '../../../assets/gallery-image-2.png';
-import GalleryImage3 from '../../../assets/gallery-image-3.png';
-import GalleryImage4 from '../../../assets/gallery-image-4.png';
+// 1. Tentukan props
+interface GalleryTabsProps {
+    gallery: string[];
+    mainImage: string;
+}
 
-function GalleryTabs() {
-    // Buat array semua gambar gallery
-    const images = [GalleryImage1, GalleryImage2, GalleryImage3, GalleryImage4];
+function GalleryTabs({ gallery, mainImage }: GalleryTabsProps) {
+    // 2. Gabungkan gambar utama dan galeri, hapus duplikat
+    const images = Array.from(new Set([mainImage, ...gallery].filter(Boolean)));
 
-    // ambil hanya 4 foto pertama untuk tampilan grid
+    // Jika kosong, tampilkan fallback
+    if (images.length === 0) {
+        images.push(NoImage);
+    }
+
+    // 3. Ambil 4 foto pertama untuk grid
     const previewImages = images.slice(0, 4);
-    const hasMoreImages = images.length == 4;
+    const hasMoreImages = images.length > 4; // Cek jika ada LEBIH dari 4
+    const remainingCount = images.length - 4;
 
     return (
         <>
@@ -38,14 +47,15 @@ function GalleryTabs() {
                 {/* Foto D — dengan overlay jika ada lebih banyak foto */}
                 {previewImages[3] && (
                     <div className={`gallery-item small ${hasMoreImages ? "overlay-item" : ""}`}
-                        style={{ gridArea: "d" }}>
+                         style={{ gridArea: "d" }}>
                         <img src={previewImages[3]} alt="Foto 4" className="gallery-img" />
                         {hasMoreImages && (
                             <div className="overlay">
-                                <a href="/gallery-page-">
+                                <a href="#"> {/* TODO: Buat link ke halaman galeri penuh */}
                                     <div className="overlay-content">
                                         <img src={ImageIcon} alt="" className="overlay-icon" />
-                                        <p>Lihat Semua Foto</p>
+                                        {/* Tampilkan jumlah sisa foto */}
+                                        <p>+{remainingCount} Foto Lainnya</p>
                                     </div>
                                 </a>
                             </div>
@@ -53,7 +63,8 @@ function GalleryTabs() {
                     </div>
                 )}
             </section>
-            <a href="/gallery-page-">Tambah Foto</a>
+            {/* TODO: Link "Tambah Foto" ini harusnya hanya muncul untuk pemilik UMKM */}
+            <a href="#">Tambah Foto</a>
         </>
     );
 }

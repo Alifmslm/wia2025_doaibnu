@@ -7,7 +7,7 @@ import type {
     UmkmFromDB, // Tipe lengkap
     NewUmkmData // Tipe untuk data baru
 } from "../../shared/types/Umkm";
-// Impor ini dengan path yang benar
+// PERBAIKAN: Path disesuaikan dengan struktur file Anda
 import { type FormEditData } from '../../ui/page/FormEditUmkm'; 
 
 const JOIN_QUERY = `
@@ -185,14 +185,15 @@ export const UmkmRepository = {
             .select('umkm_id')
             .eq('user_id', userId)
             .eq('umkm_id', id)
-            .maybeSingle(); // Ambil satu atau null
+            .maybeSingle(); 
         
         if (error) {
             console.error("Error mengecek 'isSaved':", error);
+            // Jangan 'throw error' di sini, kembalikan 'false' saja
             return false;
         }
         
-        return !!data; // return true jika data ada, false jika null
+        return !!data;
     },
     
     /**
@@ -278,10 +279,8 @@ export const UmkmRepository = {
     async moveToVisited(id: number, userId: string): Promise<void> {
         console.log(`Memindahkan UMKM ID: ${id} ke 'dikunjungi'`);
         
-        // 1. Hapus dari daftar 'Saved'
         await this.unsave(id, userId);
 
-        // 2. Tambahkan ke daftar 'Visited'
         const { error: visitError } = await supabase
             .from('visited_umkm')
             .insert({
@@ -296,13 +295,11 @@ export const UmkmRepository = {
              }
         }
         
-        // 3. Tambahkan ke counter publik (totalVisits)
         const { error: rpcError } = await supabase.rpc('increment_visits', { umkm_id_to_inc: id });
         if (rpcError) {
             console.error("Gagal meng-increment visit count:", rpcError);
         }
 
-        // 4. Beri tahu listener (jika ada) bahwa data berubah
         this.emitVisitedDataChange();
     },
     
