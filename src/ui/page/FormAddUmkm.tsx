@@ -380,12 +380,11 @@ function FormAddUmkm() {
                             type="number"
                             id="stok"
                             name="stok"
-                            // Kontrol value agar 0 tidak muncul saat input kosong
                             value={currentMenuItem.stok === 0 ? '' : currentMenuItem.stok}
                             onChange={handleMenuChange}
                             min="0"
                             placeholder="Contoh: 10"
-                            required // Validasi HTML
+                            required
                         />
                     </div>
                 </div>

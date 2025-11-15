@@ -88,24 +88,6 @@ function QuoteLanding() {
                     <p>Tempat di mana UMKM dan pelanggan saling bertemu</p>
                 </div>
 
-                <div className="quote-carousel-wrapper" ref={wrapperRef}>
-                    <div className="quote-carousel" ref={carouselRef}>
-                        {testimonials.map((item, index) => (
-                            <img
-                                key={item.id}
-                                src={item.img}
-                                className={
-                                    index === activeIndex
-                                        ? "quote-carousel__item active"
-                                        : "quote-carousel__item"
-                                }
-                                alt={`Testimonial dari ${item.author}`}
-                                onClick={() => setActiveIndex(index)}
-                            />
-                        ))}
-                    </div>
-                </div>
-
                 <div className="quote-testimonial">
                     <p className="quote-text">"{activeTestimonial.text}"</p>
                     <p className="quote-author">{activeTestimonial.author}</p>
