@@ -1,9 +1,12 @@
+// src/component/macro-components/UmkmList.tsx
 import { useEffect, useState } from "react";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
-import type { Umkm } from "../../../shared/types/Umkm";
+// 1. Impor tipe data BARU
+import type { UmkmFromDB } from "../../../shared/types/Umkm"; 
 import UmkmCard from "../micro-components/UmkmCard";
 import "../../../style/UmkmList.css";
 
+// Fungsi getDistance (di-copy dari kode Anda)
 function getDistance(
     lat1: number,
     lon1: number,
@@ -41,62 +44,82 @@ function UmkmList({
     geoLoading,
     geoError,
 }: UmkmListProps) {
-    const [umkmList, setUmkmList] = useState<Umkm[]>([]);
+    // 2. Gunakan tipe data BARU
+    const [umkmList, setUmkmList] = useState<UmkmFromDB[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null); // State error
 
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
-            let result: Umkm[];
+            setError(null);
+            // 3. Tipe data result diubah ke UmkmFromDB
+            let result: UmkmFromDB[];
 
-            if (activeFilter === "Terdekat" && (geoLoading || geoError)) {
-                setUmkmList([]);
-                setLoading(false);
-                return;
-            }
+            try {
+                if (activeFilter === "Terdekat" && (geoLoading || geoError)) {
+                    setUmkmList([]);
+                    setLoading(false);
+                    return;
+                }
 
-            if (searchQuery) {
-                result = await UmkmRepository.search(searchQuery);
-            } else if (category) {
-                result = await UmkmRepository.findByCategory(category);
-            } else if (activeFilter === "Terdekat") {
-                if (userLocation) {
+                // Logika 'if' ini sekarang akan BERFUNGSI
+                if (searchQuery) {
+                    result = await UmkmRepository.search(searchQuery);
+                } else if (category) {
+                    result = await UmkmRepository.findByCategory(category);
+                } else if (activeFilter === "Terdekat") {
+                    if (userLocation) {
+                        const allData = await UmkmRepository.getAll();
+                        result = allData.filter((umkm) => {
+                            // Cek null/undefined pada lokasi
+                            if (!umkm.lokasi?.latitude || !umkm.lokasi?.longitude) {
+                                return false;
+                            }
+
+                            const distance = getDistance(
+                                userLocation.latitude,
+                                userLocation.longitude,
+                                umkm.lokasi.latitude,
+                                umkm.lokasi.longitude
+                            );
+
+                            return distance <= 10; // Filter 10km
+                        });
+                    } else {
+                        // Jika lokasi belum siap, tampilkan semua
+                        result = await UmkmRepository.getAll();
+                    }
+                } else if (activeFilter === "Hidden Gem") {
                     const allData = await UmkmRepository.getAll();
                     result = allData.filter((umkm) => {
-                        if (!umkm.lokasi?.latitude || !umkm.lokasi?.longitude) {
-                            return false;
-                        }
-
-                        const distance = getDistance(
-                            userLocation.latitude,
-                            userLocation.longitude,
-                            umkm.lokasi.latitude,
-                            umkm.lokasi.longitude
+                        return (
+                            // 4. Sesuaikan nama kolom DB
+                            umkm.monthly_visits < 100 &&
+                            umkm.total_visits < 50 &&
+                            umkm.average_rating >= 4.5
                         );
-
-                        return distance <= 10;
                     });
                 } else {
+                    // Filter "Semua"
                     result = await UmkmRepository.getAll();
                 }
-            } else if (activeFilter === "Hidden Gem") {
-                const allData = await UmkmRepository.getAll();
-                result = allData.filter((umkm) => {
-                    return (
-                        umkm.monthlyEats < 100 &&
-                        umkm.totalVisits < 50 &&
-                        umkm.averageRating >= 4.5
-                    );
-                });
-            } else {
-                result = await UmkmRepository.getAll();
-            }
 
-            setUmkmList(result);
-            setLoading(false);
+                setUmkmList(result);
+
+            } catch (err) {
+                console.error("Gagal mengambil data list UMKM:", err);
+                let msg = "Gagal memuat data.";
+                if (err instanceof Error) msg = err.message;
+             setError(msg);
+            } finally {
+                setLoading(false);
+            }
         }
 
         fetchData();
+        
+        // 5. Tambahkan dependensi. Setiap filter berubah, fetch ulang data.
     }, [searchQuery, category, activeFilter, userLocation, geoLoading, geoError]);
 
     if (loading) return <p className="no-data-text">Memuat data...</p>;
@@ -107,6 +130,10 @@ function UmkmList({
 
     if (activeFilter === "Terdekat" && geoError) {
         return <p className="no-data-text">⚠️ {geoError}</p>;
+    }
+
+    if (error) {
+        return <p className="no-data-text">⚠️ {error}</p>;
     }
 
     if (umkmList.length === 0) {

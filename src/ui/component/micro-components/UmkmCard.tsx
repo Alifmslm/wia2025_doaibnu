@@ -1,31 +1,43 @@
+// src/component/micro-components/UmkmCard.tsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import RatingLabel from "../micro-components/RatingLabel.tsx";
-import type { Umkm } from "../../../shared/types/Umkm";
-import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
-import HomeImage from '../../../assets/gallery-image-1.png';
+// 1. Impor tipe data BARU
+import type { UmkmFromDB } from "../../../shared/types/Umkm"; 
+import { UmkmRepository } from "../../../data/repositories/UmkmRepository"; 
+import HomeImage from '../../../assets/gallery-image-1.png'; // Fallback
 import { formatVisits } from "../../../shared/utils/formater/Formatters.ts";
 
-function UmkmCard({ umkm }: { umkm: Umkm }) {
-    const avgRating = UmkmRepository.getAverageRating(umkm);
-    const totalRatings = umkm.ratings?.length || 0;
+// 2. Ubah tipe prop menjadi UmkmFromDB
+function UmkmCard({ umkm }: { umkm: UmkmFromDB }) {
     
-    const formattedVisits = formatVisits(umkm.totalVisits);
+    // 3. Panggil fungsi getAverageRating (sekarang sudah ada lagi)
+    const avgRating = UmkmRepository.getAverageRating(umkm);
+    const totalRatings = umkm.reviews?.length || 0; // Ganti 'ratings' ke 'reviews'
+    const formattedVisits = formatVisits(umkm.total_visits); // Ganti 'totalVisits' ke 'total_visits'
 
+    // 4. Panggil fungsi isSaved (sekarang sudah ada lagi, walau mock)
     const [isSaved, setIsSaved] = useState(() => UmkmRepository.isSaved(umkm.id));
 
     const handleSaveClick = (event: React.MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
+        
+        alert("Fitur 'Simpan' akan segera hadir dengan Autentikasi!");
 
-        if (isSaved) {
-            UmkmRepository.unsave(umkm.id);
-            setIsSaved(false);
-        } else {
-            UmkmRepository.save(umkm.id);
-            setIsSaved(true);
-        }
+        // 5. Logika lama (isSaved) bisa diaktifkan
+        //    tapi tidak akan melakukan apa-apa sampai 'save/unsave' di repo di-update
+        // if (isSaved) {
+        //     // UmkmRepository.unsave(umkm.id); // Belum ada
+        //     setIsSaved(false);
+        // } else {
+        //     // UmkmRepository.save(umkm.id); // Belum ada
+        //     setIsSaved(true);
+        // }
     };
+
+    // 6. Ambil URL gambar dari prop (nama kolom sudah benar)
+    const imageUrl = umkm.gambar_utama || HomeImage;
 
     return (
         <Link to={`/detail-page/${umkm.id}`} className="card-link">
@@ -33,7 +45,7 @@ function UmkmCard({ umkm }: { umkm: Umkm }) {
                 <div
                     className="card-image"
                     style={{
-                        backgroundImage: `url(${HomeImage})`,
+                        backgroundImage: `url(${imageUrl})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                     }}
