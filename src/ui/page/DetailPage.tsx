@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import { UmkmRepository } from "../../data/repositories/UmkmRepository";
 import { UserRepository } from "../../data/repositories/UserRepository"; 
 import type { UmkmFromDB } from "../../shared/types/Umkm"; 
@@ -15,6 +15,7 @@ import { type User } from "@supabase/supabase-js";
 
 function DetailPage() {
     const { id } = useParams();
+    const navigate = useNavigate(); // Tambahkan navigate
     const [umkm, setUmkm] = useState<UmkmFromDB | null>(null);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isSaved, setIsSaved] = useState(false);
@@ -22,8 +23,10 @@ function DetailPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     
-    // 1. Tambahkan state 'isSubmitting' untuk loading modal
+    // State untuk loading modal
     const [isSubmitting, setIsSubmitting] = useState(false);
+    // State untuk otorisasi (kepemilikan)
+    const [isOwner, setIsOwner] = useState(false); 
 
     useEffect(() => {
         async function fetchData() {
@@ -41,9 +44,21 @@ function DetailPage() {
                 const umkmPromise = UmkmRepository.getById(Number(id));
                 const [user, data] = await Promise.all([userPromise, umkmPromise]);
 
+                if (!data) {
+                    setError("UMKM tidak ditemukan.");
+                    setIsLoading(false);
+                    return;
+                }
+
                 setUmkm(data);
                 setCurrentUser(user);
 
+                // Set state kepemilikan
+                if (user && data && user.id === data.owner_id) {
+                    setIsOwner(true);
+                }
+
+                // Cek status 'saved'
                 if (user && data) {
                     const savedStatus = await UmkmRepository.isSaved(data.id, user.id);
                     setIsSaved(savedStatus);
@@ -61,22 +76,21 @@ function DetailPage() {
 
     const handleOpenEditModal = () => setIsEditModalOpen(true);
     const handleCloseEditModal = () => {
-        // Jangan biarkan modal ditutup jika sedang submit
         if (!isSubmitting) {
             setIsEditModalOpen(false);
         }
     };
 
-    // 2. Modifikasi 'handleUpdateUmkm' dengan state 'isSubmitting'
     const handleUpdateUmkm = async (data: FormEditData) => {
         if (!umkm || !umkm.lokasi) return;
 
-        setIsSubmitting(true); // <-- Mulai loading
+        setIsSubmitting(true);
         console.log("Data baru yang akan di-update:", data);
         
         try {
             const updatedUmkmData = await UmkmRepository.updateById(umkm.id, data, umkm.lokasi);
 
+            // Update state dengan data baru, tapi pertahankan data relasi (menu/reviews)
             setUmkm(prevUmkm => ({
                 ...(prevUmkm as UmkmFromDB), 
                 ...updatedUmkmData, 
@@ -88,11 +102,35 @@ function DetailPage() {
             console.error("Gagal meng-update UMKM:", err);
             alert("Gagal menyimpan perubahan. Silakan coba lagi.");
         } finally {
-            setIsSubmitting(false); // <-- Selesai loading
+            setIsSubmitting(false);
         }
     };
 
-    // ... (if loading, if error, if !umkm tidak berubah) ...
+    const handleSaveClick = async (event: React.MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!currentUser) {
+            alert("Anda harus login untuk menyimpan UMKM.");
+            navigate('/login'); // Arahkan ke login
+            return;
+        }
+        const newSavedStatus = !isSaved;
+        setIsSaved(newSavedStatus);
+        try {
+            if (newSavedStatus) {
+                await UmkmRepository.save(umkm.id, currentUser.id);
+            } else {
+                await UmkmRepository.unsave(umkm.id, currentUser.id);
+            }
+        } catch (err) {
+            console.error("Gagal menyimpan:", err);
+            alert("Gagal menyimpan perubahan. Coba lagi.");
+            setIsSaved(!newSavedStatus); 
+        }
+    };
+
+    // --- Render Logic ---
+
     if (isLoading) {
         return (
             <>
@@ -120,35 +158,12 @@ function DetailPage() {
         );
     }
 
-    // ... (handleSaveClick tidak berubah) ...
-    const handleSaveClick = async (event: React.MouseEvent) => {
-        event.preventDefault();
-        event.stopPropagation();
-        if (!currentUser) {
-            alert("Anda harus login untuk menyimpan UMKM.");
-            return;
-        }
-        const newSavedStatus = !isSaved;
-        setIsSaved(newSavedStatus);
-        try {
-            if (newSavedStatus) {
-                await UmkmRepository.save(umkm.id, currentUser.id);
-            } else {
-                await UmkmRepository.unsave(umkm.id, currentUser.id);
-            }
-        } catch (err) {
-            console.error("Gagal menyimpan:", err);
-            alert("Gagal menyimpan perubahan. Coba lagi.");
-            setIsSaved(!newSavedStatus); 
-        }
-    };
-
     const formattedVisits = formatVisits(umkm.total_visits);
 
     return (
         <>
-            {/* 3. Nonaktifkan tombol FAB saat modal sedang submit */}
-            {currentUser && umkm.owner_id === currentUser.id && (
+            {/* Tampilkan FAB Edit hanya jika 'isOwner' true */}
+            {isOwner && (
                  <Fab 
                     color="primary" 
                     className="fab-edit-umkm" 
@@ -169,7 +184,6 @@ function DetailPage() {
             
             <div className="detail-content-container">
                 <section className="detail-content">
-                    {/* ... (sisa JSX Anda tidak berubah) ... */}
                     <section className="label-content">
                         <div className="label-detail__on">{umkm.kategori}</div>
                         <button onClick={handleSaveClick} className="button-save-detail" style={{
@@ -194,17 +208,22 @@ function DetailPage() {
                         </div>
                     </div>
                     <p className="description-detail">{umkm.deskripsi}</p>
-                    <PlaceMediaContent umkm={umkm} />
+                    
+                    {/* Teruskan 'isOwner' ke PlaceMediaContent */}
+                    <PlaceMediaContent 
+                        umkm={umkm} 
+                        isOwner={isOwner} 
+                    />
                 </section>
             </div>
             
-            {/* 4. Kirim 'isSubmitting' ke modal */}
+            {/* Teruskan 'isSubmitting' ke FormEditUmkm */}
             <FormEditUmkm
                 open={isEditModalOpen}
                 onClose={handleCloseEditModal}
                 onUpdate={handleUpdateUmkm}
                 umkm={umkm} 
-                isSubmitting={isSubmitting} // <-- Kirim prop
+                isSubmitting={isSubmitting}
             />
         </>
     );

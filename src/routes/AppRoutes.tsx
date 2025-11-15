@@ -24,7 +24,7 @@ function AppRoutes() {
             <Route path="/" element={<LandingPage/>} />
             <Route path="/profile" element={<ProfilePage/>} />
             <Route path="/add-umkm" element={<FormAddUmkm/>} />
-            <Route path="/edit-menu" element={<FormEditMenu/>} />
+            <Route path="/edit-menu/:id" element={<FormEditMenu/>} />
         </Routes>
     );
 }

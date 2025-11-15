@@ -1,21 +1,18 @@
-// src/component/macro-components/PlaceMediaContent.tsx
 import { useState } from "react";
-// Impor Tipe BARU
 import type { UmkmFromDB } from "../../../shared/types/Umkm"; 
-
-// Impor komponen tab (asumsi path)
 import GalleryTabs from "./GalleryTabs";
 import ReviewTabs from "./ReviewTabs";
 import LocationTabs from "./LocationTabs";
 import MenuPage from "../../page/MenuPage/MenuPage";
 import "../../../style/PlaceMediaContent.css";
 
-// 1. Tentukan props yang diterima
+// 1. Definisikan props baru
 interface PlaceMediaContentProps {
     umkm: UmkmFromDB;
+    isOwner: boolean; // <-- Prop baru
 }
 
-function PlaceMediaContent({ umkm }: PlaceMediaContentProps) {
+function PlaceMediaContent({ umkm, isOwner }: PlaceMediaContentProps) { // <-- Terima prop baru
     const [activeTab, setActiveTab] = useState("menu");
 
     const tabs = [
@@ -28,26 +25,27 @@ function PlaceMediaContent({ umkm }: PlaceMediaContentProps) {
     const renderContent = () => {
         switch (activeTab) {
             case "gallery":
-                // 2. PERBAIKAN: Kirim 'gambar_utama' juga
                 return <GalleryTabs 
                             gallery={umkm.gallery} 
                             mainImage={umkm.gambar_utama} 
-                       />;
+                        />;
             case "ulasan":
-                // 3. Kirim data reviews (Sudah Benar)
                 return <ReviewTabs 
                             reviews={umkm.reviews} 
                             umkmId={umkm.id} 
-                       />;
+                        />;
             case "lokasi":
-                // 4. PERBAIKAN: Kirim 'nama' juga
                 return <LocationTabs 
                             lokasi={umkm.lokasi} 
                             nama={umkm.nama} 
-                       />;
+                        />;
             case "menu":
-                // 5. Kirim data menu (Sudah Benar)
-                return <MenuPage menuItems={umkm.menu_items} />
+                // 2. Teruskan prop ke MenuPage
+                return <MenuPage 
+                            menuItems={umkm.menu_items} 
+                            isOwner={isOwner} // <-- Teruskan
+                            umkmId={umkm.id}    // <-- Teruskan ID
+                        />
             default:
                 return null;
         }

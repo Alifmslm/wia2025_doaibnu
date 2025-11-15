@@ -1,27 +1,31 @@
-// src/page/MenuPage/MenuPage.tsx
 import './MenuPage.css'
 import Product from './Product'
-// 1. Impor Tipe BARU
 import type { MenuItemFromDB } from '../../../shared/types/Umkm';
+import { Link } from 'react-router-dom'; // <-- 1. Impor Link
 
-// 2. Tentukan props
+// 2. Definisikan props baru
 interface MenuPageProps {
     menuItems: MenuItemFromDB[];
+    isOwner: boolean; // <-- Terima
+    umkmId: number;   // <-- Terima
 }
 
-function MenuPage({ menuItems }: MenuPageProps) {
+function MenuPage({ menuItems, isOwner, umkmId }: MenuPageProps) { // <-- Terima di sini
     
-    // 3. Cek jika tidak ada menu
     if (!menuItems || menuItems.length === 0) {
         return (
              <section className="menu-page">
                 <div className="menu-page-header">
                     <h3>Menu UMKM Kami</h3>
+                    {/* 3. Tampilkan link HANYA jika owner */}
+                    {isOwner && (
+                        <Link to={`/edit-menu/${umkmId}`}>Edit Menu Anda?</Link>
+                    )}
                 </div>
                 <p className="no-data-text" style={{ padding: '1rem 0' }}>
                     Belum ada menu yang didaftarkan.
                 </p>
-             </section>
+            </section>
         )
     }
 
@@ -30,11 +34,12 @@ function MenuPage({ menuItems }: MenuPageProps) {
             <section className="menu-page">
                 <div className="menu-page-header">
                     <h3>Menu UMKM Kami</h3>
-                    {/* TODO: Sembunyikan link ini jika bukan pemilik */}
-                    <a href="/edit-menu">Edit Menu Anda?</a>
+                    {/* 4. Tampilkan link HANYA jika owner */}
+                    {isOwner && (
+                        <Link to={`/edit-menu/${umkmId}`}>Edit Menu Anda?</Link>
+                    )}
                 </div>
                 <div className="product-list">
-                    {/* 4. Map data dinamis ke komponen Product */}
                     {menuItems.map((item) => (
                         <Product key={item.id} item={item} />
                     ))}

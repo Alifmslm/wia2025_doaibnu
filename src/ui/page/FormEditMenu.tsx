@@ -1,227 +1,173 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef, type ChangeEvent, type FormEvent } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import HeaderDefault from '../component/macro-components/HeaderDefault';
-import '../../style/FormAddUmkm.css';
+import '../../style/FormEditMenu.css'; // <-- Menggunakan CSS yang sama
 
-interface MenuItem {
-    id: number; // Untuk key di React
-    namaProduk: string;
-    deskripsiProduk: string;
-    harga: number;
-    stok: number;
-    fotoProduk: File | null;
-}
+// Impor tipe DAN repository
+import type { MenuItem } from '../../shared/types/Umkm'; // Tipe Form
+import type { MenuItemFromDB } from '../../shared/types/Umkm'; // Tipe DB
+import { UmkmRepository } from '../../data/repositories/UmkmRepository';
+import { UserRepository } from '../../data/repositories/UserRepository';
+
+// Tipe untuk form 'Tambah/Edit Menu'
+type MenuFormData = Omit<MenuItem, 'id'>;
+
+// Nilai default untuk reset form
+const defaultMenuForm: MenuFormData = {
+    namaProduk: '',
+    deskripsiProduk: '',
+    harga: 0,
+    stok: 0,
+    fotoProduk: null,
+};
 
 function FormEditMenu() {
     const navigate = useNavigate();
+    const { id: umkmIdParam } = useParams<{ id: string }>(); 
+    const umkmId = Number(umkmIdParam);
 
-    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+    // --- State ---
+    const [existingMenus, setExistingMenus] = useState<MenuItemFromDB[]>([]);
+    const [currentForm, setCurrentForm] = useState<MenuFormData>(defaultMenuForm);
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const [currentMenuItem, setCurrentMenuItem] = useState<Omit<MenuItem, 'id'>>({
-        namaProduk: '',
-        deskripsiProduk: '',
-        harga: 0,
-        stok: 0,
-        fotoProduk: null,
-    });
+    // --- Efek untuk Fetch Data ---
+    useEffect(() => {
+        if (!umkmIdParam || isNaN(umkmId)) {
+            setError("ID UMKM tidak valid.");
+            setIsLoading(false);
+            return;
+        }
 
-    // --- Handlers untuk Menu ---
+        async function fetchData() {
+            setIsLoading(true);
+            try {
+                const umkmData = await UmkmRepository.getById(umkmId);
+                if (!umkmData) {
+                    throw new Error("UMKM tidak ditemukan.");
+                }
+                const user = await UserRepository.getCurrentUser();
+                if (!user || user.id !== umkmData.owner_id) {
+                    throw new Error("Anda tidak berhak mengakses halaman ini.");
+                }
+                setExistingMenus(umkmData.menu_items || []);
+            } catch (err: any) {
+                setError(err.message || "Gagal memuat data.");
+                // navigate('/'); // Opsional: lempar jika tidak berhak
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchData();
+    }, [umkmId, umkmIdParam, navigate]);
 
-    /**
-     * Menangani perubahan pada form "Tambah Menu"
-     */
+    // --- Handlers Form ---
     const handleMenuChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
-
         let processedValue: string | number = value;
         if (type === 'number') {
             processedValue = value === '' ? 0 : parseFloat(value);
-            if (isNaN(processedValue)) {
-                processedValue = 0;
-            }
+            if (isNaN(processedValue)) processedValue = 0;
         }
-
-        setCurrentMenuItem(prev => ({
-            ...prev,
-            [name]: processedValue,
-        }));
+        setCurrentForm(prev => ({ ...prev, [name]: processedValue }));
     };
 
-    /**
-     * Menangani perubahan file pada form "Tambah Menu"
-     */
     const handleMenuFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0]) {
-            setCurrentMenuItem(prev => ({
-                ...prev,
-                fotoProduk: e.target.files![0],
-            }));
+            setCurrentForm(prev => ({ ...prev, fotoProduk: e.target.files![0] }));
         }
     };
+    
+    // --- Handlers Aksi CRUD ---
+    const refreshMenus = async () => {
+         const data = await UmkmRepository.getById(umkmId);
+         setExistingMenus(data?.menu_items || []);
+    };
 
-    /**
-     * Menambahkan menu saat ini ke dalam daftar 'menuItems'
-     */
-    const handleAddMenuItem = () => {
-        // Validasi untuk form menu
-        if (!currentMenuItem.namaProduk || currentMenuItem.namaProduk.trim() === "") {
+    const handleSubmitItem = async (e: FormEvent) => {
+        e.preventDefault();
+        
+        if (currentForm.namaProduk.trim() === "") {
             alert("Nama produk wajib diisi.");
             return;
         }
-        if (isNaN(currentMenuItem.harga) || currentMenuItem.harga <= 0) {
+        if (isNaN(currentForm.harga) || currentForm.harga <= 0) {
             alert("Harga produk wajib diisi dan harus lebih besar dari 0.");
             return;
         }
-        if (isNaN(currentMenuItem.stok) || currentMenuItem.stok < 0) {
+        if (isNaN(currentForm.stok) || currentForm.stok < 0) {
             alert("Stok wajib diisi dan tidak boleh negatif (minimal 0).");
             return;
         }
 
-        const newMenuItem: MenuItem = {
-            ...currentMenuItem,
-            id: Date.now()
+        setIsSubmitting(true);
+        
+        const menuItemData: MenuItem = {
+            ...currentForm,
+            id: editingId || 0,
         };
 
-        setMenuItems(prev => [...prev, newMenuItem]);
+        try {
+            if (editingId) {
+                await UmkmRepository.updateMenuItem(editingId, menuItemData);
+            } else {
+                await UmkmRepository.addMenuItem(umkmId, menuItemData);
+            }
+            
+            setEditingId(null);
+            setCurrentForm(defaultMenuForm);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+            await refreshMenus();
 
-        // Reset form "Tambah Menu"
-        setCurrentMenuItem({
-            namaProduk: '',
-            deskripsiProduk: '',
-            harga: 0,
-            stok: 0,
-            fotoProduk: null,
-        });
-
-        const fileInput = document.getElementById('fotoProduk') as HTMLInputElement;
-        if (fileInput) fileInput.value = '';
-    };
-
-    /**
-     * Tombol submit akhir (hanya submit menu)
-     */
-    const handleFinalSubmit = (e: FormEvent) => {
-        e.preventDefault();
-
-        if (menuItems.length === 0) {
-            alert("Anda wajib menambahkan minimal satu menu.");
-            return;
+        } catch (err) {
+            console.error("Gagal submit item:", err);
+            alert("Gagal menyimpan item. Coba lagi.");
+        } finally {
+            setIsSubmitting(false);
         }
-
-        // Hanya data menu yang dikirim
-        const finalData = {
-            menu: menuItems,
-        };
-
-        console.log("=== DATA MENU FINAL SIAP DIKIRIM ===");
-        console.log(JSON.stringify(finalData, null, 2));
-
-        console.log("File Menu:", menuItems.map(m => m.fotoProduk?.name));
-
-        alert("Update Menu Berhasil!");
-        navigate('/profile');
     };
 
-    /**
-     * Render Form (Hanya logika dari Step 2)
-     */
-    const renderMenuForm = () => (
-        <>
-            {/* 2A: Form untuk menambah menu baru */}
-            <form className="menu-add-form" onSubmit={(e) => e.preventDefault()}>
-                <h3>Tambah Item Menu Baru</h3>
-                <div className="form-group">
-                    <label htmlFor="fotoProduk">Foto Produk (Opsional)</label>
-                    <input
-                        type="file"
-                        id="fotoProduk"
-                        name="fotoProduk"
-                        onChange={handleMenuFileChange}
-                        accept="image/*"
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="namaProduk">Nama Produk</label>
-                    <input
-                        type="text"
-                        id="namaProduk"
-                        name="namaProduk"
-                        value={currentMenuItem.namaProduk}
-                        onChange={handleMenuChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="deskripsiProduk">Deskripsi Produk (Opsional)</label>
-                    <textarea
-                        id="deskripsiProduk"
-                        name="deskripsiProduk"
-                        value={currentMenuItem.deskripsiProduk}
-                        onChange={handleMenuChange}
-                        rows={3}
-                    />
-                </div>
-                <div className="form-group-row">
-                    <div className="form-group">
-                        <label htmlFor="harga">Harga (Rp)</label>
-                        <input
-                            type="number"
-                            id="harga"
-                            name="harga"
-                            value={currentMenuItem.harga === 0 ? '' : currentMenuItem.harga}
-                            onChange={handleMenuChange}
-                            min="1"
-                            placeholder="Contoh: 15000"
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="stok">Stok</label>
-                        <input
-                            type="number"
-                            id="stok"
-                            name="stok"
-                            value={currentMenuItem.stok === 0 ? '' : currentMenuItem.stok}
-                            onChange={handleMenuChange}
-                            min="0"
-                            placeholder="Contoh: 10"
-                            required
-                        />
-                    </div>
-                </div>
-                <button type="button" onClick={handleAddMenuItem} className="button-secondary-add">
-                    + Tambah Item Menu Ini
-                </button>
-            </form>
+    const handleEditClick = (item: MenuItemFromDB) => {
+        setEditingId(item.id);
+        setCurrentForm({
+            namaProduk: item.nama_produk,
+            deskripsiProduk: item.deskripsi_produk || '',
+            harga: item.harga,
+            stok: item.stok,
+            fotoProduk: null 
+        });
+        window.scrollTo(0, 0);
+    };
 
-            {/* 2B: Daftar menu yang sudah ditambahkan */}
-            <div className="menu-list-preview">
-                <h3>Daftar Menu ({menuItems.length})</h3>
-                {menuItems.length === 0 ? (
-                    <p className="empty-message">Anda belum menambahkan menu apapun.</p>
-                ) : (
-                    menuItems.map((item) => (
-                        <div key={item.id} className="menu-item-preview">
-                            <p><strong>{item.namaProduk}</strong> - Rp {item.harga.toLocaleString('id-ID')}</p>
-                            <p>Stok: {item.stok}</p>
-                        </div>
-                    ))
-                )}
-            </div>
+    const handleDeleteClick = async (itemId: number) => {
+        if (!window.confirm("Anda yakin ingin menghapus menu ini?")) return;
+        
+        setIsSubmitting(true);
+        try {
+            await UmkmRepository.deleteMenuItem(itemId);
+            await refreshMenus();
+        } catch (err) {
+            console.error("Gagal menghapus item:", err);
+            alert("Gagal menghapus item. Coba lagi.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+    
+    const handleCancelEdit = () => {
+        setEditingId(null);
+        setCurrentForm(defaultMenuForm);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+    }
 
-            {/* 2C: Form submit akhir */}
-            <form onSubmit={handleFinalSubmit}>
-                <div className="form-navigation">
-                    {/* Tombol "Kembali" dihapus karena tidak ada Step 1 */}
-
-                    {/* Style "space-between" akan otomatis mendorong ini ke kanan */}
-                    <button type="submit" className="button-primary-add">
-                        Selesai & Simpan Menu
-                    </button>
-                </div>
-            </form>
-        </>
-    );
+    // --- Render ---
+    if (isLoading) return <p>Loading data menu...</p>;
+    if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
 
     return (
         <>
@@ -229,16 +175,77 @@ function FormEditMenu() {
             <section className="add-umkm-page">
                 <div className="form-container">
 
-                    <button onClick={() => navigate(-1)} className="back-button-page">
-                        <i className="fa-solid fa-chevron-left"></i> Kembali ke Profil
+                    <button onClick={() => navigate(`/detail-page/${umkmId}`)} className="back-button-page" disabled={isSubmitting}>
+                        <i className="fa-solid fa-chevron-left"></i> Kembali ke Detail UMKM
                     </button>
 
                     <div className="form-header">
-                        <h2>Edit / Tambah Menu</h2>
-                        {/* Indikator step dihapus karena tidak relevan lagi */}
+                        <h2>{editingId ? "Edit Menu" : "Tambah Menu Baru"}</h2>
                     </div>
 
-                    {renderMenuForm()}
+                    {/* === Form untuk Add/Edit === */}
+                    <form className="menu-add-form" onSubmit={handleSubmitItem}>
+                        <fieldset disabled={isSubmitting}>
+                            <div className="form-group">
+                                <label htmlFor="fotoProduk">Foto Produk {editingId ? "(Kosongkan jika tidak ingin ganti)" : "(Opsional)"}</label>
+                                <input type="file" id="fotoProduk" name="fotoProduk" onChange={handleMenuFileChange} accept="image/*" ref={fileInputRef} />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="namaProduk">Nama Produk</label>
+                                <input type="text" id="namaProduk" name="namaProduk" value={currentForm.namaProduk} onChange={handleMenuChange} required />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="deskripsiProduk">Deskripsi Produk (Opsional)</label>
+                                <textarea id="deskripsiProduk" name="deskripsiProduk" value={currentForm.deskripsiProduk} onChange={handleMenuChange} rows={3} />
+                            </div>
+                            <div className="form-group-row">
+                                <div className="form-group">
+                                    <label htmlFor="harga">Harga (Rp)</label>
+                                    <input type="number" id="harga" name="harga" value={currentForm.harga === 0 ? '' : currentForm.harga} onChange={handleMenuChange} min="1" placeholder="Contoh: 15000" required />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="stok">Stok</label>
+                                    <input type="number" id="stok" name="stok" value={currentForm.stok === 0 ? '' : currentForm.stok} onChange={handleMenuChange} min="0" placeholder="Contoh: 10" required />
+                                </div>
+                            </div>
+                            <button type="submit" className="button-primary-add">
+                                {isSubmitting ? "Menyimpan..." : (editingId ? "Update Item Menu" : "+ Tambah Item Menu Ini")}
+                            </button>
+                            {editingId && (
+                                <button type="button" onClick={handleCancelEdit} className="button-secondary-add">
+                                    Batal Edit
+                                </button>
+                            )}
+                        </fieldset>
+                    </form>
+
+                    {/* === Daftar Menu yang Sudah Ada === */}
+                    <div className="menu-list-preview">
+                        <h3>Daftar Menu Saat Ini ({existingMenus.length})</h3>
+                        {existingMenus.length === 0 ? (
+                            <p className="empty-message">Anda belum menambahkan menu apapun.</p>
+                        ) : (
+                            existingMenus.map((item) => (
+                                <div key={item.id} className="menu-item-preview">
+                                    <div>
+                                        <p><strong>{item.nama_produk}</strong> - Rp {item.harga.toLocaleString('id-ID')}</p>
+                                        <p>Stok: {item.stok}</p>
+                                    </div>
+                                    <div className="menu-item-actions">
+                                        <button onClick={() => handleEditClick(item)} disabled={isSubmitting} className='button-edit-menu'>Edit</button>
+                                        <button onClick={() => handleDeleteClick(item.id)} disabled={isSubmitting} className="button-delete">Hapus</button>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                    
+                    {/* Tombol Selesai */}
+                    <div className="form-navigation">
+                         <button onClick={() => navigate(`/detail-page/${umkmId}`)} className="button-primary-add button-grey">
+                            Selesai & Kembali
+                        </button>
+                    </div>
 
                 </div>
             </section>
