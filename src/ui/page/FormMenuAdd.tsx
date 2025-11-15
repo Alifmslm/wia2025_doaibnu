@@ -9,6 +9,7 @@ interface FormMenuAddProps {
     initialData: MenuItem[];
     onSubmit: (data: MenuItem[]) => void;
     onBack: () => void;
+    isSubmitting: boolean; // <-- Prop BARU untuk status loading
 }
 
 // Nilai default untuk reset form menu
@@ -20,7 +21,8 @@ const defaultCurrentMenu: NewMenuItemData = {
     fotoProduk: null,
 };
 
-function FormMenuAdd({ initialData, onSubmit, onBack }: FormMenuAddProps) {
+// <-- Terima 'isSubmitting' dari props
+function FormMenuAdd({ initialData, onSubmit, onBack, isSubmitting }: FormMenuAddProps) {
     // State untuk daftar menu yang sudah ditambahkan
     const [menuItems, setMenuItems] = useState<MenuItem[]>(initialData);
     
@@ -101,11 +103,16 @@ function FormMenuAdd({ initialData, onSubmit, onBack }: FormMenuAddProps) {
      */
     const handleFinalSubmit = (e: FormEvent) => {
         e.preventDefault();
+        
+        // Jangan submit jika proses sudah berjalan
+        if (isSubmitting) return; 
 
         // Pastikan ada minimal 1 menu
         if (menuItems.length === 0) {
-            alert("Anda wajib menambahkan minimal satu menu.");
-            return;
+            // Beri opsi untuk lanjut tanpa menu, jika diinginkan
+            if (!window.confirm("Anda belum menambahkan menu. Lanjutkan mendaftar tanpa menu?")) {
+                 return;
+            }
         }
 
         // Kirim data (array menuItems) ke induk
@@ -126,6 +133,7 @@ function FormMenuAdd({ initialData, onSubmit, onBack }: FormMenuAddProps) {
                         onChange={handleMenuFileChange}
                         accept="image/*"
                         ref={fileInputRef} // Tambahkan ref di sini
+                        disabled={isSubmitting} // <-- Nonaktifkan saat loading
                     />
                 </div>
                 <div className="form-group">
@@ -137,6 +145,7 @@ function FormMenuAdd({ initialData, onSubmit, onBack }: FormMenuAddProps) {
                         value={currentMenuItem.namaProduk}
                         onChange={handleMenuChange}
                         required 
+                        disabled={isSubmitting} // <-- Nonaktifkan saat loading
                     />
                 </div>
                 <div className="form-group">
@@ -147,6 +156,7 @@ function FormMenuAdd({ initialData, onSubmit, onBack }: FormMenuAddProps) {
                         value={currentMenuItem.deskripsiProduk}
                         onChange={handleMenuChange}
                         rows={3}
+                        disabled={isSubmitting} // <-- Nonaktifkan saat loading
                     />
                 </div>
                 <div className="form-group-row">
@@ -161,6 +171,7 @@ function FormMenuAdd({ initialData, onSubmit, onBack }: FormMenuAddProps) {
                             min="1" 
                             placeholder="Contoh: 15000"
                             required 
+                            disabled={isSubmitting} // <-- Nonaktifkan saat loading
                         />
                     </div>
                     <div className="form-group">
@@ -174,10 +185,16 @@ function FormMenuAdd({ initialData, onSubmit, onBack }: FormMenuAddProps) {
                             min="0"
                             placeholder="Contoh: 10"
                             required
+                            disabled={isSubmitting} // <-- Nonaktifkan saat loading
                         />
                     </div>
                 </div>
-                <button type="button" onClick={handleAddMenuItem} className="button-secondary-add">
+                <button 
+                    type="button" 
+                    onClick={handleAddMenuItem} 
+                    className="button-secondary-add"
+                    disabled={isSubmitting} // <-- Nonaktifkan saat loading
+                >
                     + Tambah Item Menu Ini
                 </button>
             </form>
@@ -192,7 +209,6 @@ function FormMenuAdd({ initialData, onSubmit, onBack }: FormMenuAddProps) {
                         <div key={item.id} className="menu-item-preview">
                             <p><strong>{item.namaProduk}</strong> - Rp {item.harga.toLocaleString('id-ID')}</p>
                             <p>Stok: {item.stok}</p>
-                            {/* Di sini Anda bisa menambahkan tombol "Hapus" jika perlu */}
                         </div>
                     ))
                 )}
@@ -201,11 +217,20 @@ function FormMenuAdd({ initialData, onSubmit, onBack }: FormMenuAddProps) {
             {/* 2C: Form submit akhir dan navigasi */}
             <form onSubmit={handleFinalSubmit}>
                 <div className="form-navigation">
-                    <button type="button" onClick={onBack} className="button-secondary-add">
+                    <button 
+                        type="button" 
+                        onClick={onBack} 
+                        className="button-secondary-add"
+                        disabled={isSubmitting} // <-- Nonaktifkan saat loading
+                    >
                         <i className="fa-solid fa-arrow-left"></i> Kembali ke Info UMKM
                     </button>
-                    <button type="submit" className="button-primary-add">
-                        Selesai & Daftarkan UMKM
+                    <button 
+                        type="submit" 
+                        className="button-primary-add"
+                        disabled={isSubmitting} // <-- Nonaktifkan saat loading
+                    >
+                        {isSubmitting ? "Menyimpan..." : "Selesai & Daftarkan UMKM"}
                     </button>
                 </div>
             </form>
