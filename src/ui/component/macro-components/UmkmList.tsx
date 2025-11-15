@@ -1,12 +1,11 @@
-// src/component/macro-components/UmkmList.tsx
-import { useEffect, useState } from "react";
+// 1. Impor 'useCallback' dari React
+import { useEffect, useState, useCallback } from "react"; 
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
-// 1. Impor tipe data BARU
 import type { UmkmFromDB } from "../../../shared/types/Umkm"; 
 import UmkmCard from "../micro-components/UmkmCard";
 import "../../../style/UmkmList.css";
 
-// Fungsi getDistance (di-copy dari kode Anda)
+// Fungsi getDistance (Tidak berubah)
 function getDistance(
     lat1: number,
     lon1: number,
@@ -44,83 +43,102 @@ function UmkmList({
     geoLoading,
     geoError,
 }: UmkmListProps) {
-    // 2. Gunakan tipe data BARU
     const [umkmList, setUmkmList] = useState<UmkmFromDB[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null); // State error
+    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        async function fetchData() {
-            setLoading(true);
-            setError(null);
-            // 3. Tipe data result diubah ke UmkmFromDB
-            let result: UmkmFromDB[];
+    // 2. Pisahkan 'fetchData' dan bungkus dengan 'useCallback'
+    // Ini membuat fungsi 'fetchData' stabil dan bisa dipanggil dari mana saja
+    // tanpa menyebabkan render ulang yang tidak perlu.
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        let result: UmkmFromDB[];
 
-            try {
-                if (activeFilter === "Terdekat" && (geoLoading || geoError)) {
-                    setUmkmList([]);
-                    setLoading(false);
-                    return;
-                }
+        try {
+            if (activeFilter === "Terdekat" && (geoLoading || geoError)) {
+                setUmkmList([]);
+                setLoading(false);
+                return;
+            }
 
-                // Logika 'if' ini sekarang akan BERFUNGSI
-                if (searchQuery) {
-                    result = await UmkmRepository.search(searchQuery);
-                } else if (category) {
-                    result = await UmkmRepository.findByCategory(category);
-                } else if (activeFilter === "Terdekat") {
-                    if (userLocation) {
-                        const allData = await UmkmRepository.getAll();
-                        result = allData.filter((umkm) => {
-                            // Cek null/undefined pada lokasi
-                            if (!umkm.lokasi?.latitude || !umkm.lokasi?.longitude) {
-                                return false;
-                            }
-
-                            const distance = getDistance(
-                                userLocation.latitude,
-                                userLocation.longitude,
-                                umkm.lokasi.latitude,
-                                umkm.lokasi.longitude
-                            );
-
-                            return distance <= 10; // Filter 10km
-                        });
-                    } else {
-                        // Jika lokasi belum siap, tampilkan semua
-                        result = await UmkmRepository.getAll();
-                    }
-                } else if (activeFilter === "Hidden Gem") {
+            if (searchQuery) {
+                result = await UmkmRepository.search(searchQuery);
+            } else if (category) {
+                result = await UmkmRepository.findByCategory(category);
+            } else if (activeFilter === "Terdekat") {
+                if (userLocation) {
                     const allData = await UmkmRepository.getAll();
                     result = allData.filter((umkm) => {
-                        return (
-                            // 4. Sesuaikan nama kolom DB
-                            umkm.monthly_visits < 100 &&
-                            umkm.total_visits < 50 &&
-                            umkm.average_rating >= 4.5
+                        if (!umkm.lokasi?.latitude || !umkm.lokasi?.longitude) {
+                            return false;
+                        }
+
+                        const distance = getDistance(
+                            userLocation.latitude,
+                            userLocation.longitude,
+                            umkm.lokasi.latitude,
+                            umkm.lokasi.longitude
                         );
+
+                        return distance <= 10; // Filter 10km
                     });
                 } else {
-                    // Filter "Semua"
                     result = await UmkmRepository.getAll();
                 }
-
-                setUmkmList(result);
-
-            } catch (err) {
-                console.error("Gagal mengambil data list UMKM:", err);
-                let msg = "Gagal memuat data.";
-                if (err instanceof Error) msg = err.message;
-             setError(msg);
-            } finally {
-                setLoading(false);
+            } else if (activeFilter === "Hidden Gem") {
+                const allData = await UmkmRepository.getAll();
+                result = allData.filter((umkm) => {
+                    return (
+                        umkm.monthly_visits < 100 &&
+                        umkm.total_visits < 50 &&
+                        umkm.average_rating >= 4.5
+                    );
+                });
+            } else {
+                result = await UmkmRepository.getAll();
             }
-        }
 
+            setUmkmList(result);
+
+        } catch (err) {
+            console.error("Gagal mengambil data list UMKM:", err);
+            let msg = "Gagal memuat data.";
+            if (err instanceof Error) msg = err.message;
+            setError(msg);
+        } finally {
+            setLoading(false);
+        }
+    }, [searchQuery, category, activeFilter, userLocation, geoLoading, geoError]); // <-- Dependensi untuk useCallback
+
+    // 3. useEffect ini sekarang HANYA memanggil 'fetchData' ketika filternya berubah
+    useEffect(() => {
         fetchData();
+    }, [fetchData]); // <-- Dependensinya adalah fungsi 'fetchData' itu sendiri
+
+    
+    // 4. TAMBAHKAN useEffect BARU ini untuk "mendengarkan" sinyal dari SavePage
+    useEffect(() => {
+        // Daftarkan listener saat komponen dimuat (mount)
+        console.log("UmkmList: Mendengarkan perubahan data 'visited'...");
         
-        // 5. Tambahkan dependensi. Setiap filter berubah, fetch ulang data.
-    }, [searchQuery, category, activeFilter, userLocation, geoLoading, geoError]);
+        const unsubscribe = UmkmRepository.onVisitedDataChange(() => {
+            console.log("UmkmList: Sinyal 'visited' diterima! Memuat ulang data...");
+            // Panggil fungsi 'fetchData' yang sama untuk refresh data
+            fetchData();
+        });
+
+        // Kembalikan fungsi cleanup untuk 'unsubscribe' 
+        // saat komponen dibongkar (unmount)
+        return () => {
+            console.log("UmkmList: Berhenti mendengarkan perubahan.");
+            unsubscribe();
+        };
+        
+    }, [fetchData]); // <-- 'fetchData' sebagai dependensi agar listener selalu up-to-date
+
+
+    // --- Sisa kode (Render) tidak ada yang berubah ---
 
     if (loading) return <p className="no-data-text">Memuat data...</p>;
 

@@ -1,4 +1,3 @@
-// src/data/repositories/UmkmRepository.ts
 import { supabase } from '../../shared/supbase';
 import type {
     Lokasi,
@@ -281,19 +280,24 @@ export const UmkmRepository = {
         
         await this.unsave(id, userId);
 
+        // --- PERBAIKAN DI SINI ---
+        // Gunakan 'upsert' dengan 'ignoreDuplicates' untuk menghindari error 23505
+        // (duplicate key) jika data sudah ada.
         const { error: visitError } = await supabase
             .from('visited_umkm')
-            .insert({
+            .upsert({ // <-- Ganti dari 'insert'
                 user_id: userId,
                 umkm_id: id
+            }, {
+                ignoreDuplicates: true // <-- Tambahkan opsi ini
             });
         
         if (visitError) {
-             console.error("Gagal menambah ke 'visited':", visitError);
-             if (visitError.code !== '23505') { 
+                console.error("Gagal menambah ke 'visited':", visitError);
+             // Tidak perlu lagi cek '23505', lempar semua error yang tersisa
                 throw visitError;
-             }
         }
+        // --- AKHIR PERBAIKAN ---
         
         const { error: rpcError } = await supabase.rpc('increment_visits', { umkm_id_to_inc: id });
         if (rpcError) {
