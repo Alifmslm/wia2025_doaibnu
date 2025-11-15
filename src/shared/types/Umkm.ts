@@ -24,3 +24,20 @@ export type Umkm = {
     monthlyEats: number;
     totalVisits: number; 
 };
+
+export interface UmkmFormData {
+    nama: string;
+    kategori: 'Indonesia' | 'Asia' | 'Western' | 'Lain-lain' | '';
+    deskripsi: string;
+    lokasiGeneral: string;
+    linkGmaps: string;
+    gallery: File[];
+}
+export interface MenuItem {
+    id: number;
+    namaProduk: string;
+    deskripsiProduk: string;
+    harga: number;
+    stok: number;
+    fotoProduk: File | null;
+}
