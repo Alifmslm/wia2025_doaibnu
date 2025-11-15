@@ -1,4 +1,3 @@
-// src/component/macro-components/LocationTabs.tsx
 import '../../../style/LocationTab.css'
 import {
     MapContainer,
@@ -7,11 +6,9 @@ import {
     Popup,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-// 1. Hapus UmkmRepository
-// import { UmkmRepository } from '../../../data/repositories/UmkmRepository';
 import type { Lokasi } from "../../../shared/types/Umkm";
 import type { LatLngExpression } from 'leaflet';
-import { Icon } from 'leaflet'; // Import Icon
+import { Icon } from 'leaflet';
 
 // Fix untuk ikon Leaflet yang hilang di React
 import iconUrl from 'leaflet/dist/images/marker-icon.png';
@@ -29,15 +26,12 @@ const DefaultIcon = new Icon({
 });
 // --- Akhir Fix Ikon ---
 
-// 2. Tentukan props
 interface LocationTabsProps {
     lokasi: Lokasi | null;
     nama: string;
 }
 
 function LocationTabs({ lokasi, nama }: LocationTabsProps) {
-    // 3. Hapus semua 'useState' dan 'useEffect'
-    //    Data sudah ada di props
 
     if (!lokasi) {
         return (
@@ -48,29 +42,58 @@ function LocationTabs({ lokasi, nama }: LocationTabsProps) {
         );
     }
     
-    // 4. Gunakan data latitude/longitude dari prop
-    //    Jika tidak ada, set default ke lokasi (misal: Monas)
+    // Gunakan data latitude/longitude dari prop
+    // Jika tidak ada (masih 0), set default ke lokasi (misal: Monas)
+    // Ini penting agar peta tidak error jika lat/long masih 0
     const position: LatLngExpression = [
-        lokasi.latitude || -6.1754, 
-        lokasi.longitude || 106.8272
+        lokasi.latitude === 0 ? -6.1754 : lokasi.latitude, 
+        lokasi.longitude === 0 ? 106.8272 : lokasi.longitude
     ];
+    
+    // Cek apakah linkGmaps valid (dimulai dengan http)
+    // 'lokasi.alamat' sekarang berisi 'linkGmaps'
+    const isValidLink = lokasi.alamat && lokasi.alamat.startsWith('http');
 
     return (
         <>
             <section className="location-tab">
                 <div className="location-header">
                     <h1>Lokasi</h1>
-                    <p>{lokasi.alamat}</p>
+                    
+                    {/* --- PERBAIKAN DI SINI --- */}
+                    {/* Tampilkan lokasi general sebagai deskripsi, BUKAN alamat */}
+                    <p>{lokasi.lokasi_general}</p>
+                    
+                    {/* Tampilkan link Gmaps HANYA jika valid */}
+                    {isValidLink ? (
+                        <a 
+                            href={lokasi.alamat} // 'lokasi.alamat' = 'linkGmaps'
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                        >
+                            Buka di Google Maps
+                        </a>
+                    ) : (
+                        <p><i>Link Google Maps tidak tersedia.</i></p>
+                    )}
+                    {/* --- AKHIR PERBAIKAN --- */}
+
                 </div>
-                {/* 5. Pastikan map memiliki tinggi, jika tidak ia akan 0px */}
-                <MapContainer center={position} zoom={13} scrollWheelZoom={false} id='map' style={{ height: '300px', width: '100%' }}>
+                
+                <MapContainer 
+                    center={position} 
+                    zoom={13} 
+                    scrollWheelZoom={false} 
+                    id='map' 
+                    style={{ height: '300px', width: '100%' }}
+                >
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     <Marker position={position} icon={DefaultIcon}>
                         <Popup>
-                            {nama}<br />{lokasi.alamat}
+                            {nama}<br />{lokasi.lokasi_general}
                         </Popup>
                     </Marker>
                 </MapContainer>
