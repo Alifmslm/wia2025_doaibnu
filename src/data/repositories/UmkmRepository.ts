@@ -21,24 +21,18 @@ const visitedListeners: DataChangeListener[] = [];
 
 
 // === FUNGSI HELPER BARU UNTUK UPLOAD GAMBAR ===
-/**
- * Meng-upload file gambar ke Supabase Storage dan mengembalikan URL publiknya.
- * @param file - Objek File yang akan di-upload.
- * @param bucketName - Nama bucket Anda (cth: 'gambar-umkm').
- */
 async function uploadImageAndGetUrl(file: File, bucketName: string): Promise<string> {
     
-    // 1. Buat nama file yang unik untuk menghindari konflik
+    // 1. Buat nama file yang unik
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-    // Simpan semua di folder 'public' agar mudah diatur
     const filePath = `public/${fileName}`; 
 
     console.log(`Meng-upload file ke: ${bucketName}/${filePath}`);
 
-    // 2. Upload file ke Supabase Storage
+    // 2. Upload file
     const { error: uploadError } = await supabase.storage
-        .from(bucketName) // Nama bucket Anda
+        .from(bucketName)
         .upload(filePath, file);
 
     if (uploadError) {
@@ -46,9 +40,9 @@ async function uploadImageAndGetUrl(file: File, bucketName: string): Promise<str
         throw uploadError;
     }
 
-    // 3. Ambil URL publik dari file yang baru di-upload
+    // 3. Ambil URL publik
     const { data } = supabase.storage
-        .from(bucketName) // Nama bucket Anda
+        .from(bucketName)
         .getPublicUrl(filePath);
 
     if (!data.publicUrl) {
@@ -62,12 +56,11 @@ async function uploadImageAndGetUrl(file: File, bucketName: string): Promise<str
 
 
 // === FUNGSI HELPER LAMA (DIMODIFIKASI) ===
-// Sekarang menerima URL gambar yang sudah di-upload
 function mapFormDataToDb(
     formData: UmkmFormData, 
     ownerId: string,
-    mainImageUrl: string,     // <-- Argumen BARU
-    galleryImageUrls: string[]  // <-- Argumen BARU
+    mainImageUrl: string,
+    galleryImageUrls: string[]
 ): NewUmkmData {
     
     const newLokasi: Lokasi = {
@@ -77,17 +70,14 @@ function mapFormDataToDb(
         longitude: 0,
     };
     
-    // HAPUS HARDCODED URL
-    // const HARDCODED_IMAGE_URL = "/images/gallery-image-1.png"; 
-
     return {
         owner_id: ownerId, 
         nama: formData.nama,
         kategori: formData.kategori,
         deskripsi: formData.deskripsi,
         lokasi: newLokasi,
-        gambar_utama: mainImageUrl,     // <-- Gunakan URL BARU
-        gallery: galleryImageUrls,    // <-- Gunakan URL BARU
+        gambar_utama: mainImageUrl,
+        gallery: galleryImageUrls,
         total_visits: 0,
         monthly_visits: 0,
         average_rating: 0,
@@ -96,9 +86,9 @@ function mapFormDataToDb(
 
 export const UmkmRepository = {
 
-    // ... [ SEMUA FUNGSI LAMA ANDA DARI 'getAll' SAMPAI 'emitVisitedDataChange' ] ...
-    // ... [ Saya salin lagi di bawah agar lengkap, tapi intinya TIDAK BERUBAH ] ...
-
+    // ... [Fungsi getAll, getById, updateById, search, findByCategory, getAverageRating] ...
+    // ... [Fungsi isSaved, save, unsave, getSavedUmkms] ...
+    
     async getAll(): Promise<UmkmFromDB[]> { 
         console.log("Mengambil semua UMKM dari Supabase...");
         const { data, error } = await supabase.from('umkm').select(JOIN_QUERY); 
@@ -177,6 +167,28 @@ export const UmkmRepository = {
         if (error) { console.error("Error mengambil UMKM dikunjungi:", error); throw error; }
         return data.map(item => item.umkm) as UmkmFromDB[];
     },
+
+    // --- FUNGSI BARU DITAMBAHKAN DI SINI ---
+    /**
+     * Mengambil SEMUA UMKM milik user tertentu
+     */
+    async getByOwnerId(userId: string): Promise<UmkmFromDB[]> {
+        console.log(`Mengambil UMKM milik user: ${userId}`);
+        
+        const { data, error } = await supabase
+            .from('umkm')
+            .select(JOIN_QUERY)
+            .eq('owner_id', userId); // Filter berdasarkan owner_id
+
+        if (error) {
+            console.error("Error mengambil data by owner:", error);
+            throw error;
+        }
+        
+        return data as UmkmFromDB[]; 
+    },
+    // --- AKHIR FUNGSI BARU ---
+
     async moveToVisited(id: number, userId: string): Promise<void> {
         console.log(`Memindahkan UMKM ID: ${id} ke 'dikunjungi'`);
         await this.unsave(id, userId);
@@ -197,7 +209,7 @@ export const UmkmRepository = {
         visitedListeners.forEach(listener => listener());
     },
 
-    // --- FUNGSI addMyUmkm (DIMODIFIKASI TOTAL) ---
+    // ... [Fungsi addMyUmkm] ...
     async addMyUmkm(
         formData: UmkmFormData, 
         menuItems: MenuItem[], 
@@ -205,26 +217,19 @@ export const UmkmRepository = {
     ): Promise<UmkmFromDB> { 
         
         console.log(`Menambahkan UMKM baru untuk user: ${ownerId}`);
-        
-        // PENTING: Ganti 'gambar-umkm' dengan nama bucket Anda
         const BUCKET_NAME = 'gambar-umkm'; 
 
         // === 1. PROSES UPLOAD GAMBAR UMKM ===
         if (formData.gallery.length === 0) {
             throw new Error("Minimal harus ada 1 gambar di galeri.");
         }
-
-        // Upload semua file di galeri secara paralel
         const galleryUploadPromises = formData.gallery.map(file => 
             uploadImageAndGetUrl(file, BUCKET_NAME)
         );
-        // Menunggu semua upload galeri selesai
         const galleryImageUrls = await Promise.all(galleryUploadPromises);
-        
-        // Asumsi: Gambar utama adalah gambar pertama di galeri
         const mainImageUrl = galleryImageUrls[0]; 
 
-        // === 2. SIAPKAN DATA UMKM (setelah URL didapat) ===
+        // === 2. SIAPKAN DATA UMKM ===
         const umkmBaru: NewUmkmData = mapFormDataToDb(
             formData, 
             ownerId, 
@@ -232,7 +237,7 @@ export const UmkmRepository = {
             galleryImageUrls
         );
 
-        // === 3. INSERT DATA UMKM KE TABEL 'umkm' ===
+        // === 3. INSERT DATA UMKM ===
         const { data: umkmData, error: umkmError } = await supabase
             .from('umkm')
             .insert(umkmBaru) 
@@ -244,55 +249,44 @@ export const UmkmRepository = {
             throw umkmError;
         }
 
-        // === 4. PROSES UPLOAD GAMBAR MENU (jika ada) ===
+        // === 4. PROSES UPLOAD GAMBAR MENU ===
         if (menuItems.length > 0) {
-            
-            // Buat array promise untuk upload foto menu
             const menuUploadPromises = menuItems.map(async (menu) => {
-                let fotoProdukUrl = "/images/menu_default.png"; // Fallback
-                
-                // Jika ada file foto produk, upload
+                let fotoProdukUrl = "/images/menu_default.png";
                 if (menu.fotoProduk) {
                     try {
                         fotoProdukUrl = await uploadImageAndGetUrl(menu.fotoProduk, BUCKET_NAME);
                     } catch (uploadErr) {
                         console.error(`Gagal upload foto menu ${menu.namaProduk}:`, uploadErr);
-                        // Jika gagal, tetap gunakan URL default
                     }
                 }
-                
-                // Kembalikan data yang siap di-insert ke tabel 'menu_items'
                 return {
                     umkm_id: umkmData.id, 
                     nama_produk: menu.namaProduk,
                     deskripsi_produk: menu.deskripsiProduk,
                     harga: menu.harga,
                     stok: menu.stok,
-                    foto_produk: fotoProdukUrl // URL yang sudah di-upload (atau default)
+                    foto_produk: fotoProdukUrl
                 };
             });
             
-            // Tunggu semua proses upload & map selesai
             const menuDataBaru = await Promise.all(menuUploadPromises);
 
-            // === 5. INSERT DATA MENU KE TABEL 'menu_items' ===
+            // === 5. INSERT DATA MENU ===
             const { error: menuError } = await supabase
                 .from('menu_items')
                 .insert(menuDataBaru);
 
             if (menuError) {
                 console.error("Gagal menambah menu:", menuError);
-                // Kita tidak 'throw' error di sini, agar UMKM-nya tetap terbuat
-                // Tapi kita catat errornya
             }
         }
 
         console.log("Data UMKM dan Menu berhasil ditambahkan:", umkmData);
         
-        // Kembalikan data UMKM yang baru dibuat
         return {
             ...umkmData,
-            menu_items: [], // Menu & review masih kosong saat baru dibuat
+            menu_items: [], 
             reviews: []     
         } as UmkmFromDB;
     }
