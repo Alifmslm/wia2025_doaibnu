@@ -21,20 +21,23 @@ function HomePage() {
     const [geoError, setGeoError] = useState<string | null>(null);
 
     const filterTabs: FilterType[] = ["Semua", "Terdekat", "Hidden Gem"];
+    
+    // --- TAMBAHKAN INI ---
+    // Definisikan daftar kategori Anda di sini
+    const filterCategories = ['Indonesia', 'Asia', 'Western', 'Lain-lain'];
+    // ---------------------
 
     const handleFilterTabClick = (filterTab: FilterType) => {
+        // ... (logika Anda tidak berubah)
         setActiveFilterTab(filterTab);
         if (filterTab === "Terdekat") {
             if (userLocation) return;
-
             if (!("geolocation" in navigator)) {
                 setGeoError("Geolocation tidak didukung oleh browser Anda.");
                 return;
             }
-
             setGeoLoading(true);
             setGeoError(null);
-
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     setUserLocation({
@@ -64,9 +67,11 @@ function HomePage() {
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
                     onCategorySelect={setCategory}
+                    categories={filterCategories} // <-- KIRIM PROPS BARU
                 />
             </div>
             <div className="filter-rekomendasi">
+                {/* ... (sisa JSX tidak berubah) ... */}
                 {filterTabs.map((filter) => (
                     <div
                         key={filter}

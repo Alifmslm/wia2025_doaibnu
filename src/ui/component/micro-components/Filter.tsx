@@ -2,7 +2,13 @@ import { useState } from "react";
 import PopUpFilter from "../micro-components/PopupFilter.tsx";
 import FilterIcon from "../../../assets/filter-icon.png";
 
-function Filter({ onCategorySelect }: { onCategorySelect: (cat: string) => void }) {
+// 1. Tambahkan 'categories' ke tipe props
+interface FilterProps {
+    onCategorySelect: (cat: string) => void;
+    categories: string[]; // <-- TAMBAHKAN INI
+}
+
+function Filter({ onCategorySelect, categories }: FilterProps) { // <-- 2. Terima props
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -15,6 +21,7 @@ function Filter({ onCategorySelect }: { onCategorySelect: (cat: string) => void 
                 <PopUpFilter
                     onClose={() => setIsOpen(false)}
                     onCategorySelect={onCategorySelect}
+                    categories={categories} // <-- 3. Teruskan ke PopUpFilter
                 />
             )}
         </>
