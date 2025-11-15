@@ -1,23 +1,30 @@
 // src/component/macro-components/DikunjungiTabs.tsx
 import { useState, useEffect } from "react";
-// 1. Impor tipe BARU
-import type { UmkmFromDB } from "../../../shared/types/Umkm";
+import type { UmkmFromDB } from "../../../shared/types/Umkm"; // 1. Tipe BARU
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
+import { UserRepository } from "../../../data/repositories/UserRepository"; // 2. Impor User Repo
 import UmkmCard from "../micro-components/UmkmCard";
 
 function DikunjungiTabs() {
-    // 2. Gunakan tipe BARU
-    const [visitedUmkms, setVisitedUmkms] = useState<UmkmFromDB[]>([]);
+    const [visitedUmkms, setVisitedUmkms] = useState<UmkmFromDB[]>([]); // 3. Tipe BARU
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null); // Tambah state error
+    const [error, setError] = useState<string | null>(null);
 
-    // Fungsi untuk mengambil data UMKM yang telah dikunjungi
     const fetchVisitedData = async () => {
         setLoading(true);
         setError(null);
+        
+        // 4. Dapatkan user
+        const user = await UserRepository.getCurrentUser();
+        if (!user) {
+            setError("Anda harus login untuk melihat data ini.");
+            setLoading(false);
+            return;
+        }
+
         try {
-            // 3. Panggil fungsi repository yang baru
-            const data = await UmkmRepository.getVisitedUmkms();
+            // 5. Kirim ID user
+            const data = await UmkmRepository.getVisitedUmkms(user.id);
             setVisitedUmkms(data);
         } catch (err) {
             console.error("Gagal fetch data dikunjungi:", err);
@@ -28,30 +35,27 @@ function DikunjungiTabs() {
     };
 
     useEffect(() => {
-        // 1. Ambil data saat komponen pertama kali dimuat
         fetchVisitedData();
 
-        // 2. Daftarkan listener
+        // Listener ini akan me-fetch ulang data (termasuk cek user)
         const cleanupListener = UmkmRepository.onVisitedDataChange(() => {
             console.log("Data 'Dikunjungi' berubah. Memuat ulang data...");
             fetchVisitedData();
         });
 
-        // 3. Fungsi cleanup
         return () => {
             cleanupListener();
         };
     }, []);
 
     if (loading) return <p>Memuat UMKM yang telah dikunjungi...</p>;
-    if (error) return <p>Error: {error}</p>; // Tampilkan error
+    if (error) return <p>{error}</p>;
     if (visitedUmkms.length === 0) return <p>Belum ada UMKM yang ditandai telah dikunjungi.</p>;
 
     return (
         <section className="umkm-dikunjungi-list">
             <div className="card-grid-dikunjngi"> 
                 {visitedUmkms.map((umkm) => (
-                    // 4. UmkmCard sekarang menerima tipe UmkmFromDB (sudah cocok)
                     <UmkmCard key={umkm.id} umkm={umkm} />
                 ))}
             </div>

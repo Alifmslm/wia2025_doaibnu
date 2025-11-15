@@ -16,9 +16,6 @@ const JOIN_QUERY = `
     reviews ( * )
 `;
 
-// ID user mock dari data CSV Anda
-const FAKE_USER_ID = "11111111-1111-1111-1111-111111111111"; 
-
 // --- Listener untuk 'Visited' (Kode ini sudah benar) ---
 type DataChangeListener = () => void;
 const visitedListeners: DataChangeListener[] = [];
@@ -180,24 +177,33 @@ export const UmkmRepository = {
     // --- FUNGSI SAVE & VISIT (YANG BARU) ---
 
     /**
-     * Mengecek apakah UMKM disimpan oleh user (mock)
-     * (Kita belum bisa cek ini tanpa ID user asli)
+     * Mengecek apakah UMKM disimpan oleh user
      */
-    isSaved(id: number): boolean {
-        // TODO: Implementasi ini setelah Auth
-        // console.warn(`Pengecekan 'isSaved' untuk ID: ${id} belum diimplementasi.`);
-        return false; // Selalu kembalikan false untuk saat ini
+    async isSaved(id: number, userId: string): Promise<boolean> {
+        const { data, error } = await supabase
+            .from('saved_umkm')
+            .select('umkm_id')
+            .eq('user_id', userId)
+            .eq('umkm_id', id)
+            .maybeSingle(); // Ambil satu atau null
+        
+        if (error) {
+            console.error("Error mengecek 'isSaved':", error);
+            return false;
+        }
+        
+        return !!data; // return true jika data ada, false jika null
     },
     
     /**
      * Menyimpan UMKM ke tabel 'saved_umkm'
      */
-    async save(id: number): Promise<void> {
-        console.log(`Menyimpan UMKM ID: ${id} untuk user: ${FAKE_USER_ID}`);
+    async save(id: number, userId: string): Promise<void> {
+        console.log(`Menyimpan UMKM ID: ${id} untuk user: ${userId}`);
         const { error } = await supabase
             .from('saved_umkm')
             .insert({
-                user_id: FAKE_USER_ID,
+                user_id: userId,
                 umkm_id: id
             });
         
@@ -210,12 +216,12 @@ export const UmkmRepository = {
     /**
      * Menghapus UMKM dari tabel 'saved_umkm'
      */
-    async unsave(id: number): Promise<void> {
-         console.log(`Menghapus UMKM ID: ${id} untuk user: ${FAKE_USER_ID}`);
+    async unsave(id: number, userId: string): Promise<void> {
+         console.log(`Menghapus UMKM ID: ${id} untuk user: ${userId}`);
          const { error } = await supabase
             .from('saved_umkm')
             .delete()
-            .eq('user_id', FAKE_USER_ID)
+            .eq('user_id', userId)
             .eq('umkm_id', id);
         
         if (error) {
@@ -227,39 +233,36 @@ export const UmkmRepository = {
     /**
      * Mengambil data UMKM LENGKAP berdasarkan ID yang disimpan
      */
-    async getSavedUmkms(): Promise<UmkmFromDB[]> {
-        console.log(`Mengambil UMKM tersimpan untuk user: ${FAKE_USER_ID}`);
+    async getSavedUmkms(userId: string): Promise<UmkmFromDB[]> {
+        console.log(`Mengambil UMKM tersimpan untuk user: ${userId}`);
         
-        // Query ini: "SELECT umkm.*, ... FROM saved_umkm JOIN umkm ON ... WHERE user_id = FAKE_USER_ID"
         const { data, error } = await supabase
             .from('saved_umkm')
             .select(`
                 umkm ( ${JOIN_QUERY} )
             `)
-            .eq('user_id', FAKE_USER_ID);
+            .eq('user_id', userId);
 
         if (error) {
             console.error("Error mengambil UMKM tersimpan:", error);
             throw error;
         }
 
-        // Data yang kembali berbentuk: [ { umkm: {...} }, { umkm: {...} } ]
-        // Kita perlu 'meratakan' (flatten) array tersebut
         return data.map(item => item.umkm) as UmkmFromDB[];
     },
 
     /**
      * Mengambil data UMKM LENGKAP berdasarkan ID yang dikunjungi
      */
-    async getVisitedUmkms(): Promise<UmkmFromDB[]> {
-         console.log(`Mengambil UMKM dikunjungi untuk user: ${FAKE_USER_ID}`);
+    async getVisitedUmkms(userId: string): Promise<UmkmFromDB[]> {
+         console.log(`Mengambil UMKM dikunjungi untuk user: ${userId}`);
         
         const { data, error } = await supabase
             .from('visited_umkm')
             .select(`
                 umkm ( ${JOIN_QUERY} )
             `)
-            .eq('user_id', FAKE_USER_ID);
+            .eq('user_id', userId);
 
         if (error) {
             console.error("Error mengambil UMKM dikunjungi:", error);
@@ -272,30 +275,28 @@ export const UmkmRepository = {
     /**
      * Memindahkan UMKM dari 'saved' ke 'visited'
      */
-    async moveToVisited(id: number): Promise<void> {
+    async moveToVisited(id: number, userId: string): Promise<void> {
         console.log(`Memindahkan UMKM ID: ${id} ke 'dikunjungi'`);
         
         // 1. Hapus dari daftar 'Saved'
-        await this.unsave(id);
+        await this.unsave(id, userId);
 
         // 2. Tambahkan ke daftar 'Visited'
         const { error: visitError } = await supabase
             .from('visited_umkm')
             .insert({
-                user_id: FAKE_USER_ID,
+                user_id: userId,
                 umkm_id: id
             });
         
         if (visitError) {
              console.error("Gagal menambah ke 'visited':", visitError);
-             // Abaikan error 'duplicate key' jika sudah pernah dikunjungi
              if (visitError.code !== '23505') { 
                 throw visitError;
              }
         }
         
         // 3. Tambahkan ke counter publik (totalVisits)
-        // Kita gunakan 'rpc' untuk memanggil fungsi database
         const { error: rpcError } = await supabase.rpc('increment_visits', { umkm_id_to_inc: id });
         if (rpcError) {
             console.error("Gagal meng-increment visit count:", rpcError);
@@ -319,11 +320,11 @@ export const UmkmRepository = {
         visitedListeners.forEach(listener => listener());
     },
 
-    // --- addMyUmkm (Tidak Berubah) ---
-    async addMyUmkm(formData: UmkmFormData, menuItems: MenuItem[]): Promise<UmkmFromDB> { 
-        console.log("Menambahkan UMKM baru ke Supabase...");
+    // --- addMyUmkm (Diperbarui) ---
+    async addMyUmkm(formData: UmkmFormData, menuItems: MenuItem[], ownerId: string): Promise<UmkmFromDB> { 
+        console.log(`Menambahkan UMKM baru untuk user: ${ownerId}`);
         
-        const umkmBaru: NewUmkmData = mapFormDataToDb(formData, FAKE_USER_ID);
+        const umkmBaru: NewUmkmData = mapFormDataToDb(formData, ownerId);
 
         const { data: umkmData, error: umkmError } = await supabase
             .from('umkm')

@@ -1,10 +1,10 @@
-// src/component/macro-components/Form.tsx
-import React, { useState } from 'react'; // [TAMBAHKAN] Impor useState
+// File: src/component/macro-components/Form.tsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // 1. Impor useNavigate
 import "../../../style/Form.css";
 import FormInput from "../micro-components/FormInput.tsx";
 import Button from "../micro-components/Button.tsx";
 import FooterAuth from "../micro-components/FooterAuth.tsx";
-// [TAMBAHKAN] Impor Repository dan ikon error
 import { UserRepository } from '../../../data/repositories/UserRepository';
 import ErrorIcon from '../../../assets/error-icon.png';
 
@@ -13,27 +13,20 @@ type FormProps = {
 };
 
 function Form({ name }: FormProps) {
-    console.log('PROP "name" YANG DITERIMA:', name);
     const isLogin = name === "Login Akun";
-    console.log('isLogin BERNILAI:', isLogin);
+    const navigate = useNavigate(); // 2. Gunakan hook navigasi
 
-    // [TAMBAHKAN] State untuk menampung semua data input
     const [formData, setFormData] = useState<{ [key: string]: string }>({"email": "", "password": "", "nama": ""});
-    
-    // [TAMBAHKAN] State untuk menangani pesan error login
-    const [loginError, setLoginError] = useState<string | null>(null);
-    
-    // [TAMBAHKAN] State untuk loading saat submit
+    const [globalError, setGlobalError] = useState<string | null>(null); // Ganti nama state
     const [isLoading, setIsLoading] = useState(false);
 
-    // daftar field & tipe input-nya
     const fields = isLogin
         ? [
             { label: "Email", type: "email" },
             { label: "Password", type: "password" }
         ]
         : [
-            { label: "Nama", type: "text" },
+            { label: "Nama", type: "text" }, // 'Nama' ini akan jadi 'username'
             { label: "Email", type: "email" },
             { label: "Password", type: "password" }
         ];
@@ -42,59 +35,60 @@ function Form({ name }: FormProps) {
         ? { name: "Belum punya akun?", subname: "Daftar Sekarang!", link: "/register" }
         : { name: "Sudah punya akun?", subname: "Masuk Sekarang!", link: "/login" };
 
-    // [TAMBAHKAN] Handler untuk memperbarui state saat input berubah
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: value // 'name' di sini adalah 'email', 'password', 'nama'
+            [name]: value 
         }));
-        
-        // Hapus error jika pengguna mulai mengetik lagi
-        if (isLogin) {
-            setLoginError(null);
-        }
+        setGlobalError(null); // Hapus error saat mengetik
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('--- FORM DISUBMIT ---');
+        setIsLoading(true);
+        setGlobalError(null);
         
-        if (isLogin) {
-            console.log('--- BLOK LOGIN DIJALANKAN ---');
-            setIsLoading(true);
-            setLoginError(null);
-            
-            const email = formData.email;
-            const password = formData.password;
+        const email = formData.email;
+        const password = formData.password;
 
+        if (isLogin) {
+            // --- Logika LOGIN ---
             try {
-                // Panggil fungsi login dari repository
-                const user = await UserRepository.login(email, password);
+                const { user, error } = await UserRepository.login(email, password);
+                if (error) throw error;
 
                 if (user) {
-                    window.location.href = '/home';
+                    navigate('/home'); // 3. Gunakan 'navigate'
                 } else {
-                    // Jika user null (login gagal)
-                    setLoginError("Email atau password yang Anda masukkan salah!");
+                    setGlobalError("Email atau password salah.");
                 }
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Login error:", error);
-                setLoginError("Terjadi kesalahan. Silakan coba lagi.");
-            } finally {
-                setIsLoading(false);
+                setGlobalError(error.message || "Email atau password salah.");
             }
-
         } else {
-            // --- Logika untuk Register ---
-            console.log('--- BLOK REGISTER DIJALANKAN ---');
-            setIsLoading(true);
-            window.location.href = '/home';
+            // --- Logika REGISTER ---
+            const username = formData.nama; // Ambil 'nama' sebagai username
+            try {
+                const { user, error } = await UserRepository.register(email, password, username);
+                if (error) throw error;
+                
+                if (user) {
+                    // Tampilkan pesan untuk cek email (jika konfirmasi diaktifkan)
+                    alert("Pendaftaran berhasil! Silakan cek email Anda untuk konfirmasi.");
+                    navigate('/login'); // Arahkan ke login setelah daftar
+                }
+            } catch (error: any) {
+                console.error("Register error:", error);
+                setGlobalError(error.message || "Gagal mendaftar. Coba lagi.");
+            }
         }
+        
+        setIsLoading(false); // Selesai loading
     };
 
     return (
-        // [PERUBAHAN] Ganti <section> dengan <form> dan tambahkan onSubmit
         <form className="section_form_parent" onSubmit={handleSubmit}>
             {fields.map((field) => (
                 <FormInput
@@ -109,11 +103,10 @@ function Form({ name }: FormProps) {
                 />
             ))}
 
-            {/* [TAMBAHKAN] Tampilkan pesan error global di atas tombol */}
-            {isLogin && loginError && (
+            {globalError && (
                 <div className="label-error">
                     <img src={ErrorIcon} alt="error-icon" />
-                    <p>{loginError}</p>
+                    <p>{globalError}</p>
                 </div>
             )}
 

@@ -1,9 +1,10 @@
 // src/component/micro-components/UmkmCard.tsx
-import React, { useState } from "react"; // Impor useEffect
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import RatingLabel from "../micro-components/RatingLabel.tsx";
 import type { UmkmFromDB } from "../../../shared/types/Umkm"; 
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository"; 
+import { UserRepository } from "../../../data/repositories/UserRepository"; // Impor User Repo
 import HomeImage from '../../../assets/gallery-image-1.png'; // Fallback
 import { formatVisits } from "../../../shared/utils/formater/Formatters.ts";
 
@@ -13,32 +14,41 @@ function UmkmCard({ umkm }: { umkm: UmkmFromDB }) {
     const totalRatings = umkm.reviews?.length || 0;
     const formattedVisits = formatVisits(umkm.total_visits);
 
-    // Kita butuh state loading untuk tombol save
+    const [isSaved, setIsSaved] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     
-    // Panggil fungsi isSaved (masih mock, akan selalu false)
-    const [isSaved, setIsSaved] = useState(() => UmkmRepository.isSaved(umkm.id));
-    
-    // TODO: Nanti, 'isSaved' harus di-fetch dari DB saat Auth sudah ada.
-    // useEffect(() => {
-    //    async function checkSaved() {
-    //        const saved = await UmkmRepository.isSaved(umkm.id);
-    //        setIsSaved(saved);
-    //    }
-    //    checkSaved();
-    // }, [umkm.id]);
+    // Cek status 'saved' saat komponen dimuat
+    useEffect(() => {
+       async function checkIsSaved() {
+           const user = await UserRepository.getCurrentUser();
+           if (user) {
+               const saved = await UmkmRepository.isSaved(umkm.id, user.id);
+               setIsSaved(saved);
+           }
+       }
+       checkIsSaved();
+    }, [umkm.id]);
 
     const handleSaveClick = async (event: React.MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
         
+        // 1. Dapatkan user
+        const user = await UserRepository.getCurrentUser();
+        if (!user) {
+            alert("Anda harus login untuk menyimpan UMKM.");
+            return;
+        }
+
         setIsSaving(true);
         try {
             if (isSaved) {
-                await UmkmRepository.unsave(umkm.id);
+                // 2. Kirim user ID
+                await UmkmRepository.unsave(umkm.id, user.id);
                 setIsSaved(false);
             } else {
-                await UmkmRepository.save(umkm.id);
+                // 3. Kirim user ID
+                await UmkmRepository.save(umkm.id, user.id);
                 setIsSaved(true);
             }
         } catch (err) {
@@ -70,7 +80,7 @@ function UmkmCard({ umkm }: { umkm: UmkmFromDB }) {
                         <button
                             className="save-button"
                             onClick={handleSaveClick}
-                            disabled={isSaving} // Nonaktifkan tombol saat loading
+                            disabled={isSaving}
                             style={{
                                 color: isSaved ? '#FFD700' : '#ccc'
                             }}
