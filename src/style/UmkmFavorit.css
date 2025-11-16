@@ -1,3 +1,41 @@
+/* --- CSS BARU/YANG DIUBAH --- */
+
+/* 1. UBAH .umkm-card: Hapus properti background-image */
+.umkm-card {
+    flex: 0 0 150px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    padding: 18px 0;
+    text-align: center;
+    border-radius: 50px;
+    justify-content: space-between;
+    align-items: center;
+    
+    /* Hapus bagian background-image yang HARDCODED di sini */
+    
+    /* Sisakan properti background lainnya */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    scroll-snap-align: center;
+}
+
+/* 2. TAMBAH TRANSITION ke off-card agar hover mulus */
+.off-card {
+    filter: grayscale(100%);
+    border-radius: 5px;
+    justify-content: end;
+    transition: all 0.3s ease; /* Penting untuk efek mulus */
+}
+
+.off-card .category-label {
+    display: none;
+}
+
+
+/* --- CSS LAINNYA (TIDAK BERUBAH) --- */
+
 .umkm-favorit {
     display: flex;
     flex-direction: column;
@@ -15,13 +53,6 @@
     font-size: 16px;
     color: white;
     font-weight: 500;
-}
-
-.umkm-favorit {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    padding: 24px 16px;
 }
 
 .outer {
@@ -42,35 +73,6 @@
 }
 
 .umkm-favorit__carousell::-webkit-scrollbar {
-    display: none;
-}
-
-.umkm-card {
-    flex: 0 0 150px;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-    padding: 18px 0;
-    text-align: center;
-    border-radius: 50px;
-    justify-content: space-between;
-    align-items: center;
-    background-image:
-        linear-gradient(180deg, #0000 0%, #2FB06D 100%),
-        url('../assets/landing-carousell1.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    scroll-snap-align: center;
-}
-
-.off-card {
-    filter: grayscale(100%);
-    border-radius: 5px;
-    justify-content: end;
-}
-
-.off-card .category-label {
     display: none;
 }
 
