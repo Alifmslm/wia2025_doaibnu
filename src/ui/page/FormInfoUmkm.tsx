@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import type { UmkmFormData } from '../../shared/types/Umkm';
+
 // Props yang diterima dari Induk
 interface FormInfoUmkmProps {
     initialData: UmkmFormData;
@@ -57,6 +58,14 @@ function FormInfoUmkm({ initialData, onSubmit }: FormInfoUmkmProps) {
             alert("Lokasi General wajib diisi.");
             return;
         }
+        
+        // --- VALIDASI BARU ---
+        if (umkmData.alamatLengkap.trim() === '') {
+            alert("Alamat Lengkap wajib diisi.");
+            return;
+        }
+        // --- AKHIR VALIDASI BARU ---
+        
         if (umkmData.linkGmaps.trim() === '') {
             alert("Link Google Maps wajib diisi.");
             return;
@@ -105,7 +114,7 @@ function FormInfoUmkm({ initialData, onSubmit }: FormInfoUmkmProps) {
                     id="gallery"
                     name="gallery"
                     onChange={handleUmkmFileChange}
-                    multiple // Penting untuk multi-file
+                    multiple 
                     accept="image/*"
                     required
                 />
@@ -134,6 +143,21 @@ function FormInfoUmkm({ initialData, onSubmit }: FormInfoUmkmProps) {
                     required
                 />
             </div>
+
+            {/* --- FORM GROUP BARU --- */}
+            <div className="form-group">
+                <label htmlFor="alamatLengkap">Alamat Lengkap</label>
+                <textarea
+                    id="alamatLengkap"
+                    name="alamatLengkap"
+                    value={umkmData.alamatLengkap}
+                    onChange={handleUmkmChange}
+                    rows={3}
+                    placeholder="Contoh: Jl. Merdeka No. 17, RT 05/RW 02, Kel. Cempaka..."
+                    required
+                />
+            </div>
+            {/* --- AKHIR FORM GROUP BARU --- */}
 
             <div className="form-group">
                 <label htmlFor="linkGmaps">Link Google Maps</label>

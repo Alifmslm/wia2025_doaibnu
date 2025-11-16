@@ -1,3 +1,5 @@
+// File: src/shared/types/Umkm.ts
+
 // --- Tipe-tipe LAMA (Untuk Form) INI TETAP DIPERLUKAN ---
 export interface UmkmFormData {
     nama: string;
@@ -6,6 +8,7 @@ export interface UmkmFormData {
     lokasiGeneral: string;
     linkGmaps: string;
     gallery: File[];
+    alamatLengkap: string; // <-- TAMBAHKAN INI
 }
 
 export interface MenuItem {
@@ -18,10 +21,11 @@ export interface MenuItem {
 }
 
 export type Lokasi = {
-    alamat: string;
+    alamat: string; // Ini untuk linkGmaps
     lokasi_general: string;
     latitude: number;
     longitude: number;
+    alamat_lengkap: string; // <-- TAMBAHKAN INI
 };
 // --------------------------------------------------------
 
@@ -40,7 +44,6 @@ export type MenuItemFromDB = {
     created_at: string; // timestamptz
 };
 
-// --- MODIFIKASI DI SINI ---
 // Tipe untuk data dari tabel 'profiles' yang di-join
 export type ReviewerProfile = {
     username: string;
@@ -54,9 +57,8 @@ export type ReviewFromDB = {
     nilai: number; // float8
     komentar: string; // text
     created_at: string; // timestamptz
-    profiles: ReviewerProfile | null; // <-- TAMBAHKAN RELASI INI
+    profiles: ReviewerProfile | null; // Relasi
 };
-// --- AKHIR MODIFIKASI ---
 
 
 /**
@@ -69,14 +71,14 @@ export type UmkmFromDB = {
     nama: string; // text
     kategori: string; // text
     deskripsi: string; // text
-    lokasi: Lokasi; // jsonb
+    lokasi: Lokasi; // <-- Tipe ini sekarang sudah ter-update
     gambar_utama: string; // (Sudah diperbaiki)
     gallery: string[]; // jsonb (Array of URLs)
     total_visits: number; // int8
     monthly_visits: number; // int8
     average_rating: number; // float8
     menu_items: MenuItemFromDB[];
-    reviews: ReviewFromDB[]; // <-- Tipe ini sekarang sudah ter-update
+    reviews: ReviewFromDB[];
 };
 
 /**

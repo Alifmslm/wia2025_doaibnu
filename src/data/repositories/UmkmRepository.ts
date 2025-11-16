@@ -28,41 +28,23 @@ const visitedListeners: DataChangeListener[] = [];
 
 
 // === FUNGSI HELPER: UPLOAD GAMBAR ===
+// (Fungsi ini tidak berubah)
 async function uploadImageAndGetUrl(file: File, bucketName: string): Promise<string> {
-    
-    // 1. Buat nama file yang unik
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
     const filePath = `public/${fileName}`; 
-
     console.log(`Meng-upload file ke: ${bucketName}/${filePath}`);
-
-    // 2. Upload file
-    const { error: uploadError } = await supabase.storage
-        .from(bucketName)
-        .upload(filePath, file);
-
-    if (uploadError) {
-        console.error("Error saat upload file:", uploadError);
-        throw uploadError;
-    }
-
-    // 3. Ambil URL publik
-    const { data } = supabase.storage
-        .from(bucketName)
-        .getPublicUrl(filePath);
-
-    if (!data.publicUrl) {
-        throw new Error("Gagal mendapatkan URL publik setelah upload.");
-    }
-    
+    const { error: uploadError } = await supabase.storage.from(bucketName).upload(filePath, file);
+    if (uploadError) { console.error("Error saat upload file:", uploadError); throw uploadError; }
+    const { data } = supabase.storage.from(bucketName).getPublicUrl(filePath);
+    if (!data.publicUrl) { throw new Error("Gagal mendapatkan URL publik setelah upload."); }
     console.log("Upload berhasil, URL:", data.publicUrl);
     return data.publicUrl;
 }
 // --- AKHIR FUNGSI HELPER ---
 
 
-// === FUNGSI HELPER: MAP DATA FORM KE DB ===
+// === FUNGSI HELPER: MAP DATA FORM KE DB (MODIFIKASI) ===
 function mapFormDataToDb(
     formData: UmkmFormData, 
     ownerId: string,
@@ -71,8 +53,9 @@ function mapFormDataToDb(
 ): NewUmkmData {
     
     const newLokasi: Lokasi = {
-        alamat: formData.linkGmaps,
+        alamat: formData.linkGmaps,             // Ini adalah link Gmaps
         lokasi_general: formData.lokasiGeneral,
+        alamat_lengkap: formData.alamatLengkap, // <-- TAMBAHKAN INI
         latitude: 0,
         longitude: 0,
     };
@@ -82,7 +65,7 @@ function mapFormDataToDb(
         nama: formData.nama,
         kategori: formData.kategori,
         deskripsi: formData.deskripsi,
-        lokasi: newLokasi,
+        lokasi: newLokasi, // <-- Objek 'lokasi' sekarang berisi alamat lengkap
         gambar_utama: mainImageUrl,
         gallery: galleryImageUrls,
         total_visits: 0,
@@ -122,9 +105,14 @@ export const UmkmRepository = {
      */
     async updateById(id: number, updateData: FormEditData, currentLokasi: Lokasi): Promise<UmkmFromDB> {
         console.log(`Meng-update UMKM dengan ID: ${id}`);
+        // CATATAN: 'lokasi' di sini belum menyertakan 'alamat_lengkap'
+        // Anda perlu memperbarui tipe FormEditData dan form edit nanti
         const updatedLokasi: Lokasi = {
-            latitude: currentLokasi.latitude, longitude: currentLokasi.longitude,
-            alamat: updateData.alamat, lokasi_general: updateData.lokasiGeneral
+            latitude: currentLokasi.latitude, 
+            longitude: currentLokasi.longitude,
+            alamat: updateData.alamat, 
+            lokasi_general: updateData.lokasiGeneral,
+            alamat_lengkap: currentLokasi.alamat_lengkap // Pertahankan alamat lengkap yg lama
         };
         const dataToUpdate = {
             nama: updateData.nama, deskripsi: updateData.deskripsi,
@@ -389,7 +377,7 @@ export const UmkmRepository = {
     },
     
     
-    // === FUNGSI BARU UNTUK TAMBAH REVIEW ===
+    // === FUNGSI TAMBAH REVIEW ===
     async addReview(
         umkmId: number, 
         userId: string, 

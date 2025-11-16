@@ -14,7 +14,7 @@ function FormAddUmkm() {
     const navigate = useNavigate();
 
     const [step, setStep] = useState(1);
-    const [isSubmitting, setIsSubmitting] = useState(false); // <-- State loading BARU
+    const [isSubmitting, setIsSubmitting] = useState(false); 
 
     // === State Utama untuk Data Final ===
     const [umkmData, setUmkmData] = useState<UmkmFormData>({
@@ -24,6 +24,7 @@ function FormAddUmkm() {
         lokasiGeneral: '',
         linkGmaps: '',
         gallery: [],
+        alamatLengkap: '', // <-- TAMBAHKAN INI
     });
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
     
@@ -38,12 +39,10 @@ function FormAddUmkm() {
 
     /**
      * Menerima data dari Step 2, menggabungkan semua data, dan submit
-     * (DIMODIFIKASI TOTAL)
      */
     const handleStepTwoSubmit = async (dataFromStepTwo: MenuItem[]) => {
-        // Simpan data menu final ke state
         setMenuItems(dataFromStepTwo);
-        setIsSubmitting(true); // <-- Mulai loading
+        setIsSubmitting(true); 
 
         try {
             // 1. Dapatkan user yang sedang login
@@ -51,16 +50,15 @@ function FormAddUmkm() {
             if (!user) {
                 alert("Sesi Anda telah berakhir. Silakan login kembali.");
                 setIsSubmitting(false);
-                navigate('/login'); // Arahkan ke login
+                navigate('/login'); 
                 return;
             }
 
-            // 2. Cek validasi file (FormInfoUmkm sudah melakukan ini, tapi
-            //    ini adalah 'double check' yang baik)
+            // 2. Cek validasi file
             if (umkmData.gallery.length === 0) {
                  alert("Anda harus meng-upload minimal 1 foto UMKM di Langkah 1.");
                  setIsSubmitting(false);
-                 setStep(1); // Kembalikan ke step 1
+                 setStep(1); 
                  return;
             }
 
@@ -70,17 +68,16 @@ function FormAddUmkm() {
             console.log("Owner ID:", user.id);
 
             // 3. Panggil Repository
-            // Repository akan menangani semua proses upload file
             await UmkmRepository.addMyUmkm(
-                umkmData,         // Mengandung File[]
-                dataFromStepTwo,  // Mengandung File | null
+                umkmData,
+                dataFromStepTwo,
                 user.id
             );
 
             console.log("=== DATA UMKM FINAL BERHASIL DIKIRIM ===");
             
             alert("Pendaftaran UMKM Berhasil!");
-            navigate('/profile'); // Arahkan kembali ke halaman profil
+            navigate('/profile'); 
 
         } catch (error) {
             console.error("Gagal total saat submit UMKM:", error);
@@ -90,7 +87,7 @@ function FormAddUmkm() {
                 alert("Terjadi kesalahan yang tidak diketahui. Coba lagi.");
             }
         } finally {
-            setIsSubmitting(false); // Selesai loading, apa pun hasilnya
+            setIsSubmitting(false);
         }
     };
 
@@ -103,7 +100,7 @@ function FormAddUmkm() {
                     <button 
                         onClick={() => navigate(-1)} 
                         className="back-button-page"
-                        disabled={isSubmitting} // <-- Nonaktifkan saat submit
+                        disabled={isSubmitting} 
                     >
                         <i className="fa-solid fa-chevron-left"></i> Kembali ke Profil
                     </button>
@@ -117,31 +114,25 @@ function FormAddUmkm() {
                         </div>
                     </div>
 
-                    {/* Tampilkan pesan loading jika sedang submit di step 2 */}
                     {isSubmitting && step === 2 && (
                         <div className="loading-overlay" style={{ textAlign: 'center', padding: '40px' }}>
                             <p><strong>Sedang meng-upload gambar dan menyimpan data...</strong> <br/> Mohon tunggu, ini mungkin perlu waktu beberapa saat.</p>
-                            {/* Anda bisa tambahkan spinner CSS di sini */}
                         </div>
                     )}
 
-                    {/* Wrapper untuk menonaktifkan form saat loading */}
                     <div style={{ display: isSubmitting ? 'none' : 'block' }}>
-                        {/* Render Komponen Step 1 */}
                         {step === 1 && (
                             <FormInfoUmkm 
                                 initialData={umkmData}
                                 onSubmit={handleStepOneSubmit}
                             />
                         )}
-
-                        {/* Render Komponen Step 2 */}
                         {step === 2 && (
                             <FormMenuAdd
                                 initialData={menuItems}
                                 onSubmit={handleStepTwoSubmit}
                                 onBack={() => setStep(1)}
-                                isSubmitting={isSubmitting} // <-- Kirim prop loading
+                                isSubmitting={isSubmitting} 
                             />
                         )}
                     </div>
