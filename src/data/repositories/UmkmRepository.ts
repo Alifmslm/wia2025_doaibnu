@@ -53,7 +53,7 @@ function mapFormDataToDb(
 ): NewUmkmData {
     
     const newLokasi: Lokasi = {
-        alamat: formData.linkGmaps,             // Ini adalah link Gmaps
+        alamat: formData.linkGmaps,           // Ini adalah link Gmaps
         lokasi_general: formData.lokasiGeneral,
         alamat_lengkap: formData.alamatLengkap, // <-- TAMBAHKAN INI
         latitude: 0,
@@ -142,6 +142,36 @@ export const UmkmRepository = {
         const { data, error } = await supabase.from('umkm').select(JOIN_QUERY).eq('kategori', category); 
         if (error) { console.error("Error saat filter kategori:", error); throw error; }
         return data as UmkmFromDB[];
+    },
+
+    /**
+     * === FUNGSI BARU UNTUK HIDDEN GEM ===
+     * Mengambil UMKM "Hidden Gem"
+     * Kriteria: Rating >= 4.5, Monthly Visits < 100, Total Reviews < 50
+     * Dibatasi 5 hasil
+     */
+    async getHiddenGems(): Promise<UmkmFromDB[]> {
+        console.log("Mengambil UMKM Hidden Gems...");
+        
+        // 1. Filter di DB untuk kriteria yang ada di kolom tabel 'umkm'
+        const { data, error } = await supabase
+            .from('umkm')
+            .select(JOIN_QUERY) // Penting untuk mendapatkan array 'reviews'
+            .gte('average_rating', 4.5)
+            .lt('monthly_visits', 100);
+        
+        if (error) {
+            console.error("Error mengambil data (pre-filter hidden gems):", error);
+            throw error;
+        }
+
+        // 2. Filter di klien untuk kriteria 'total reviews < 50'
+        const hiddenGems = (data as UmkmFromDB[])
+            .filter(umkm => umkm.reviews.length < 50)
+            .slice(0, 5); // 3. Batasi 5 hasil
+
+        console.log(`Menemukan ${hiddenGems.length} hidden gems.`);
+        return hiddenGems;
     },
 
     /**
@@ -296,7 +326,7 @@ export const UmkmRepository = {
         return {
             ...umkmData,
             menu_items: [], 
-            reviews: []     
+            reviews: []    
         } as UmkmFromDB;
     },
 
@@ -346,9 +376,9 @@ export const UmkmRepository = {
 
         if (item.fotoProduk) {
              try {
-                dataToUpdate.foto_produk = await uploadImageAndGetUrl(item.fotoProduk, BUCKET_NAME);
+                 dataToUpdate.foto_produk = await uploadImageAndGetUrl(item.fotoProduk, BUCKET_NAME);
             } catch (uploadErr) {
-                console.error("Gagal upload foto menu baru:", uploadErr);
+                 console.error("Gagal upload foto menu baru:", uploadErr);
             }
         }
 

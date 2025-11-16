@@ -5,7 +5,6 @@ import type { UmkmFromDB } from "../../../shared/types/Umkm";
 import UmkmCard from "../micro-components/UmkmCard";
 import "../../../style/UmkmList.css";
 
-// Fungsi getDistance (Tidak berubah)
 function getDistance(
     lat1: number,
     lon1: number,
@@ -48,8 +47,6 @@ function UmkmList({
     const [error, setError] = useState<string | null>(null);
 
     // 2. Pisahkan 'fetchData' dan bungkus dengan 'useCallback'
-    // Ini membuat fungsi 'fetchData' stabil dan bisa dipanggil dari mana saja
-    // tanpa menyebabkan render ulang yang tidak perlu.
     const fetchData = useCallback(async () => {
         setLoading(true);
         setError(null);
@@ -84,18 +81,20 @@ function UmkmList({
                         return distance <= 10; // Filter 10km
                     });
                 } else {
+                    // Jika lokasi tidak ada, tampilkan semua (atau bisa juga list kosong)
                     result = await UmkmRepository.getAll();
                 }
             } else if (activeFilter === "Hidden Gem") {
-                const allData = await UmkmRepository.getAll();
-                result = allData.filter((umkm) => {
-                    return (
-                        umkm.monthly_visits < 100 &&
-                        umkm.total_visits < 50 &&
-                        umkm.average_rating >= 4.5
-                    );
-                });
+                
+                // === PERUBAHAN DI SINI ===
+                // Langsung panggil fungsi spesifik 'getHiddenGems'.
+                // Ini lebih efisien daripada getAll() lalu filter.
+                // Logika filter (rating >= 4.5, visits < 100, reviews < 50)
+                // sudah ditangani di dalam repository.
+                result = await UmkmRepository.getHiddenGems();
+                
             } else {
+                // Filter 'Semua'
                 result = await UmkmRepository.getAll();
             }
 
@@ -117,25 +116,21 @@ function UmkmList({
     }, [fetchData]); // <-- Dependensinya adalah fungsi 'fetchData' itu sendiri
 
     
-    // 4. TAMBAHKAN useEffect BARU ini untuk "mendengarkan" sinyal dari SavePage
+    // 4. useEffect BARU untuk "mendengarkan" sinyal dari SavePage (Tidak Berubah)
     useEffect(() => {
-        // Daftarkan listener saat komponen dimuat (mount)
         console.log("UmkmList: Mendengarkan perubahan data 'visited'...");
         
         const unsubscribe = UmkmRepository.onVisitedDataChange(() => {
             console.log("UmkmList: Sinyal 'visited' diterima! Memuat ulang data...");
-            // Panggil fungsi 'fetchData' yang sama untuk refresh data
             fetchData();
         });
 
-        // Kembalikan fungsi cleanup untuk 'unsubscribe' 
-        // saat komponen dibongkar (unmount)
         return () => {
             console.log("UmkmList: Berhenti mendengarkan perubahan.");
             unsubscribe();
         };
         
-    }, [fetchData]); // <-- 'fetchData' sebagai dependensi agar listener selalu up-to-date
+    }, [fetchData]); // <-- 'fetchData' sebagai dependensi
 
 
     // --- Sisa kode (Render) tidak ada yang berubah ---
