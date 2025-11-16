@@ -1,15 +1,15 @@
-// 1. Impor 'useCallback' dari React
-import { useEffect, useState, useCallback } from "react"; 
+import { useEffect, useState, useCallback } from "react";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
-import type { UmkmFromDB } from "../../../shared/types/Umkm"; 
+import type { UmkmFromDB } from "../../../shared/types/Umkm";
 import UmkmCard from "../micro-components/UmkmCard";
 import "../../../style/UmkmList.css";
 
+// Fungsi utilitas getDistance (tetap sama)
 function getDistance(
     lat1: number,
     lon1: number,
     lat2: number,
-    lon2: number
+    lon2: number    
 ): number {
     const R = 6371;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -17,9 +17,9 @@ function getDistance(
     const a =
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(lat1 * (Math.PI / 180)) *
-            Math.cos(lat2 * (Math.PI / 180)) *
-            Math.sin(dLon / 2) *
-            Math.sin(dLon / 2);
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     return distance;
@@ -27,8 +27,8 @@ function getDistance(
 
 interface UmkmListProps {
     searchQuery: string;
-    category: string;
-    activeFilter: "Semua" | "Terdekat" | "Hidden Gem";
+    category: string; // Filter Kategori (Indonesia, Western, dll)
+    activeFilter: "Semua" | "Terdekat" | "Hidden Gem"; // Filter Tab (Semua, Hidden Gem, Terdekat)
     userLocation: { latitude: number; longitude: number } | null;
     geoLoading: boolean;
     geoError: string | null;
@@ -46,59 +46,65 @@ function UmkmList({
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // 2. Pisahkan 'fetchData' dan bungkus dengan 'useCallback'
+    // FUNGSI UTAMA PENGAMBIL DATA DAN FILTER
     const fetchData = useCallback(async () => {
         setLoading(true);
         setError(null);
-        let result: UmkmFromDB[];
+        let baseResult: UmkmFromDB[] = [];
+        let finalResult: UmkmFromDB[] = [];
 
         try {
-            if (activeFilter === "Terdekat" && (geoLoading || geoError)) {
-                setUmkmList([]);
-                setLoading(false);
-                return;
-            }
+
+            // --- FASE 1: Ambil Data Dasar (Berdasarkan Search atau ActiveFilter) ---
 
             if (searchQuery) {
-                result = await UmkmRepository.search(searchQuery);
-            } else if (category) {
-                result = await UmkmRepository.findByCategory(category);
+                // Prioritas 1: Search
+                baseResult = await UmkmRepository.search(searchQuery);
+
             } else if (activeFilter === "Terdekat") {
+                // Prioritas 2: Terdekat
+                if (geoLoading || geoError) {
+                    setUmkmList([]);
+                    return;
+                }
                 if (userLocation) {
                     const allData = await UmkmRepository.getAll();
-                    result = allData.filter((umkm) => {
-                        if (!umkm.lokasi?.latitude || !umkm.lokasi?.longitude) {
-                            return false;
-                        }
-
+                    baseResult = allData.filter((umkm) => {
+                        if (!umkm.lokasi?.latitude || !umkm.lokasi?.longitude) return false;
                         const distance = getDistance(
-                            userLocation.latitude,
-                            userLocation.longitude,
-                            umkm.lokasi.latitude,
-                            umkm.lokasi.longitude
+                            userLocation.latitude, userLocation.longitude,
+                            umkm.lokasi.latitude, umkm.lokasi.longitude
                         );
-
-                        return distance <= 10; // Filter 10km
+                        return distance <= 10;
                     });
-                } else {
-                    // Jika lokasi tidak ada, tampilkan semua (atau bisa juga list kosong)
-                    result = await UmkmRepository.getAll();
                 }
+
             } else if (activeFilter === "Hidden Gem") {
-                
-                // === PERUBAHAN DI SINI ===
-                // Langsung panggil fungsi spesifik 'getHiddenGems'.
-                // Ini lebih efisien daripada getAll() lalu filter.
-                // Logika filter (rating >= 4.5, visits < 100, reviews < 50)
-                // sudah ditangani di dalam repository.
-                result = await UmkmRepository.getHiddenGems();
-                
+                // Prioritas 3: Hidden Gem
+                baseResult = await UmkmRepository.getHiddenGems();
+
             } else {
-                // Filter 'Semua'
-                result = await UmkmRepository.getAll();
+                // Default: Semua
+                baseResult = await UmkmRepository.getAll();
             }
 
-            setUmkmList(result);
+
+            // --- FASE 2: Terapkan Filter Kategori (Indonesia, Western, dll.) ---
+            // Kunci: Filter ini harus diterapkan pada baseResult, tanpa memandang activeFilter
+
+            if (category && category !== "") {
+                // Cek apakah kategori UMKM cocok dengan kategori yang dipilih
+                finalResult = baseResult.filter(umkm =>
+                    // Asumsi: properti 'kategori' pada umkm.kategori cocok dengan nilai 'category'
+                    umkm.kategori.toLowerCase() === category.toLowerCase()
+                );
+            } else {
+                // Jika kategori kosong (reset), gunakan baseResult
+                finalResult = baseResult;
+            }
+
+
+            setUmkmList(finalResult);
 
         } catch (err) {
             console.error("Gagal mengambil data list UMKM:", err);
@@ -108,18 +114,15 @@ function UmkmList({
         } finally {
             setLoading(false);
         }
-    }, [searchQuery, category, activeFilter, userLocation, geoLoading, geoError]); // <-- Dependensi untuk useCallback
+    }, [searchQuery, category, activeFilter, userLocation, geoLoading, geoError]);
 
-    // 3. useEffect ini sekarang HANYA memanggil 'fetchData' ketika filternya berubah
     useEffect(() => {
         fetchData();
-    }, [fetchData]); // <-- Dependensinya adalah fungsi 'fetchData' itu sendiri
+    }, [fetchData]);
 
-    
-    // 4. useEffect BARU untuk "mendengarkan" sinyal dari SavePage (Tidak Berubah)
     useEffect(() => {
         console.log("UmkmList: Mendengarkan perubahan data 'visited'...");
-        
+
         const unsubscribe = UmkmRepository.onVisitedDataChange(() => {
             console.log("UmkmList: Sinyal 'visited' diterima! Memuat ulang data...");
             fetchData();
@@ -129,13 +132,13 @@ function UmkmList({
             console.log("UmkmList: Berhenti mendengarkan perubahan.");
             unsubscribe();
         };
-        
-    }, [fetchData]); // <-- 'fetchData' sebagai dependensi
 
+    }, [fetchData]);
 
-    // --- Sisa kode (Render) tidak ada yang berubah ---
+    // --- Render Logic (tetap sama) ---
 
     if (loading) return <p className="no-data-text">Memuat data...</p>;
+    // ... (sisa logika render tetap sama) ...
 
     if (activeFilter === "Terdekat" && geoLoading) {
         return <p className="no-data-text">Mencari lokasi Anda...</p>;

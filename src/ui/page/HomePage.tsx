@@ -21,15 +21,32 @@ function HomePage() {
     const [geoError, setGeoError] = useState<string | null>(null);
 
     const filterTabs: FilterType[] = ["Semua", "Terdekat", "Hidden Gem"];
-    
-    // --- TAMBAHKAN INI ---
-    // Definisikan daftar kategori Anda di sini
     const filterCategories = ['Indonesia', 'Asia', 'Western', 'Lain-lain'];
-    // ---------------------
 
+
+    // ====================================================================
+    // 1. HANDLER KATEGORI (handleCategorySelect)
+    // Logika: Memilih kategori dan mengunci filter.
+    // ====================================================================
+    const handleCategorySelect = (selectedCategory: string) => {
+        // Jika kategori dipilih atau di-reset, kategori diatur.
+        // TIDAK ADA RESET activeFilterTab di sini.
+        setCategory(selectedCategory);
+
+        // Opsional: Jika Anda ingin kembali ke tab "Semua" setelah memilih kategori baru:
+        // setActiveFilterTab("Semua");
+    }
+
+
+    // ====================================================================
+    // 2. HANDLER TAB (handleFilterTabClick)
+    // Logika: Hanya mengubah jenis tab, mempertahankan kategori.
+    // ====================================================================
     const handleFilterTabClick = (filterTab: FilterType) => {
-        // ... (logika Anda tidak berubah)
+
         setActiveFilterTab(filterTab);
+
+        // Logika Geolocation (tetap sama)
         if (filterTab === "Terdekat") {
             if (userLocation) return;
             if (!("geolocation" in navigator)) {
@@ -66,12 +83,11 @@ function HomePage() {
                 <SearchFilterContainer
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
-                    onCategorySelect={setCategory}
-                    categories={filterCategories} // <-- KIRIM PROPS BARU
+                    onCategorySelect={handleCategorySelect} // Menggunakan handler baru
+                    categories={filterCategories}
                 />
             </div>
             <div className="filter-rekomendasi">
-                {/* ... (sisa JSX tidak berubah) ... */}
                 {filterTabs.map((filter) => (
                     <div
                         key={filter}
@@ -89,7 +105,7 @@ function HomePage() {
             <UmkmList
                 activeFilter={activeFilterTab}
                 searchQuery={searchQuery}
-                category={category}
+                category={category} // Category (Indonesia, dll.) dikirim ke UmkmList
                 userLocation={userLocation}
                 geoLoading={geoLoading}
                 geoError={geoError}

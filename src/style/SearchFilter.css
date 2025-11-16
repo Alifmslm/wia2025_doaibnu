@@ -127,6 +127,21 @@
     color: var(--text-color-primary);
 }
 
+.popup-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.popup-actions button {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.reset-btn {
+    background-color: var(--error-color);
+}
+
 /* grid responsif */
 .filter-label-container {
     display: grid;

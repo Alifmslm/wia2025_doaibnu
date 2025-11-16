@@ -17,7 +17,7 @@ function Form({ name }: FormProps) {
     const navigate = useNavigate(); // 2. Gunakan hook navigasi
 
     const [formData, setFormData] = useState<{ [key: string]: string }>({"email": "", "password": "", "nama": ""});
-    const [globalError, setGlobalError] = useState<string | null>(null); // Ganti nama state
+    const [globalError, setGlobalError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     const fields = isLogin

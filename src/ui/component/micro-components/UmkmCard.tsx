@@ -4,20 +4,19 @@ import { Link } from "react-router-dom";
 import RatingLabel from "../micro-components/RatingLabel.tsx";
 import type { UmkmFromDB } from "../../../shared/types/Umkm";
 import { UmkmRepository } from "../../../data/repositories/UmkmRepository";
-import { UserRepository } from "../../../data/repositories/UserRepository"; // Impor User Repo
-import HomeImage from '../../../assets/gallery-image-1.png'; // Fallback
+import { UserRepository } from "../../../data/repositories/UserRepository";
+import HomeImage from '../../../assets/gallery-image-1.png';
 import { formatVisits } from "../../../shared/utils/formater/Formatters.ts";
 
 function UmkmCard({ umkm }: { umkm: UmkmFromDB }) {
 
     const avgRating = UmkmRepository.getAverageRating(umkm);
     const totalRatings = umkm.reviews?.length || 0;
-    const formattedVisits = formatVisits(umkm.total_visits);
+    const formattedVisits = formatVisits(umkm.monthly_visits);
 
     const [isSaved, setIsSaved] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
-    // Cek status 'saved' saat komponen dimuat
     useEffect(() => {
         async function checkIsSaved() {
             const user = await UserRepository.getCurrentUser();

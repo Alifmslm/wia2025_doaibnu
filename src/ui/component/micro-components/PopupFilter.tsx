@@ -1,23 +1,36 @@
 import FilterContainer from "../macro-components/FilterContainer";
 import { createPortal } from "react-dom";
-// Hapus 'Button' karena tidak diperlukan lagi
-// import Button from "./Button.tsx";
+import { useState } from "react"; // Tambahkan useState untuk melacak pilihan sementara
 
 // 1. Tambahkan 'categories' ke tipe props
 type PopUpFilterProps = {
     onClose: () => void;
     onCategorySelect: (cat: string) => void;
-    categories: string[]; // <-- Terima prop dari Filter.tsx
+    categories: string[]; 
 };
 
-// 2. Terima 'categories' di sini
 function PopUpFilter({ onClose, onCategorySelect, categories }: PopUpFilterProps) {
+    // State lokal untuk melacak kategori yang dipilih saat ini di dalam popup
+    const [selectedCategory, setSelectedCategory] = useState<string>("");
 
-    // 3. Buat handler baru
-    //    Ini akan memilih kategori DAN menutup modal dalam satu klik
-    const handleCategoryClick = (category: string) => {
-        onCategorySelect(category); // Kirim kategori ke HomePage
-        onClose(); // Tutup modal
+    // Handler yang dipanggil saat label di FilterContainer diklik
+    const handleLabelClick = (category: string) => {
+        // Simpan pilihan sementara, tetapi jangan terapkan filter sampai tombol 'Terapkan' diklik
+        setSelectedCategory(category);
+    };
+
+    // Handler yang dipanggil saat tombol 'Terapkan Filter' diklik
+    const handleApplyFilter = () => {
+        onCategorySelect(selectedCategory);
+        onClose();
+    };
+    
+    // Handler yang dipanggil saat tombol 'Reset Filter' diklik
+    const handleResetFilter = () => {
+        // Kirim string kosong ("") atau null untuk menunjukkan reset
+        onCategorySelect(""); 
+        setSelectedCategory(""); // Reset pilihan lokal
+        onClose();
     };
 
     return createPortal(
@@ -34,12 +47,32 @@ function PopUpFilter({ onClose, onCategorySelect, categories }: PopUpFilterProps
 
                     <h1>Pilih Filter</h1>
 
-                    {/* 4. Gunakan 'categories' dari props */}
+                    {/* Filter Kategori */}
                     <FilterContainer
                         title="Kategori UMKM"
-                        labels={categories} // <-- Gunakan prop
-                        onLabelClick={handleCategoryClick} // <-- Gunakan handler baru
+                        labels={categories}
+                        // Gunakan state lokal untuk melacak pilihan
+                        selectedLabel={selectedCategory} 
+                        onLabelClick={handleLabelClick}
                     />
+
+                    {/* --- KONTROL TOMBOL BARU --- */}
+                    <div className="popup-actions">
+                        <button 
+                            className="reset-btn" 
+                            onClick={handleResetFilter} // Panggil handler reset
+                        >
+                            Reset Filter
+                        </button>
+                        <button 
+                            className="apply-btn" 
+                            onClick={handleApplyFilter} // Panggil handler terapkan
+                        >
+                            Terapkan Filter
+                        </button>
+                    </div>
+                    {/* --------------------------- */}
+
                 </div>
             </div>
         </>,

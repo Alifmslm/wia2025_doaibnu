@@ -158,7 +158,7 @@ export const UmkmRepository = {
             .from('umkm')
             .select(JOIN_QUERY) // Penting untuk mendapatkan array 'reviews'
             .gte('average_rating', 4.5)
-            .lt('monthly_visits', 100);
+            .lt('monthly_visits', 50);
         
         if (error) {
             console.error("Error mengambil data (pre-filter hidden gems):", error);
