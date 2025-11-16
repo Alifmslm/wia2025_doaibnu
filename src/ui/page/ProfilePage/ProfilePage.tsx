@@ -40,7 +40,6 @@ function ProfilePage() {
                         id: data.auth.id,
                         name: data.profile.username || data.auth.email || 'User',
                         email: data.auth.email || '',
-                        // 'avatar_url' dihapus
                     });
                 } else {
                     console.log("Tidak ada sesi, kembali ke login.");
@@ -62,7 +61,6 @@ function ProfilePage() {
 
         setIsSubmitting(true);
         try {
-            // 'newData' sekarang tidak lagi mengandung 'image'
             const { auth, profile } = await UserRepository.updateUserProfile(
                 user.id,
                 user.email,
@@ -84,6 +82,24 @@ function ProfilePage() {
             setIsSubmitting(false);
         }
     };
+
+    // --- 1. TAMBAHKAN FUNGSI HANDLER LOGOUT ---
+    const handleLogout = async () => {
+        // Nonaktifkan tombol jika sedang ada proses lain
+        if (isSubmitting) return; 
+
+        if (window.confirm("Apakah Anda yakin ingin logout?")) {
+            try {
+                await UserRepository.logout();
+                navigate('/login'); // Arahkan ke halaman login
+            } catch (error) {
+                console.error("Gagal logout:", error);
+                alert("Gagal logout. Silakan coba lagi.");
+            }
+        }
+    };
+    // --- AKHIR FUNGSI BARU ---
+
 
     if (loading) {
         return (
@@ -113,12 +129,20 @@ function ProfilePage() {
             <section className="profile-page">
                 <div className="profile-info-header">
                     <div className="profile-picture">
-                        {/* --- Logika Render (Disederhanakan) --- */}
-                        {/* Selalu tampilkan inisial */}
                         <p>{getInitials(user.name)}</p>
                     </div>
                     <h2>{user.name}</h2>
                     <p>{user.email}</p>
+
+                    {/* --- 2. TAMBAHKAN TOMBOL LOGOUT DI SINI --- */}
+                    <button 
+                        onClick={handleLogout} 
+                        className="logout-button" // Tambahkan kelas untuk styling
+                        disabled={isSubmitting}
+                    >
+                        Logout
+                    </button>
+                    {/* --- AKHIR TOMBOL BARU --- */}
                 </div>
                 
                 <TabProfile 

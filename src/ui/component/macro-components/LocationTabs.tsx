@@ -41,17 +41,10 @@ function LocationTabs({ lokasi, nama }: LocationTabsProps) {
             </section>
         );
     }
-    
-    // Gunakan data latitude/longitude dari prop
-    // Jika tidak ada (masih 0), set default ke lokasi (misal: Monas)
-    // Ini penting agar peta tidak error jika lat/long masih 0
     const position: LatLngExpression = [
         lokasi.latitude === 0 ? -6.1754 : lokasi.latitude, 
         lokasi.longitude === 0 ? 106.8272 : lokasi.longitude
     ];
-    
-    // Cek apakah linkGmaps valid (dimulai dengan http)
-    // 'lokasi.alamat' sekarang berisi 'linkGmaps'
     const isValidLink = lokasi.alamat && lokasi.alamat.startsWith('http');
 
     return (
@@ -62,7 +55,7 @@ function LocationTabs({ lokasi, nama }: LocationTabsProps) {
                     
                     {/* --- PERBAIKAN DI SINI --- */}
                     {/* Tampilkan lokasi general sebagai deskripsi, BUKAN alamat */}
-                    <p>{lokasi.lokasi_general}</p>
+                    <p>{lokasi.alamat_lengkap}</p>
                     
                     {/* Tampilkan link Gmaps HANYA jika valid */}
                     {isValidLink ? (

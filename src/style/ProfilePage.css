@@ -79,6 +79,29 @@
     color: var(--main-color);
 }
 
+/* Tambahkan ini ke dalam file ../../../style/ProfilePage.css */
+
+.profile-info-header .logout-button {
+    background-color: #f44336; /* Warna merah */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+}
+
+.profile-info-header .logout-button:hover {
+    background-color: var(--error-color); /* Merah lebih gelap saat hover */
+}
+
+.profile-info-header .logout-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 .input-modal-image i {
     font-size: 2rem;
     margin-bottom: 10px;
