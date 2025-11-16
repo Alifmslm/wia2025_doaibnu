@@ -61,9 +61,9 @@
 .gallery-grid {
     display: grid;
     grid-template-areas:
-        "main b c"
-        "main d d";
-    grid-template-columns: 1.5fr 1fr 1fr;
+        "main b"
+        "main c";
+    grid-template-columns: 2fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 10px;
     width: 100%;

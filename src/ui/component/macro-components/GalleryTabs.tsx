@@ -63,8 +63,6 @@ function GalleryTabs({ gallery, mainImage }: GalleryTabsProps) {
                     </div>
                 )}
             </section>
-            {/* TODO: Link "Tambah Foto" ini harusnya hanya muncul untuk pemilik UMKM */}
-            <a href="#">Tambah Foto</a>
         </>
     );
 }
